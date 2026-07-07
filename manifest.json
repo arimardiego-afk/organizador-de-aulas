@@ -1,7 +1,8 @@
 {
+  "id": "./",
   "name": "Organizador de Aulas — Prometeu",
   "short_name": "Aulas",
-  "description": "Organizador de aulas em vídeo (Disciplina → Aula → Capítulo → Vídeo), com tema HUD Prometeu.",
+  "description": "Organizador de aulas em vídeo para professores: Matéria → Série/Ano → Aula → Capítulo → Vídeo. 100% offline, com resumos, anexos, relatórios em Word/PDF e 5 temas visuais. Disponível em português, inglês, espanhol e chinês.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
@@ -9,6 +10,9 @@
   "background_color": "#050b13",
   "theme_color": "#050b13",
   "lang": "pt-BR",
+  "dir": "ltr",
+  "categories": ["education", "productivity"],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "icons/icon-192.png",

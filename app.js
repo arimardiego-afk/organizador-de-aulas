@@ -37,7 +37,9 @@ const ICONS={
 'ti-eye':'<path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/>',
 'ti-device-tablet':'<path d="M5 3m0 1a1 1 0 0 1 1 -1h12a1 1 0 0 1 1 1v16a1 1 0 0 1 -1 1h-12a1 1 0 0 1 -1 -1z"/><path d="M11 17a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"/>',
 'ti-palette':'<path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25"/><path d="M8.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M12.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M16.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>',
-'ti-shield':'<path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1 -8.5 15a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3"/>'
+'ti-shield':'<path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1 -8.5 15a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3"/>',
+'ti-language':'<path d="M4 5h7"/><path d="M9 3v2c0 4.418 -2.239 8 -5 8"/><path d="M5 9c0 2.144 2.952 3.908 6.7 4"/><path d="M12 20l4 -9l4 9"/><path d="M19.1 18h-6.2"/>',
+'ti-key':'<path d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.977a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.977a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0z"/><path d="M15 9h.01"/>'
 };
 function paintIcons(){
   document.querySelectorAll('i.ti').forEach(el=>{
@@ -47,10 +49,10 @@ function paintIcons(){
     if(inner){el.innerHTML=`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">${inner}</svg>`;el.setAttribute('data-ic',cls);}
   });
 }
-new MutationObserver(()=>paintIcons()).observe(document.documentElement,{childList:true,subtree:true});
+new MutationObserver(()=>{paintIcons();if(window.scheduleTranslate)scheduleTranslate();}).observe(document.documentElement,{childList:true,subtree:true});
 
 const CPS=['CP1','CP2','CP3','CP4','CP5','CP6','CP7','CP8','CP9','CP10','CP11'];
-let themeIdx=0,_mcb=null,vidTimer=null,curDiscId=null,curAulaId=null,curCapId=null,editVidId=null;
+let themeIdx=0,_mcb=null,vidTimer=null,curDiscId=null,curAulaId=null,curCapId=null,editVidId=null,demoOn=false;
 const THEMES=['L','D','P','P PR','P PB'];
 const THEME_META={
   'L':{icon:'ti-sun',label:'Claro',bg:'#F0EDE8'},
@@ -59,10 +61,10 @@ const THEME_META={
   'P PR':{icon:'ti-cpu',label:'P. Vermelho',bg:'#120407'},
   'P PB':{icon:'ti-cpu',label:'P. Azul',bg:'#04060f'}
 };
-const SEED={"disciplinas":[{"id":101,"nome":"HISTÓRIA","turma":"1° ANO ENSINO MÉDIO","capitulo":"Currículo — Aulas 01 a 17","aulas":[{"id":101001,"numero":1,"titulo":"Introdução ao estudo da História","cps":[],"caps":[{"id":10100101,"num":"Cap. 01","nome":"O Que é História? Introdução aos Estudos Históricos","videos":[{"id":101001011,"nome":"O Que é História? Introdução aos Estudos Históricos","link":"","dur":"48:00","durSeg":2880,"resumo":"","materiais":[]}]},{"id":10100102,"num":"Cap. 02","nome":"Afinal, o que é História?","videos":[{"id":101001021,"nome":"Afinal, o que é História?","link":"","dur":"11:45","durSeg":705,"resumo":"","materiais":[]}]},{"id":10100103,"num":"Cap. 03","nome":"O Trabalho do Historiador / Fontes históricas","videos":[{"id":101001031,"nome":"2021 | 6° Ano | História | Aula 08 – O Trabalho do Historiador","link":"","dur":"25:03","durSeg":1503,"resumo":"","materiais":[]},{"id":101001032,"nome":"24/02/21 – 6° ano EF – História – Fontes históricas","link":"","dur":"26:24","durSeg":1584,"resumo":"","materiais":[]}]}]},{"id":101002,"numero":2,"titulo":"As Diferentes Correntes Historiográficas","cps":[],"caps":[{"id":10100201,"num":"Cap. 01","nome":"Historiografia","videos":[{"id":101002011,"nome":"Historiografia","link":"","dur":"20:18","durSeg":1218,"resumo":"","materiais":[]}]},{"id":10100202,"num":"Cap. 02","nome":"Historiografia: A Escola dos Annales","videos":[{"id":101002021,"nome":"Historiografia: A Escola dos Annales","link":"","dur":"22:50","durSeg":1370,"resumo":"","materiais":[]}]}]},{"id":101003,"numero":3,"titulo":"Revisão Geral da linha do tempo histórica","cps":[],"caps":[{"id":10100301,"num":"Cap. 01","nome":"Linha do tempo de História Geral","videos":[{"id":101003011,"nome":"HISTÓRIA – AULA 01: LINHA DO TEMPO DE HISTÓRIA GERAL","link":"","dur":"37:11","durSeg":2231,"resumo":"","materiais":[]}]},{"id":10100302,"num":"Cap. 02","nome":"Linha do tempo de História do Brasil","videos":[{"id":101003021,"nome":"HISTÓRIA – AULA 02: Linha do tempo de História do Brasil","link":"","dur":"24:58","durSeg":1498,"resumo":"","materiais":[]}]}]},{"id":101004,"numero":4,"titulo":"A escrita da História: verdades absolutas X versões históricas","cps":[],"caps":[{"id":10100401,"num":"Cap. 01","nome":"As controvérsias do revisionismo histórico","videos":[{"id":101004011,"nome":"AS CONTROVÉRSIAS DO REVISIONISMO HISTÓRICO | UNILA","link":"","dur":"22:47","durSeg":1367,"resumo":"","materiais":[]}]},{"id":10100402,"num":"Cap. 02","nome":"Negacionismo e interesses políticos","videos":[{"id":101004021,"nome":"NEGACIONISMO E INTERESSES POLÍTICOS | Cortes do História Pública","link":"","dur":"8:58","durSeg":538,"resumo":"","materiais":[]}]}]},{"id":101005,"numero":5,"titulo":"Sujeitos históricos no passado e no presente","cps":[],"caps":[{"id":10100501,"num":"Cap. 01","nome":"Sujeito histórico: mudanças e permanências no cotidiano","videos":[{"id":101005011,"nome":"22/06 – 4° ano EF – História – Sujeito histórico: mudanças e permanências no cotidiano","link":"","dur":"22:47","durSeg":1367,"resumo":"","materiais":[]}]},{"id":10100502,"num":"Cap. 02","nome":"Reflexão sobre o tempo: Benjamin, Koselleck e Hartog","videos":[{"id":101005021,"nome":"Reflexão sobre o tempo: Benjamin, Koselleck e Hartog","link":"","dur":"22:47","durSeg":1367,"resumo":"","materiais":[]}]}]},{"id":101006,"numero":6,"titulo":"A História e sua relação com as outras ciências","cps":[],"caps":[{"id":10100601,"num":"Cap. 01","nome":"A História buscando ajuda em outras ciências","videos":[{"id":101006011,"nome":"6° ANO – A História buscando ajuda na Geografia, Filosofia, Arqueologia e entre outras ciências","link":"","dur":"5:08","durSeg":308,"resumo":"","materiais":[]}]},{"id":10100602,"num":"Cap. 02","nome":"Ciências auxiliares da História","videos":[{"id":101006021,"nome":"Você conhece as Ciências auxiliares da História?","link":"","dur":"19:12","durSeg":1152,"resumo":"","materiais":[]}]}]},{"id":101007,"numero":7,"titulo":"O mundo antigo e suas sociedades","cps":[],"caps":[{"id":10100701,"num":"Cap. 01","nome":"Mundo Antigo – Brasil Escola","videos":[{"id":101007011,"nome":"Pré-Enem 2022 | Mundo Antigo – Brasil Escola","link":"","dur":"48:20","durSeg":2900,"resumo":"","materiais":[]}]}]},{"id":101008,"numero":8,"titulo":"O Egito antigo – economia e sociedade","cps":[],"caps":[{"id":10100801,"num":"Cap. 01","nome":"Os mistérios do Antigo Egito","videos":[{"id":101008011,"nome":"OS MISTÉRIOS DO ANTIGO EGITO – Nostalgia História","link":"","dur":"48:41","durSeg":2921,"resumo":"","materiais":[]}]}]},{"id":101009,"numero":9,"titulo":"O mundo antigo: economia e sociedade – Grécia e Roma","cps":[],"caps":[{"id":10100901,"num":"Cap. 01","nome":"A História completa da Grécia Antiga","videos":[{"id":101009011,"nome":"A História COMPLETA da Grécia Antiga | Documentário","link":"","dur":"2:41:28","durSeg":9688,"resumo":"","materiais":[]}]},{"id":10100902,"num":"Cap. 02","nome":"A História de Roma","videos":[{"id":101009021,"nome":"A História de Roma: Como se Tornou o Maior Império do Mundo? (Da Fundação ao Império)","link":"","dur":"46:56","durSeg":2816,"resumo":"","materiais":[]}]},{"id":10100903,"num":"Cap. 03","nome":"A queda de Roma","videos":[{"id":101009031,"nome":"A QUEDA DE ROMA: O DIA em Que o IMPÉRIO ROMANO caiu","link":"","dur":"14:15","durSeg":855,"resumo":"","materiais":[]}]}]},{"id":101010,"numero":10,"titulo":"O mundo grego: democracia e cultura","cps":[],"caps":[{"id":10101001,"num":"Cap. 01","nome":"Grécia Antiga: Democracia Ateniense","videos":[{"id":101010011,"nome":"Grécia Antiga: Democracia Ateniense","link":"","dur":"14:26","durSeg":866,"resumo":"","materiais":[]}]}]},{"id":101011,"numero":11,"titulo":"A África Antiga: civilizações africanas","cps":[],"caps":[{"id":10101101,"num":"Cap. 01","nome":"As Grandes Civilizações Africanas","videos":[{"id":101011011,"nome":"As Grandes Civilizações Africanas – História da África","link":"","dur":"40:05","durSeg":2405,"resumo":"","materiais":[]}]},{"id":10101102,"num":"Cap. 02","nome":"Povos Africanos","videos":[{"id":101011021,"nome":"Povos Africanos","link":"","dur":"19:21","durSeg":1161,"resumo":"","materiais":[]}]}]},{"id":101012,"numero":12,"titulo":"Grupos humanos de diferentes lugares e tempos históricos","cps":[],"caps":[{"id":10101201,"num":"Cap. 01","nome":"Pré-história e a dispersão da humanidade","videos":[{"id":101012011,"nome":"Pré-história e a dispersão da humanidade – História – Ensino Médio","link":"","dur":"12:21","durSeg":741,"resumo":"","materiais":[]}]}]},{"id":101013,"numero":13,"titulo":"Narrativas sobre as origens humanas","cps":[],"caps":[{"id":10101301,"num":"Cap. 01","nome":"As origens da humanidade","videos":[{"id":101013011,"nome":"História – 6° ano – As origens da humanidade","link":"","dur":"37:07","durSeg":2227,"resumo":"","materiais":[]}]},{"id":10101302,"num":"Cap. 02","nome":"A Trajetória do Homem na Terra","videos":[{"id":101013021,"nome":"A Trajetória do Homem na Terra – Documentário Completo","link":"","dur":"25:28","durSeg":1528,"resumo":"","materiais":[]}]}]},{"id":101014,"numero":14,"titulo":"Mito e história: mitos de origens nas culturas ocidentais, africanas e indígenas","cps":[],"caps":[{"id":10101401,"num":"Cap. 01","nome":"Criação do mundo segundo indígenas brasileiros","videos":[{"id":101014011,"nome":"CRIAÇÃO DO MUNDO SEGUNDO INDÍGENAS BRASILEIROS (TUPI-GUARANI)","link":"","dur":"9:09","durSeg":549,"resumo":"","materiais":[]}]},{"id":10101402,"num":"Cap. 02","nome":"Mitos de criação africanos e a história da ciência","videos":[{"id":101014021,"nome":"Ciência e mito: 4 mitos de criação africanos e a história da ciência","link":"","dur":"12:03","durSeg":723,"resumo":"","materiais":[]}]},{"id":10101403,"num":"Cap. 03","nome":"A origem do mundo segundo a mitologia grega","videos":[{"id":101014031,"nome":"A ORIGEM DO MUNDO SEGUNDO A MITOLOGIA GREGA","link":"","dur":"11:41","durSeg":701,"resumo":"","materiais":[]}]}]},{"id":101015,"numero":15,"titulo":"África: o berço da humanidade","cps":[],"caps":[{"id":10101501,"num":"Cap. 01","nome":"África: Berço da Humanidade","videos":[{"id":101015011,"nome":"ÁFRICA: Berço da Humanidade | Onde Tudo Começou | Documentário Completo em 4K","link":"","dur":"26:56","durSeg":1616,"resumo":"","materiais":[]}]}]},{"id":101016,"numero":16,"titulo":"A linguagem e o fogo","cps":[],"caps":[{"id":10101601,"num":"Cap. 01","nome":"A Guerra do Fogo analisada","videos":[{"id":101016011,"nome":"A GUERRA DO FOGO ANALISADA | Linguagem, Desejo e Subjetividade. O filme censurado!","link":"","dur":"32:00","durSeg":1920,"resumo":"","materiais":[]}]}]},{"id":101017,"numero":17,"titulo":"Cidades: ontem e hoje","cps":[],"caps":[{"id":10101701,"num":"Cap. 01","nome":"Cidades","videos":[{"id":101017011,"nome":"Cidades","link":"","dur":"8:40","durSeg":520,"resumo":"","materiais":[]}]},{"id":10101702,"num":"Cap. 02","nome":"Qual foi a primeira cidade?","videos":[{"id":101017021,"nome":"Qual foi a PRIMEIRA cidade? As provas da Aurora da Civilização!","link":"","dur":"15:17","durSeg":917,"resumo":"","materiais":[]}]},{"id":10101703,"num":"Cap. 03","nome":"Apocalipse Moderno | Nerdologia","videos":[{"id":101017031,"nome":"Apocalipse Moderno | Nerdologia","link":"","dur":"7:03","durSeg":423,"resumo":"","materiais":[]}]},{"id":10101704,"num":"Cap. 04","nome":"Cidades Conectadas (documentário)","videos":[{"id":101017041,"nome":"Documentário | CIDADES CONECTADAS | EP. 01 – 14/06/2025","link":"","dur":"12:52","durSeg":772,"resumo":"","materiais":[]},{"id":101017042,"nome":"Documentário | CIDADES CONECTADAS | EP. 02 – 15/06/2025","link":"","dur":"12:04","durSeg":724,"resumo":"","materiais":[]}]}]}]},{"id":102,"nome":"HISTÓRIA","turma":"2° ANO ENSINO MÉDIO","capitulo":"Currículo — Aulas 01 a 24","aulas":[{"id":102001,"numero":1,"titulo":"Os povos germânicos e as relações com o Império","cps":[],"caps":[{"id":10200101,"num":"Cap. 01","nome":"Queda do Império Romano, criação do Islamismo","videos":[{"id":102001011,"nome":"04 | Queda do Império Romano, Criação do Islamismo – Documentário History Channel Brasil","link":"","dur":"52:35","durSeg":3155,"resumo":"","materiais":[]}]},{"id":10200102,"num":"Cap. 02","nome":"Os Germânicos – Grandes Civilizações","videos":[{"id":102001021,"nome":"Os Germânicos: O Bravo Povo Guerreiro da Europa Central – Grandes Civilizações – Foca na História","link":"","dur":"17:27","durSeg":1047,"resumo":"","materiais":[]}]},{"id":10200103,"num":"Cap. 03","nome":"As invasões bárbaras e o fim do Império Romano do Ocidente","videos":[{"id":102001031,"nome":"AS INVASÕES BÁRBARAS E O FIM DO IMPÉRIO ROMANO DO OCIDENTE","link":"","dur":"22:52","durSeg":1372,"resumo":"","materiais":[]}]}]},{"id":102002,"numero":2,"titulo":"Germanização dos romanos e romanização dos germanos","cps":[],"caps":[{"id":10200201,"num":"Cap. 01","nome":"Cultura, arte e religião romana e o processo de romanização","videos":[{"id":102002011,"nome":"CULTURA, ARTE, RELIGIÃO ROMANA E O PROCESSO DE ROMANIZAÇÃO","link":"","dur":"28:52","durSeg":1732,"resumo":"","materiais":[]}]}]},{"id":102003,"numero":3,"titulo":"Religiosidade germânica e o cristianismo","cps":[],"caps":[{"id":10200301,"num":"Cap. 01","nome":"O Sacro Império Romano-Germânico","videos":[{"id":102003011,"nome":"O SACRO IMPÉRIO ROMANO-GERMÂNICO","link":"","dur":"21:55","durSeg":1315,"resumo":"","materiais":[]}]}]},{"id":102004,"numero":4,"titulo":"As cruzadas","cps":[],"caps":[{"id":10200401,"num":"Cap. 01","nome":"A História das Cruzadas","videos":[{"id":102004011,"nome":"A História das Cruzadas","link":"","dur":"37:54","durSeg":2274,"resumo":"","materiais":[]}]},{"id":10200402,"num":"Cap. 02","nome":"Cruzadas: consequências","videos":[{"id":102004021,"nome":"Cruzadas: consequências","link":"","dur":"10:00","durSeg":600,"resumo":"","materiais":[]}]}]},{"id":102005,"numero":5,"titulo":"O poder das religiões","cps":[],"caps":[{"id":10200501,"num":"Cap. 01","nome":"Religião, temor e tremor — Leandro Karnal","videos":[{"id":102005011,"nome":"Reexibição: religião, temor e tremor, com Leandro Karnal","link":"","dur":"1:43:00","durSeg":6180,"resumo":"","materiais":[]}]}]},{"id":102006,"numero":6,"titulo":"O nascimento da modernidade","cps":[],"caps":[{"id":10200601,"num":"Cap. 01","nome":"Renascimento: resumo de História","videos":[{"id":102006011,"nome":"RENASCIMENTO: RESUMO DE HISTÓRIA (Débora Aladim)","link":"","dur":"34:54","durSeg":2094,"resumo":"","materiais":[]}]},{"id":10200602,"num":"Cap. 02","nome":"Cosmos — Quando o Conhecimento Conquistou o Medo","videos":[{"id":102006021,"nome":"Série Cosmos – 2014 – 1ª Temp. Ep. 03 – Quando o Conhecimento Conquistou o Medo","link":"","dur":"45:00","durSeg":2700,"resumo":"","materiais":[]}]}]},{"id":102007,"numero":7,"titulo":"Contrarreforma","cps":[],"caps":[{"id":10200701,"num":"Cap. 01","nome":"A Contrarreforma Católica","videos":[{"id":102007011,"nome":"A Contrarreforma Católica","link":"","dur":"18:38","durSeg":1118,"resumo":"","materiais":[]}]},{"id":10200702,"num":"Cap. 02","nome":"A Inquisição","videos":[{"id":102007021,"nome":"A Inquisição","link":"","dur":"10:27","durSeg":627,"resumo":"","materiais":[]}]}]},{"id":102008,"numero":8,"titulo":"Colonizações: espanhóis e ingleses na América","cps":[],"caps":[{"id":10200801,"num":"Cap. 01","nome":"Espanhóis e ingleses na América","videos":[{"id":102008011,"nome":"Espanhóis e ingleses na América","link":"","dur":"37:52","durSeg":2272,"resumo":"","materiais":[]}]},{"id":10200802,"num":"Cap. 02","nome":"Brasil uno x América espanhola dividida","videos":[{"id":102008021,"nome":"Por que o Brasil continuou um só e a América espanhola se dividiu após a independência","link":"","dur":"12:38","durSeg":758,"resumo":"","materiais":[]}]},{"id":10200803,"num":"Cap. 03","nome":"Humanidade – Ep. 09 – Pioneiros","videos":[{"id":102008031,"nome":"Humanidade – Ep. 09 – Pioneiros","link":"","dur":"44:00","durSeg":2640,"resumo":"","materiais":[]}]}]},{"id":102009,"numero":9,"titulo":"Os desdobramentos políticos, econômicos e sociais no Brasil Colonial","cps":[],"caps":[{"id":10200901,"num":"Cap. 01","nome":"História do Brasil Colônia (1530–1822)","videos":[{"id":102009011,"nome":"Aula Enem: História do Brasil Colônia (1530–1822) | Política, Economia e Sociedade Colonial | HCD","link":"","dur":"28:00","durSeg":1680,"resumo":"","materiais":[]}]},{"id":10200902,"num":"Cap. 02","nome":"O destino da riqueza do Brasil Colônia","videos":[{"id":102009021,"nome":"'Devolve nosso ouro' – o destino da riqueza do Brasil Colônia","link":"","dur":"8:32","durSeg":512,"resumo":"","materiais":[]}]}]},{"id":102010,"numero":10,"titulo":"Sociedade na América espanhola, inglesa e portuguesa nos séculos XVII e XVIII","cps":[],"caps":[{"id":10201001,"num":"Cap. 01","nome":"Navio negreiro / Colonização da América Portuguesa I","videos":[{"id":102010011,"nome":"Amistad – Navio Negreiro","link":"","dur":"8:00","durSeg":480,"resumo":"","materiais":[]},{"id":102010012,"nome":"História – Semana 14 – Colonização da América Portuguesa – Parte 1 (séc. XVI e XVII)","link":"","dur":"18:40","durSeg":1120,"resumo":"","materiais":[]}]},{"id":10201002,"num":"Cap. 02","nome":"Riqueza colonial / Colonização da América Portuguesa II","videos":[{"id":102010021,"nome":"'Devolve nosso ouro': o destino da riqueza do Brasil Colônia","link":"","dur":"8:32","durSeg":512,"resumo":"","materiais":[]},{"id":102010022,"nome":"História – Semana 15 – Colonização da América Portuguesa – Parte 2 (séc. XVIII)","link":"","dur":"19:36","durSeg":1176,"resumo":"","materiais":[]}]},{"id":10201003,"num":"Cap. 03","nome":"América Espanhola","videos":[{"id":102010031,"nome":"HISTÓRIA GERAL #49 – AMÉRICA ESPANHOLA","link":"","dur":"24:52","durSeg":1492,"resumo":"","materiais":[]}]},{"id":10201004,"num":"Cap. 04","nome":"Colonização da América Inglesa","videos":[{"id":102010041,"nome":"COLONIZAÇÃO DA AMÉRICA INGLESA | Prof. Biro Torres","link":"","dur":"12:29","durSeg":749,"resumo":"","materiais":[]}]}]},{"id":102011,"numero":11,"titulo":"Formação dos povos europeus","cps":[],"caps":[{"id":10201101,"num":"Cap. 01","nome":"Como os países europeus surgiram?","videos":[{"id":102011011,"nome":"Como os Países Europeus Surgiram? | De Bárbaros a Impérios Enormes","link":"","dur":"16:22","durSeg":982,"resumo":"","materiais":[]}]},{"id":10201102,"num":"Cap. 02","nome":"Como surgiram os países europeus — Avesso da História","videos":[{"id":102011021,"nome":"COMO SURGIRAM OS PAÍSES EUROPEUS – Avesso da História","link":"","dur":"5:15","durSeg":315,"resumo":"","materiais":[]}]},{"id":10201103,"num":"Cap. 03","nome":"Visigodos, Ostrogodos e Godos","videos":[{"id":102011031,"nome":"Visigodos, Ostrogodos e Godos – Nerdologia","link":"","dur":"9:58","durSeg":598,"resumo":"","materiais":[]}]}]},{"id":102012,"numero":12,"titulo":"A Revolução Francesa","cps":[],"caps":[{"id":10201201,"num":"Cap. 01","nome":"Como a Revolução Francesa mudou o mundo","videos":[{"id":102012011,"nome":"COMO A REVOLUÇÃO FRANCESA MUDOU O MUNDO – Nostalgia História","link":"","dur":"1:19:19","durSeg":4759,"resumo":"","materiais":[]}]},{"id":10201202,"num":"Cap. 02","nome":"Do Absolutismo à Guilhotina","videos":[{"id":102012021,"nome":"REVOLUÇÃO FRANCESA: Do Absolutismo à Guilhotina | História","link":"","dur":"32:05","durSeg":1925,"resumo":"","materiais":[]}]},{"id":10201203,"num":"Cap. 03","nome":"A Era Napoleônica","videos":[{"id":102012031,"nome":"A ERA NAPOLEÔNICA || VOGALIZANDO A HISTÓRIA","link":"","dur":"25:17","durSeg":1517,"resumo":"","materiais":[]}]},{"id":10201204,"num":"Cap. 04","nome":"Revolução Francesa e seus desdobramentos (1789–1799)","videos":[{"id":102012041,"nome":"8° ANO – Revolução Francesa e seus desdobramentos (1789–1799) – REPRISE 30.05.22","link":"","dur":"18:25","durSeg":1105,"resumo":"","materiais":[]}]},{"id":10201205,"num":"Cap. 05","nome":"1808: a fuga da família real portuguesa","videos":[{"id":102012051,"nome":"1808: a fuga da família real portuguesa para o Brasil – Prof. Pedro Balthazar","link":"","dur":"11:24","durSeg":684,"resumo":"","materiais":[]}]}]},{"id":102013,"numero":13,"titulo":"As Revoluções Burguesas – transformações na sociedade","cps":[],"caps":[{"id":10201301,"num":"Cap. 01","nome":"Iluminismo | Aula completa","videos":[{"id":102013011,"nome":"Iluminismo | Aula Completa","link":"","dur":"1:17:30","durSeg":4650,"resumo":"","materiais":[]}]},{"id":10201302,"num":"Cap. 02","nome":"Revoluções Burguesas","videos":[{"id":102013021,"nome":"Revoluções Burguesas","link":"","dur":"12:20","durSeg":740,"resumo":"","materiais":[]}]}]},{"id":102014,"numero":14,"titulo":"O capitalismo","cps":[],"caps":[{"id":10201401,"num":"Cap. 01","nome":"Fases do capitalismo","videos":[{"id":102014011,"nome":"Fases do Capitalismo: Comercial, Industrial, Financeiro e Informacional","link":"","dur":"38:29","durSeg":2309,"resumo":"","materiais":[]}]},{"id":10201402,"num":"Cap. 02","nome":"O que é o capitalismo?","videos":[{"id":102014021,"nome":"O QUE É O CAPITALISMO? – Cortes do História Pública","link":"","dur":"15:40","durSeg":940,"resumo":"","materiais":[]}]}]},{"id":102015,"numero":15,"titulo":"A Revolução no mundo do trabalho e na indústria / O processo de industrialização e o movimento operário","cps":[],"caps":[{"id":10201501,"num":"Cap. 01","nome":"Primeira Revolução Industrial","videos":[{"id":102015011,"nome":"Primeira Revolução Industrial – Nerdologia","link":"","dur":"9:00","durSeg":540,"resumo":"","materiais":[]}]},{"id":10201502,"num":"Cap. 02","nome":"A Segunda Revolução Industrial","videos":[{"id":102015021,"nome":"A Segunda Revolução Industrial","link":"","dur":"10:20","durSeg":620,"resumo":"","materiais":[]}]},{"id":10201503,"num":"Cap. 03","nome":"Terceira Revolução Industrial e Indústria 4.0","videos":[{"id":102015031,"nome":"O QUE É A TERCEIRA REVOLUÇÃO INDUSTRIAL?","link":"","dur":"24:12","durSeg":1452,"resumo":"","materiais":[]},{"id":102015032,"nome":"Como a INDÚSTRIA 4.0 vai ROUBAR o seu Emprego? (E como se proteger dela)","link":"","dur":"18:35","durSeg":1115,"resumo":"","materiais":[]}]},{"id":10201504,"num":"Cap. 04","nome":"Série Cosmos – 1ª Temporada, Episódio 12","videos":[{"id":102015041,"nome":"Série Cosmos – 1ª Temporada, Episódio 12","link":"","dur":"46:00","durSeg":2760,"resumo":"","materiais":[]}]},{"id":10201505,"num":"Cap. 05","nome":"Série Cosmos – 1ª Temporada, Episódio 12","videos":[{"id":102015051,"nome":"Série Cosmos – 1ª Temporada, Episódio 12","link":"","dur":"50:12","durSeg":3012,"resumo":"","materiais":[]}]},{"id":10201506,"num":"Cap. 06","nome":"Movimento Operário","videos":[{"id":102015061,"nome":"Movimento Operário","link":"","dur":"--:--","durSeg":0,"resumo":"","materiais":[]}]}]},{"id":102016,"numero":16,"titulo":"Imperialismo e o Neocolonialismo","cps":[],"caps":[{"id":10201601,"num":"Cap. 01","nome":"Imperialismo e Neocolonialismo","videos":[{"id":102016011,"nome":"Imperialismo e Neocolonialismo","link":"","dur":"30:14","durSeg":1814,"resumo":"","materiais":[]}]},{"id":10201602,"num":"Cap. 02","nome":"Atrocidades do domínio belga no Congo","videos":[{"id":102016021,"nome":"A terrível história de atrocidades do domínio belga no Congo","link":"","dur":"7:38","durSeg":458,"resumo":"","materiais":[]}]},{"id":10201603,"num":"Cap. 03","nome":"O genocídio esquecido da Alemanha na Namíbia","videos":[{"id":102016031,"nome":"O genocídio 'esquecido' da Alemanha na Namíbia, reconhecido após mais de um século","link":"","dur":"9:53","durSeg":593,"resumo":"","materiais":[]}]}]},{"id":102017,"numero":17,"titulo":"A Primeira Grande Guerra (vídeos editados)","cps":[],"caps":[{"id":10201701,"num":"Cap. 01–04","nome":"Guerras mundiais","videos":[{"id":102017011,"nome":"Guerras mundiais","link":"","dur":"--:--","durSeg":0,"resumo":"","materiais":[]},{"id":102017012,"nome":"Primeira Guerra Mundial – Nostalgia História","link":"","dur":"--:--","durSeg":0,"resumo":"","materiais":[]}]},{"id":10201702,"num":"Cap. 05","nome":"Primeira Guerra — complementos","videos":[{"id":102017021,"nome":"Guerras mundiais","link":"","dur":"--:--","durSeg":0,"resumo":"","materiais":[]},{"id":102017022,"nome":"Primeira Guerra Mundial – Nostalgia História","link":"","dur":"--:--","durSeg":0,"resumo":"","materiais":[]},{"id":102017023,"nome":"Arquivo S – O Brasil na Primeira Guerra Mundial","link":"","dur":"--:--","durSeg":0,"resumo":"","materiais":[]},{"id":102017024,"nome":"A CONFERÊNCIA DE PAZ DE PARIS, DE 1919","link":"","dur":"--:--","durSeg":0,"resumo":"","materiais":[]}]}]},{"id":102018,"numero":18,"titulo":"A Revolução Russa","cps":[],"caps":[{"id":10201801,"num":"Cap. 01","nome":"Vladimir Lenin e a Revolução Russa","videos":[{"id":102018011,"nome":"Vladimir Lenin e a Revolução Russa – Documentário | Parte 1","link":"","dur":"42:39","durSeg":2559,"resumo":"","materiais":[]}]},{"id":10201802,"num":"Cap. 02","nome":"100 anos das Revoluções Russas","videos":[{"id":102018021,"nome":"100 anos das Revoluções Russas | Nerdologia","link":"","dur":"10:00","durSeg":600,"resumo":"","materiais":[]}]},{"id":10201803,"num":"Cap. 03","nome":"Stalin e o comunismo soviético","videos":[{"id":102018031,"nome":"STALIN e o COMUNISMO SOVIÉTICO | História","link":"","dur":"29:28","durSeg":1768,"resumo":"","materiais":[]}]},{"id":10201804,"num":"Cap. 04","nome":"A Rússia pós-União Soviética e a hegemonia de Putin","videos":[{"id":102018041,"nome":"O poder da Rússia pós-União Soviética. E a hegemonia de Putin","link":"","dur":"10:25","durSeg":625,"resumo":"","materiais":[]}]}]},{"id":102019,"numero":19,"titulo":"O fortalecimento das ideologias totalitárias","cps":[],"caps":[{"id":10201901,"num":"Cap. 01","nome":"O que é fascismo?","videos":[{"id":102019011,"nome":"O QUE É FASCISMO? Entenda de um jeito SIMPLES","link":"","dur":"20:43","durSeg":1243,"resumo":"","materiais":[]}]},{"id":10201902,"num":"Cap. 02","nome":"Hitler chegou ao poder de forma democrática?","videos":[{"id":102019021,"nome":"Hitler chegou ao poder de forma democrática? | Nerdologia","link":"","dur":"10:32","durSeg":632,"resumo":"","materiais":[]}]},{"id":10201903,"num":"Cap. 03","nome":"Fascismo à brasileira / A agressão nazista","videos":[{"id":102019031,"nome":"Fascismo à Brasileira | Pedro Doria e Leandro Karnal","link":"","dur":"44:45","durSeg":2685,"resumo":"","materiais":[]},{"id":102019032,"nome":"Doc. Série – Redescobrindo a Segunda Guerra – Ep. 1: A agressão nazista","link":"","dur":"52:00","durSeg":3120,"resumo":"","materiais":[]}]}]},{"id":102020,"numero":20,"titulo":"A conjuntura latino-americana na primeira metade do século XX","cps":[],"caps":[{"id":10202001,"num":"Cap. 01","nome":"América Latina no século XX","videos":[{"id":102020011,"nome":"América Latina no século XX: Ditadura, Populismo e Revolução","link":"","dur":"32:20","durSeg":1940,"resumo":"","materiais":[]}]}]},{"id":102021,"numero":21,"titulo":"O século XX: reflexões sobre um novo panorama mundial","cps":[],"caps":[{"id":10202101,"num":"Cap. 01","nome":"O Século XX: um novo panorama mundial","videos":[{"id":102021011,"nome":"O Século XX: Um Novo Panorama Mundial","link":"","dur":"8:40","durSeg":520,"resumo":"","materiais":[]}]},{"id":10202102,"num":"Cap. 02","nome":"Brasil no Século XX (1900–2000)","videos":[{"id":102021021,"nome":"Brasil no Século XX: Um Período de Profundas Transformações (1900–2000)","link":"","dur":"15:17","durSeg":917,"resumo":"","materiais":[]}]}]},{"id":102022,"numero":22,"titulo":"Civilização e Barbárie: conceitos do passado e do presente","cps":[],"caps":[{"id":10202201,"num":"Cap. 01","nome":"A Cultura Genocida da Europa – Parte 01","videos":[{"id":102022011,"nome":"A Cultura Genocida da Europa – Parte 01","link":"","dur":"--:--","durSeg":0,"resumo":"","materiais":[]}]},{"id":10202202,"num":"Cap. 02","nome":"A Cultura Genocida da Europa – Parte 02","videos":[{"id":102022021,"nome":"A Cultura Genocida da Europa – Parte 02","link":"","dur":"--:--","durSeg":0,"resumo":"","materiais":[]}]}]},{"id":102023,"numero":23,"titulo":"Invasão ou migração? Uma discussão sobre a crise migratória contemporânea","cps":[],"caps":[{"id":10202301,"num":"Cap. 01","nome":"Crise Migratória – Atualidades","videos":[{"id":102023011,"nome":"Crise Migratória – Atualidades para Concurso #27 – AEP","link":"","dur":"28:16","durSeg":1696,"resumo":"","materiais":[]}]},{"id":10202302,"num":"Cap. 02","nome":"Migração: o drama que comove e divide o mundo","videos":[{"id":102023021,"nome":"Migração, o drama que comove e divide o mundo | 21 notícias que marcaram o século 21","link":"","dur":"15:00","durSeg":900,"resumo":"","materiais":[]}]},{"id":10202303,"num":"Cap. 03","nome":"Crises migratórias no Brasil","videos":[{"id":102023031,"nome":"Crises migratórias no Brasil – Brasil Escola","link":"","dur":"10:14","durSeg":614,"resumo":"","materiais":[]}]}]},{"id":102024,"numero":24,"titulo":"Pré-história do Amazonas","cps":[],"caps":[{"id":10202401,"num":"Cap. 01","nome":"Pré-História do Amazonas","videos":[{"id":102024011,"nome":"HISTÓRIA SIS 2/MACRO – 2024 – AULA 1: PRÉ-HISTÓRIA DO AMAZONAS","link":"","dur":"13:15","durSeg":795,"resumo":"","materiais":[]}]}]}]},{"id":103,"nome":"HISTÓRIA","turma":"3° ANO ENSINO MÉDIO","capitulo":"Currículo — Aulas 01 a 13","aulas":[{"id":103001,"numero":1,"titulo":"A degradação ambiental no processo de ocupação portuguesa no território brasileiro","cps":[],"caps":[{"id":10300101,"num":"Cap. 01","nome":"Ciclo do Pau Brasil e Capitanias Hereditárias","videos":[{"id":103001011,"nome":"Aula – Ciclo do Pau Brasil e Capitanias Hereditárias","link":"","dur":"23:30","durSeg":1410,"resumo":"","materiais":[]}]}]},{"id":103002,"numero":2,"titulo":"Atividade agrícola no Brasil Colônia","cps":[],"caps":[{"id":10300201,"num":"Cap. 01","nome":"Questão agrícola e o período da cana-de-açúcar","videos":[{"id":103002011,"nome":"Agricultura – Questão agrícola – Período da cana de açúcar","link":"","dur":"18:12","durSeg":1092,"resumo":"","materiais":[]}]}]},{"id":103003,"numero":3,"titulo":"A propriedade da terra no Brasil Colônia (Séculos XVI–XVIII)","cps":[],"caps":[{"id":10300301,"num":"Cap. 01","nome":"Você sabe o que é uma sesmaria?","videos":[{"id":103003011,"nome":"VOCÊ SABE O QUE É UMA SESMARIA? | Origem e motivação para sua criação | Idade Média","link":"","dur":"10:09","durSeg":609,"resumo":"","materiais":[]}]}]},{"id":103004,"numero":4,"titulo":"A monocultura da cana-de-açúcar e suas especificidades (Séculos XVI–XVIII)","cps":[],"caps":[{"id":10300401,"num":"Cap. 01","nome":"O Brasil Colônia","videos":[{"id":103004011,"nome":"O BRASIL COLÔNIA","link":"","dur":"1:08:44","durSeg":4124,"resumo":"","materiais":[]}]}]},{"id":103005,"numero":5,"titulo":"A Sociedade Patriarcal: formação e características (Séculos XVI–XVIII)","cps":[],"caps":[{"id":10300501,"num":"Cap. 01","nome":"A Sociedade Patriarcal","videos":[{"id":103005011,"nome":"A SOCIEDADE PATRIARCAL","link":"","dur":"19:57","durSeg":1197,"resumo":"","materiais":[]}]}]},{"id":103006,"numero":6,"titulo":"A presença holandesa no Brasil e a crise açucareira","cps":[],"caps":[{"id":10300601,"num":"Cap. 01","nome":"Ciclo do Açúcar","videos":[{"id":103006011,"nome":"Ciclo Do Açúcar","link":"","dur":"33:42","durSeg":2022,"resumo":"","materiais":[]}]},{"id":10300602,"num":"Cap. 02","nome":"Crise do Açúcar e a invasão holandesa","videos":[{"id":103006021,"nome":"Crise do Açúcar e a invasão holandesa","link":"","dur":"35:45","durSeg":2145,"resumo":"","materiais":[]}]}]},{"id":103007,"numero":7,"titulo":"Revolução Industrial (Séculos XVIII–XIX)","cps":[],"caps":[{"id":10300701,"num":"Cap. 01","nome":"A Primeira Revolução Industrial","videos":[{"id":103007011,"nome":"A Primeira Revolução Industrial","link":"","dur":"9:00","durSeg":540,"resumo":"","materiais":[]}]},{"id":10300702,"num":"Cap. 02","nome":"A Segunda Revolução Industrial","videos":[{"id":103007021,"nome":"A Segunda Revolução Industrial","link":"","dur":"10:00","durSeg":600,"resumo":"","materiais":[]}]},{"id":10300703,"num":"Cap. 03","nome":"Terceira Revolução Industrial e Indústria 4.0","videos":[{"id":103007031,"nome":"O QUE É A TERCEIRA REVOLUÇÃO INDUSTRIAL?","link":"","dur":"24:12","durSeg":1452,"resumo":"","materiais":[]},{"id":103007032,"nome":"Como a INDÚSTRIA 4.0 vai ROUBAR o seu Emprego? (E como se proteger dela)","link":"","dur":"18:35","durSeg":1115,"resumo":"","materiais":[]},{"id":103007033,"nome":"A curiosa linha do tempo da evolução da Inteligência Artificial","link":"","dur":"13:17","durSeg":797,"resumo":"","materiais":[]}]},{"id":10300704,"num":"Cap. 04","nome":"Série Cosmos – 1ª Temporada, Episódio 12","videos":[{"id":103007041,"nome":"Série Cosmos – 1ª Temporada, Episódio 12","link":"","dur":"45:00","durSeg":2700,"resumo":"","materiais":[]}]},{"id":10300705,"num":"Cap. 05","nome":"Movimento operário e pensamento social","videos":[{"id":103007051,"nome":"História Geral – aula 35 – Movimento operário e pensamento social","link":"","dur":"50:12","durSeg":3012,"resumo":"","materiais":[]}]}]},{"id":103008,"numero":8,"titulo":"Transformações nas formas de produção","cps":[],"caps":[{"id":10300801,"num":"Cap. 01","nome":"A História de Henry Ford","videos":[{"id":103008011,"nome":"A História de Henry Ford – Histórias de Sucesso #4","link":"","dur":"18:58","durSeg":1138,"resumo":"","materiais":[]}]},{"id":10300802,"num":"Cap. 02","nome":"Taylorismo","videos":[{"id":103008021,"nome":"Taylorismo","link":"","dur":"6:18","durSeg":378,"resumo":"","materiais":[]}]},{"id":10300803,"num":"Cap. 03","nome":"O Toyotismo","videos":[{"id":103008031,"nome":"O Toyotismo","link":"","dur":"16:10","durSeg":970,"resumo":"","materiais":[]}]},{"id":10300804,"num":"Cap. 04","nome":"Resumo das mudanças nas formas de produção","videos":[{"id":103008041,"nome":"Resumo das Mudanças nas Formas de Produção","link":"","dur":"10:39","durSeg":639,"resumo":"","materiais":[]}]},{"id":10300805,"num":"Cap. 05","nome":"O futuro do trabalho — Nerdologia Tech","videos":[{"id":103008051,"nome":"O futuro do seu emprego | Nerdologia Tech","link":"","dur":"9:43","durSeg":583,"resumo":"","materiais":[]},{"id":103008052,"nome":"Robôs vão tomar o seu emprego? Automatização do trabalho | Nerdologia Tech","link":"","dur":"9:43","durSeg":583,"resumo":"","materiais":[]}]}]},{"id":103009,"numero":9,"titulo":"A exploração da mão-de-obra de homens, mulheres e crianças (Séculos XVIII–XIX)","cps":[],"caps":[{"id":10300901,"num":"Cap. 01","nome":"Trabalho análogo à escravidão no Brasil e no mundo","videos":[{"id":103009011,"nome":"TRABALHO ANÁLOGO À ESCRAVIDÃO NO BRASIL E NO MUNDO","link":"","dur":"29:05","durSeg":1745,"resumo":"","materiais":[]}]},{"id":10300902,"num":"Cap. 02","nome":"Trabalho feminino na sociedade de classes — Heleieth Saffioti","videos":[{"id":103009021,"nome":"Trabalho feminino na sociedade de classes: a contribuição de Heleieth Saffioti","link":"","dur":"34:26","durSeg":2066,"resumo":"","materiais":[]}]},{"id":10300903,"num":"Cap. 03","nome":"O trabalho infantil no Brasil e no mundo","videos":[{"id":103009031,"nome":"O TRABALHO INFANTIL NO BRASIL E NO MUNDO","link":"","dur":"12:23","durSeg":743,"resumo":"","materiais":[]}]}]},{"id":103010,"numero":10,"titulo":"Trabalho rural no Brasil (Séculos XVI–XXI)","cps":[],"caps":[{"id":10301001,"num":"Cap. 01","nome":"Economia colonial: cana-de-açúcar, pecuária e drogas do sertão","videos":[{"id":103010011,"nome":"ECONOMIA COLONIAL: CANA-DE-AÇÚCAR, PECUÁRIA E DROGAS DO SERTÃO","link":"","dur":"27:20","durSeg":1640,"resumo":"","materiais":[]}]},{"id":10301002,"num":"Cap. 02","nome":"Crise do Açúcar e a invasão holandesa","videos":[{"id":103010021,"nome":"Crise do Açúcar e a invasão holandesa","link":"","dur":"8:29","durSeg":509,"resumo":"","materiais":[]}]},{"id":10301003,"num":"Cap. 03","nome":"Reforma agrária – Brasil Escola","videos":[{"id":103010031,"nome":"Reforma agrária – Brasil Escola","link":"","dur":"5:56","durSeg":356,"resumo":"","materiais":[]}]}]},{"id":103011,"numero":11,"titulo":"O atual problema da terra no Brasil (Séculos XX–XXI)","cps":[],"caps":[{"id":10301101,"num":"Cap. 01","nome":"Questão agrária no Brasil","videos":[{"id":103011011,"nome":"QUESTÃO AGRÁRIA NO BRASIL (HELP PRA REDAÇÃO DO ENEM)","link":"","dur":"15:00","durSeg":900,"resumo":"","materiais":[]}]},{"id":10301102,"num":"Cap. 02","nome":"Fome num país que alimenta 1 bilhão","videos":[{"id":103011021,"nome":"Como o Brasil que alimenta 1 bilhão no mundo tem 10 milhões passando fome","link":"","dur":"14:56","durSeg":896,"resumo":"","materiais":[]}]},{"id":10301103,"num":"Cap. 03","nome":"Desigualdade no Brasil em 4 dados","videos":[{"id":103011031,"nome":"4 dados que mostram por que o Brasil é um dos países mais desiguais do mundo","link":"","dur":"7:34","durSeg":454,"resumo":"","materiais":[]}]},{"id":10301104,"num":"Cap. 04","nome":"Agronegócio e fome","videos":[{"id":103011041,"nome":"O agronegócio carrega o Brasil nas costas?","link":"","dur":"17:56","durSeg":1076,"resumo":"","materiais":[]},{"id":103011042,"nome":"Fome e capitalismo | 062","link":"","dur":"14:14","durSeg":854,"resumo":"","materiais":[]}]}]},{"id":103012,"numero":12,"titulo":"A luta pela terra – posse, propriedade e as artimanhas da exclusão (Séculos XX–XXI)","cps":[],"caps":[{"id":10301201,"num":"Cap. 01","nome":"Vídeo da aula","videos":[{"id":103012011,"nome":"A luta pela terra – vídeo da aula","link":"","dur":"15:22","durSeg":922,"resumo":"","materiais":[]}]}]},{"id":103013,"numero":13,"titulo":"História das políticas públicas ambientais e dos movimentos sociais de proteção do meio ambiente no Brasil (Séculos XX–XXI)","cps":[],"caps":[{"id":10301301,"num":"Cap. 01","nome":"Vídeo da aula","videos":[{"id":103013011,"nome":"Políticas públicas ambientais – vídeo da aula","link":"","dur":"20:09","durSeg":1209,"resumo":"","materiais":[]}]}]}]}]};
+const SEED={"disciplinas":[]}; // app entregue vazio — o usuario cria as proprias materias
 
 /* ===== Projetos (anos letivos) — cada projeto guarda um banco completo ===== */
-const APP_VERSION='2.0', APP_DATE='julho de 2026';
+const APP_VERSION='2.1', APP_DATE='julho de 2026';
 const PROJ_KEY='prometeu.projects.v1';
 let projReg=null;
 function loadProjects(){
@@ -119,6 +121,7 @@ function capTem(c){return c.videos.length>0||c.videos.some(v=>(v.resumo||'').tri
 function aulaPend(a){return a.caps.filter(c=>capTem(c)&&!c.apresentado).length;}
 function aulaMinistrados(a){return a.caps.filter(c=>capTem(c)&&c.apresentado).length;}
 function saveDB(){
+  if(demoOn)return; // durante a demonstração o banco é temporário — nunca persiste
   try{localStorage.setItem(dbKey(),JSON.stringify(db));}catch(e){}
 }
 function loadTheme(){
@@ -150,8 +153,8 @@ function applyThemeUI(t){
   document.getElementById('root').className=t;
   document.body.className=t;                     // fundo do body acompanha o tema (corrige fundo branco)
   document.documentElement.style.background=m.bg; // e o html também (overscroll/rotação)
-  ['ti0','ti1','ti2','ti3','ti4','ti5','ti6'].forEach(id=>{const el=document.getElementById(id);if(el)el.className=`ti ${m.icon}`;});
-  const tl=document.getElementById('tl0');if(tl)tl.textContent=m.label;
+  ['ti0','ti1','ti2','ti3','ti4','ti5','ti6','ti7'].forEach(id=>{const el=document.getElementById(id);if(el)el.className=`ti ${m.icon}`;});
+  const tl=document.getElementById('tl0');if(tl)tl.textContent=(window.tr?tr(m.label):m.label);
   paintIcons();
 }
 function toggleTheme(){
@@ -201,8 +204,8 @@ function renderDiscs(){ // TELA 1: apenas as matérias
 function openMat(i){curMat=MATS[i];renderSeries();showScreen('s-series');}
 function renameMat(i){
   const m=MATS[i];
-  openModal('Renomear matéria',[{id:'mm-n',lbl:'Nome da matéria',val:m}],()=>{
-    const novo=vi('mm-n');if(!novo){alert('Informe o nome.');return;}
+  openModal(tr('Renomear matéria'),[{id:'mm-n',lbl:'Nome da matéria',val:m}],()=>{
+    const novo=vi('mm-n');if(!novo){alert(tr('Informe o nome.'));return;}
     matDiscs(m).forEach(d=>d.nome=novo.toUpperCase());
     if(curMat===m)curMat=novo.toUpperCase();
     closeModal();renderDiscs();
@@ -210,7 +213,7 @@ function renameMat(i){
 }
 function removeMat(i){
   const m=MATS[i];const n=matDiscs(m).length;
-  if(!confirm(`Remover a matéria "${m}" e sua${n!==1?'s':''} ${n} série${n!==1?'s':''}?`))return;
+  if(!confirm(trf('Remover a matéria "{m}" e sua(s) {n} série(s)?',{m,n})))return;
   db.disciplinas=db.disciplinas.filter(d=>matKey(d)!==m);renderDiscs();agendarLimpeza();
 }
 
@@ -265,23 +268,24 @@ function renderSeries(){ // TELA 2: séries/anos da matéria; aulas recolhidas n
   }).join('');
 }
 function openAddSerie(){
-  openModal('Nova série/ano — '+curMat,[{id:'md-t',lbl:'Série/Ano',ph:'Ex: 6° ANO'},{id:'md-c',lbl:'Capítulo / unidade',ph:'Ex: Cap. 01 — Brasil Colônia'}],()=>{
-    const turma=vi('md-t');if(!turma){alert('Informe a série/ano.');return;}
+  if(!exigirAtivacao())return;
+  openModal(trf('Nova série/ano — {m}',{m:curMat}),[{id:'md-t',lbl:'Série/Ano',ph:'Ex: 6° ANO'},{id:'md-c',lbl:'Capítulo / unidade',ph:'Ex: Cap. 01 — Brasil Colônia'}],()=>{
+    const turma=vi('md-t');if(!turma){alert(tr('Informe a série/ano.'));return;}
     db.disciplinas.push({id:nid(),nome:curMat,turma,capitulo:vi('md-c'),aulas:[]});closeModal();renderSeries();
   });
 }
 function openDisc(id){curDiscId=id;renderAulas();showScreen('s-disc');}
-function openAddDisc(){openModal('Nova matéria',[{id:'md-n',lbl:'Nome da matéria',ph:'Ex: HISTÓRIA'},{id:'md-t',lbl:'Série/Ano',ph:'Ex: 6° ANO'},{id:'md-c',lbl:'Capítulo / unidade',ph:'Ex: Cap. 01 — Brasil Colônia'}],()=>{
-  const nome=vi('md-n');if(!nome){alert('Informe o nome.');return;}
+function openAddDisc(){if(!exigirAtivacao())return;openModal(tr('Nova matéria'),[{id:'md-n',lbl:'Nome da matéria',ph:'Ex: HISTÓRIA'},{id:'md-t',lbl:'Série/Ano',ph:'Ex: 6° ANO'},{id:'md-c',lbl:'Capítulo / unidade',ph:'Ex: Cap. 01 — Brasil Colônia'}],()=>{
+  const nome=vi('md-n');if(!nome){alert(tr('Informe o nome.'));return;}
   db.disciplinas.push({id:nid(),nome:nome.toUpperCase(),turma:vi('md-t'),capitulo:vi('md-c'),aulas:[]});closeModal();renderDiscs();
 });}
-function openEditDisc(id){const d=getDisc(id);openModal('Editar série/ano',[{id:'md-n',lbl:'Matéria',val:d.nome},{id:'md-t',lbl:'Série/Ano',val:d.turma},{id:'md-c',lbl:'Capítulo / unidade',val:d.capitulo}],()=>{
+function openEditDisc(id){const d=getDisc(id);openModal(tr('Editar série/ano'),[{id:'md-n',lbl:'Matéria',val:d.nome},{id:'md-t',lbl:'Série/Ano',val:d.turma},{id:'md-c',lbl:'Capítulo / unidade',val:d.capitulo}],()=>{
   d.nome=(vi('md-n')||d.nome).toUpperCase();d.turma=vi('md-t');d.capitulo=vi('md-c');closeModal();
   if(document.getElementById('s-series').classList.contains('active'))renderSeries();else renderDiscs();
   if(curDiscId===id)renderAulas();
 });}
 function editCurDisc(){openEditDisc(curDiscId);}
-function removeDisc(id){if(!confirm('Remover esta série/ano e todas as suas aulas?'))return;db.disciplinas=db.disciplinas.filter(d=>d.id!==id);renderSeries();agendarLimpeza();}
+function removeDisc(id){if(!confirm(tr('Remover esta série/ano e todas as suas aulas?')))return;db.disciplinas=db.disciplinas.filter(d=>d.id!==id);renderSeries();agendarLimpeza();}
 
 function renderAulas(){
   saveDB();
@@ -308,19 +312,20 @@ function renderAulas(){
 }
 function openAula(id){curAulaId=id;selCP=null;renderCaps();showScreen('s-aula');}
 function openAddAula(){
+  if(!exigirAtivacao())return;
   const disc=getDisc(curDiscId);
-  openModal('Nova aula',[{id:'ma-t',lbl:'Título da aula',ph:'Ex: A Sociedade Patriarcal'}],()=>{
-    const titulo=vi('ma-t');if(!titulo){alert('Informe o título.');return;}
+  openModal(tr('Nova aula'),[{id:'ma-t',lbl:'Título da aula',ph:'Ex: A Sociedade Patriarcal'}],()=>{
+    const titulo=vi('ma-t');if(!titulo){alert(tr('Informe o título.'));return;}
     const num=(disc.aulas.reduce((m,a)=>Math.max(m,a.numero),0))+1;
     disc.aulas.push({id:nid(),numero:num,titulo,cps:[],caps:[]});closeModal();renderAulas();
   });
 }
 function openEditAula(id){const disc=getDisc(curDiscId);const aula=getAula(disc,id);
-  openModal('Editar aula',[{id:'ma-t',lbl:'Título da aula',val:aula.titulo}],()=>{
+  openModal(tr('Editar aula'),[{id:'ma-t',lbl:'Título da aula',val:aula.titulo}],()=>{
     aula.titulo=vi('ma-t')||aula.titulo;closeModal();renderAulas();if(curAulaId===id)renderCaps();
   });}
 function editCurAula(){openEditAula(curAulaId);}
-function removeAula(id){const disc=getDisc(curDiscId);if(!confirm('Remover esta aula?'))return;disc.aulas=disc.aulas.filter(a=>a.id!==id);disc.aulas.forEach((a,i)=>a.numero=i+1);renderAulas();agendarLimpeza();}
+function removeAula(id){const disc=getDisc(curDiscId);if(!confirm(tr('Remover esta aula?')))return;disc.aulas=disc.aulas.filter(a=>a.id!==id);disc.aulas.forEach((a,i)=>a.numero=i+1);renderAulas();agendarLimpeza();}
 
 const openCaps=new Set(); // capítulos com a lista de vídeos expandida (estado da sessão)
 function toggleCap(id){
@@ -352,7 +357,7 @@ function setObs(id,val){
 function renderCaps(){
   saveDB();
   const disc=getDisc(curDiscId);const aula=getAula(disc,curAulaId);if(!aula)return;
-  document.getElementById('aula-num-ttl').textContent='Aula '+String(aula.numero).padStart(2,'0');
+  document.getElementById('aula-num-ttl').textContent=trf('Aula {n}',{n:String(aula.numero).padStart(2,'0')});
   document.getElementById('aula-titulo-lbl').textContent=aula.titulo;
   const totalVids=aula.caps.reduce((s,c)=>s+c.videos.length,0);
   const pend=aulaPend(aula),feitos=aulaMinistrados(aula),comConteudo=pend+feitos;
@@ -444,9 +449,10 @@ function selectCP(n,capId){
   if(card)setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'start'}),80);
 }
 function openAddCap(){
+  if(!exigirAtivacao())return;
   const disc=getDisc(curDiscId);const aula=getAula(disc,curAulaId);
-  openModal('Novo capítulo',[{id:'cf-num',lbl:'Número / identificador',ph:'Ex: Cap. 01',val:`Cap. ${String(aula.caps.length+1).padStart(2,'0')}`},{id:'cf-nome',lbl:'Nome do capítulo',ph:'Ex: Ciclo do Pau Brasil'}],()=>{
-    const nome=vi('cf-nome');if(!nome){alert('Informe o nome.');return;}
+  openModal(tr('Novo capítulo'),[{id:'cf-num',lbl:'Número / identificador',ph:'Ex: Cap. 01',val:`Cap. ${String(aula.caps.length+1).padStart(2,'0')}`},{id:'cf-nome',lbl:'Nome do capítulo',ph:'Ex: Ciclo do Pau Brasil'}],()=>{
+    const nome=vi('cf-nome');if(!nome){alert(tr('Informe o nome.'));return;}
     const capId=nid();
     aula.caps.push({id:capId,num:vi('cf-num'),nome,videos:[]});
     openCaps.add(capId); // capítulo novo abre expandido
@@ -454,10 +460,10 @@ function openAddCap(){
   });
 }
 function openEditCap(capId){const disc=getDisc(curDiscId);const aula=getAula(disc,curAulaId);const cap=getCap(aula,capId);
-  openModal('Editar capítulo',[{id:'cf-num',lbl:'Número / identificador',val:cap.num},{id:'cf-nome',lbl:'Nome do capítulo',val:cap.nome}],()=>{
+  openModal(tr('Editar capítulo'),[{id:'cf-num',lbl:'Número / identificador',val:cap.num},{id:'cf-nome',lbl:'Nome do capítulo',val:cap.nome}],()=>{
     cap.num=vi('cf-num');cap.nome=vi('cf-nome')||cap.nome;closeModal();renderCaps();
   });}
-function removeCap(capId){const disc=getDisc(curDiscId);const aula=getAula(disc,curAulaId);if(!confirm('Remover este capítulo e todos os seus vídeos?'))return;aula.caps=aula.caps.filter(c=>c.id!==capId);renderCaps();agendarLimpeza();}
+function removeCap(capId){const disc=getDisc(curDiscId);const aula=getAula(disc,curAulaId);if(!confirm(tr('Remover este capítulo e todos os seus vídeos?')))return;aula.caps=aula.caps.filter(c=>c.id!==capId);renderCaps();agendarLimpeza();}
 function toggleApresentado(capId){
   const disc=getDisc(curDiscId);const aula=getAula(disc,curAulaId);const cap=getCap(aula,capId);
   if(!cap||!capTem(cap))return;
@@ -471,18 +477,19 @@ function ytSearch(capId,vidId){
 }
 function ytSearchForm(){
   const n=vi('vf-nome');
-  if(!n){alert('Preencha o nome do vídeo primeiro.');return;}
+  if(!n){alert(tr('Preencha o nome do vídeo primeiro.'));return;}
   window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(n),'_blank');
 }
-function removeVid(capId,vidId){const disc=getDisc(curDiscId);const aula=getAula(disc,curAulaId);const cap=getCap(aula,capId);if(!confirm('Remover este vídeo?'))return;cap.videos=cap.videos.filter(v=>v.id!==vidId);renderCaps();agendarLimpeza();}
+function removeVid(capId,vidId){const disc=getDisc(curDiscId);const aula=getAula(disc,curAulaId);const cap=getCap(aula,capId);if(!confirm(tr('Remover este vídeo?')))return;cap.videos=cap.videos.filter(v=>v.id!==vidId);renderCaps();agendarLimpeza();}
 
 let formMats=[];
 function goToFormVid(capId,vidId){
+  if(vidId==null&&!exigirAtivacao())return; // só bloqueia vídeo NOVO; editar existente é livre
   curCapId=capId;editVidId=vidId;
   const disc=getDisc(curDiscId);const aula=getAula(disc,curAulaId);const cap=getCap(aula,capId);
   const vid=vidId?cap.videos.find(x=>x.id===vidId):null;
   const numVid=vid?cap.videos.indexOf(vid)+1:cap.videos.length+1;
-  document.getElementById('vid-form-ttl').textContent=vid?`Editar V${numVid} — ${cap.num}`:`Novo vídeo — ${cap.num||cap.nome}`;
+  document.getElementById('vid-form-ttl').textContent=vid?trf('Editar V{v} — {c}',{v:numVid,c:cap.num}):trf('Novo vídeo — {c}',{c:cap.num||cap.nome});
   document.getElementById('vf-nome').value=vid?.nome||'';
   document.getElementById('vf-link').value=vid?.link||'';
   document.getElementById('vf-dur').value=vid&&vid.dur&&vid.dur!=='--:--'?vid.dur:'';
@@ -493,7 +500,7 @@ function goToFormVid(capId,vidId){
   const twm=document.getElementById('tw-mats'),ttm=document.getElementById('tt-mats');
   if(twm)twm.classList.remove('open');if(ttm)ttm.classList.remove('open');
   renderMats();renderArqs();updPg();
-  document.getElementById('vf-hint').textContent=vid?.link?'Link cadastrado':'';
+  document.getElementById('vf-hint').textContent=vid?.link?tr('Link cadastrado'):'';
   document.getElementById('vf-dur-info').innerHTML=vid?.durSeg>0?`<i class="ti ti-clock" aria-hidden="true"></i> ${vid.dur}`:'';
   document.getElementById('vf-spin').style.display='none';
   showScreen('s-vid');
@@ -505,7 +512,7 @@ function updPg(){
   const len=document.getElementById('vf-resumo').value.length;
   const pg=len===0?0:Math.max(1,Math.ceil(len/3000));
   const el=document.getElementById('vf-pg');
-  el.textContent=`≈ ${pg} pág. (${len}/9000)`;
+  el.textContent=trf('≈ {p} pág. ({n}/9000)',{p:pg,n:len});
   el.classList.toggle('warn',pg>=3);
 }
 
@@ -520,7 +527,7 @@ function toggleMats(){
 function updMatCount(){
   const n=formMats.filter(m=>(m.titulo||'').trim()||(m.link||'').trim()).length+formArqs.length;
   const el=document.getElementById('mats-count');
-  if(el)el.textContent=`Material didático e documentos${n?` (${n})`:''}`;
+  if(el)el.textContent=n?trf('Material didático e documentos ({n})',{n}):tr('Material didático e documentos');
 }
 function renderMats(){
   const box=document.getElementById('vf-mats');
@@ -567,17 +574,17 @@ async function sweepOrphans(){ // apaga do IndexedDB arquivos que nenhum projeto
 let _sweepT=null;
 function agendarLimpeza(){clearTimeout(_sweepT);_sweepT=setTimeout(()=>sweepOrphans().catch(()=>{}),800);}
 function pickArq(){
-  if(formArqs.length>=ARQ_MAX){alert(`Limite de ${ARQ_MAX} documentos por vídeo.`);return;}
+  if(formArqs.length>=ARQ_MAX){alert(trf('Limite de {n} documentos por vídeo.',{n:ARQ_MAX}));return;}
   document.getElementById('vf-file').click();
 }
 async function onArqPick(input){
   const files=[...(input.files||[])];input.value='';
   for(const f of files){
-    if(formArqs.length>=ARQ_MAX){alert(`Limite de ${ARQ_MAX} documentos por vídeo — os demais não foram importados.`);break;}
-    if(f.size>ARQ_MB*1024*1024){alert(`"${f.name}" passa de ${ARQ_MB} MB e não foi importado.`);continue;}
+    if(formArqs.length>=ARQ_MAX){alert(trf('Limite de {n} documentos por vídeo — os demais não foram importados.',{n:ARQ_MAX}));break;}
+    if(f.size>ARQ_MB*1024*1024){alert(trf('"{f}" passa de {n} MB e não foi importado.',{f:f.name,n:ARQ_MB}));continue;}
     const fid=nid();
     try{await fPut({fid,nome:f.name,tipo:f.type,blob:f});}
-    catch(e){alert('Não foi possível guardar o arquivo neste navegador.');break;}
+    catch(e){alert(tr('Não foi possível guardar o arquivo neste navegador.'));break;}
     formArqs.push({fid,titulo:f.name.replace(/\.[^.]+$/,''),autor:'',nomeArq:f.name,tipo:f.type,tamanho:f.size});
   }
   renderArqs();
@@ -606,28 +613,28 @@ function renderArqs(){
 async function abrirArq(fid){
   try{
     const r=await fGet(fid);
-    if(!r||!r.blob){alert('Arquivo não encontrado no armazenamento deste navegador.');return;}
+    if(!r||!r.blob){alert(tr('Arquivo não encontrado no armazenamento deste navegador.'));return;}
     const url=URL.createObjectURL(r.blob);
     const visual=/pdf/.test(r.tipo)||/^image\//.test(r.tipo);
-    if(visual){const w=window.open(url,'_blank');if(!w)alert('Permita pop-ups para visualizar o arquivo.');}
+    if(visual){const w=window.open(url,'_blank');if(!w)alert(tr('Permita pop-ups para visualizar o arquivo.'));}
     else{const a=document.createElement('a');a.href=url;a.download=r.nome||'arquivo';document.body.appendChild(a);a.click();a.remove();}
     setTimeout(()=>URL.revokeObjectURL(url),60000);
-  }catch(e){alert('Não foi possível abrir o arquivo.');}
+  }catch(e){alert(tr('Não foi possível abrir o arquivo.'));}
 }
 
 /* ===== Exportação do resumo (Word / PDF) — offline ===== */
 function buildResumoHTML(){
   const disc=getDisc(curDiscId);const aula=getAula(disc,curAulaId);const cap=getCap(aula,curCapId);
-  const nome=vi('vf-nome')||'Vídeo sem nome';
+  const nome=vi('vf-nome')||tr('Vídeo sem nome');
   const resumo=document.getElementById('vf-resumo').value.trim();
   const mats=formMats.filter(m=>(m.titulo||'').trim()||(m.link||'').trim());
   const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   const link=vi('vf-link');
   const linkHtml=link?`<div class="vlink">Vídeo: <a href="${esc(link)}">${esc(link)}</a></div>`:'';
-  const paras=resumo?resumo.split(/\n{2,}/).map(p=>`<p>${esc(p).replace(/\n/g,'<br>')}</p>`).join(''):'<p><i>(Sem resumo preenchido)</i></p>';
-  const matsHtml=mats.length?`<h2>Material didático</h2><ul>${mats.map(m=>`<li><b>${esc(m.titulo||'—')}</b>${m.link?' — '+(/^https?:\/\//i.test(m.link)?`<a href="${esc(m.link)}">${esc(m.link)}</a>`:esc(m.link)):''}</li>`).join('')}</ul>`:'';
-  const arqsHtml=formArqs.length?`<h2>Documentos anexados</h2><ul>${formArqs.map(a=>`<li><b>${esc(a.titulo||a.nomeArq)}</b>${a.autor?' — '+esc(a.autor):''} <span style="color:#777">(${esc(a.nomeArq)})</span></li>`).join('')}</ul>`:'';
-  return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><title>${esc(nome)}</title>
+  const paras=resumo?resumo.split(/\n{2,}/).map(p=>`<p>${esc(p).replace(/\n/g,'<br>')}</p>`).join(''):`<p><i>${tr('(Sem resumo preenchido)')}</i></p>`;
+  const matsHtml=mats.length?`<h2>${tr('Material didático')}</h2><ul>${mats.map(m=>`<li><b>${esc(m.titulo||'—')}</b>${m.link?' — '+(/^https?:\/\//i.test(m.link)?`<a href="${esc(m.link)}">${esc(m.link)}</a>`:esc(m.link)):''}</li>`).join('')}</ul>`:'';
+  const arqsHtml=formArqs.length?`<h2>${tr('Documentos anexados')}</h2><ul>${formArqs.map(a=>`<li><b>${esc(a.titulo||a.nomeArq)}</b>${a.autor?' — '+esc(a.autor):''} <span style="color:#777">(${esc(a.nomeArq)})</span></li>`).join('')}</ul>`:'';
+  return `<!DOCTYPE html><html lang="${LANG_META[LANG].tag}"><head><meta charset="utf-8"><title>${esc(nome)}</title>
 <style>
 @page{size:A4;margin:2.5cm}
 body{font-family:Georgia,'Times New Roman',serif;font-size:12pt;line-height:1.5;color:#111;max-width:17cm;margin:auto}
@@ -639,7 +646,7 @@ h2{font-size:13pt;margin-top:18pt}
 ul{padding-left:18pt}
 </style></head><body>
 <h1>${esc(nome)}</h1>
-<div class="meta">${esc(disc.nome||'')} · ${esc(disc.turma||'')} · Aula ${String(aula.numero).padStart(2,'0')} — ${esc(aula.titulo)} · ${esc(cap.num||'')} ${esc(cap.nome||'')}</div>
+<div class="meta">${esc(disc.nome||'')} · ${esc(disc.turma||'')} · ${trf('Aula {n}',{n:String(aula.numero).padStart(2,'0')})} — ${esc(aula.titulo)} · ${esc(cap.num||'')} ${esc(cap.nome||'')}</div>
 ${linkHtml}
 ${paras}
 ${matsHtml}
@@ -657,7 +664,7 @@ function expWord(){
 }
 function expPDF(){
   const w=window.open('','_blank');
-  if(!w){alert('Permita pop-ups para exportar em PDF.');return;}
+  if(!w){alert(tr('Permita pop-ups para exportar em PDF.'));return;}
   w.document.write(buildResumoHTML());
   w.document.close();
   w.focus();
@@ -685,8 +692,8 @@ function openRelatorio(discId){
   const d=getDisc(discId);if(!d)return;
   const nCaps=d.aulas.reduce((s,a)=>s+a.caps.length,0);
   const nVids=d.aulas.reduce((s,a)=>s+a.caps.reduce((x,c)=>x+c.videos.length,0),0);
-  document.getElementById('rmodal-title').textContent=`Relatório — ${d.nome} · ${d.turma||'Série única'}`;
-  document.getElementById('rmodal-sub').textContent=`${d.aulas.length} aulas · ${nCaps} capítulos · ${nVids} vídeos · ${fmtS(discDurSeg(d))}`;
+  document.getElementById('rmodal-title').textContent=trf('Relatório — {d}',{d:`${d.nome} · ${d.turma||tr('Série única')}`});
+  document.getElementById('rmodal-sub').textContent=[trf('{n} aulas',{n:d.aulas.length}),trf('{n} capítulos',{n:nCaps}),trf('{n} vídeos',{n:nVids}),fmtS(discDurSeg(d))].join(' · ');
   document.getElementById('rmodal').classList.add('open');paintIcons();
 }
 function closeRModal(){document.getElementById('rmodal').classList.remove('open');relDiscId=null;}
@@ -694,33 +701,33 @@ function buildRelatorioHTML(discId){
   const d=getDisc(discId);
   const nCaps=d.aulas.reduce((s,a)=>s+a.caps.length,0);
   const nVids=d.aulas.reduce((s,a)=>s+a.caps.reduce((x,c)=>x+c.videos.length,0),0);
-  const hoje=new Date().toLocaleDateString('pt-BR');
+  const hoje=new Date().toLocaleDateString(LANG_META[LANG].tag);
   let corpo='';
   d.aulas.forEach(a=>{
-    corpo+=`<h2>Aula ${String(a.numero).padStart(2,'0')} — ${escH(a.titulo)} <span class="dur">${fmtS(aulaDurSeg(a))}</span></h2>`;
-    if(!a.caps.length){corpo+='<p class="vazio">Sem capítulos.</p>';return;}
+    corpo+=`<h2>${trf('Aula {n}',{n:String(a.numero).padStart(2,'0')})} — ${escH(a.titulo)} <span class="dur">${fmtS(aulaDurSeg(a))}</span></h2>`;
+    if(!a.caps.length){corpo+=`<p class="vazio">${tr('Sem capítulos.')}</p>`;return;}
     a.caps.forEach(c=>{
-      const st=capTem(c)?(c.apresentado?' <span class="ok">✓ ministrado</span>':' <span class="pend">● a ministrar</span>'):'';
+      const st=capTem(c)?(c.apresentado?` <span class="ok">${tr('✓ ministrado')}</span>`:` <span class="pend">${tr('● a ministrar')}</span>`):'';
       corpo+=`<h3>${escH(c.num||'Cap.')} — ${escH(c.nome)}${st}</h3>`;
-      if((c.obs||'').trim())corpo+=`<p class="obs">Obs.: ${escH(c.obs.trim()).replace(/\n/g,'<br>')}</p>`;
-      if(!c.videos.length){corpo+='<p class="vazio">Sem vídeos.</p>';return;}
+      if((c.obs||'').trim())corpo+=`<p class="obs">${tr('Obs.:')} ${escH(c.obs.trim()).replace(/\n/g,'<br>')}</p>`;
+      if(!c.videos.length){corpo+=`<p class="vazio">${tr('Sem vídeos.')}</p>`;return;}
       corpo+='<ul>';
       c.videos.forEach((v,i)=>{
         corpo+=`<li><b>V${i+1}</b> · ${escH(v.nome)} — <span class="dur">${v.dur||'--:--'}</span>`;
         if(v.link)corpo+=`<br>Link: <a href="${escH(v.link)}">${escH(v.link)}</a>`;
-        if((v.resumo||'').trim())corpo+=`<br><i>Resumo disponível (${v.resumo.trim().length} caracteres)</i>`;
+        if((v.resumo||'').trim())corpo+=`<br><i>${trf('Resumo disponível ({n} caracteres)',{n:v.resumo.trim().length})}</i>`;
         if((v.materiais||[]).length){
-          corpo+='<br>Material didático:<ul>'+v.materiais.map(m=>`<li>${escH(m.titulo||'—')}${m.link?' — '+(/^https?:\/\//i.test(m.link)?`<a href="${escH(m.link)}">${escH(m.link)}</a>`:escH(m.link)):''}</li>`).join('')+'</ul>';
+          corpo+='<br>'+tr('Material didático')+':<ul>'+v.materiais.map(m=>`<li>${escH(m.titulo||'—')}${m.link?' — '+(/^https?:\/\//i.test(m.link)?`<a href="${escH(m.link)}">${escH(m.link)}</a>`:escH(m.link)):''}</li>`).join('')+'</ul>';
         }
         if((v.arquivos||[]).length){
-          corpo+='<br>Documentos anexados:<ul>'+v.arquivos.map(x=>`<li>${escH(x.titulo||x.nomeArq)}${x.autor?' — '+escH(x.autor):''}</li>`).join('')+'</ul>';
+          corpo+='<br>'+tr('Documentos anexados')+':<ul>'+v.arquivos.map(x=>`<li>${escH(x.titulo||x.nomeArq)}${x.autor?' — '+escH(x.autor):''}</li>`).join('')+'</ul>';
         }
         corpo+='</li>';
       });
       corpo+='</ul>';
     });
   });
-  return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><title>Relatório — ${escH(d.nome)} ${escH(d.turma||'')}</title>
+  return `<!DOCTYPE html><html lang="${LANG_META[LANG].tag}"><head><meta charset="utf-8"><title>${trf('Relatório — {d}',{d:escH(d.nome)+' '+escH(d.turma||'')})}</title>
 <style>
 @page{size:A4;margin:2.2cm}
 body{font-family:Georgia,'Times New Roman',serif;font-size:11.5pt;line-height:1.45;color:#111;max-width:17cm;margin:auto}
@@ -738,8 +745,8 @@ a{color:#1155cc;word-break:break-all}
 .vazio{color:#888;font-style:italic;margin:2pt 0}
 .obs{color:#555;font-style:italic;margin:2pt 0;font-size:10pt}
 </style></head><body>
-<h1>${escH(d.nome)} — ${escH(d.turma||'Série única')}</h1>
-<div class="meta">${escH(d.capitulo||'')} · ${d.aulas.length} aulas · ${nCaps} capítulos · ${nVids} vídeos · duração total ${fmtS(discDurSeg(d))} · gerado em ${hoje}</div>
+<h1>${escH(d.nome)} — ${escH(d.turma||tr('Série única'))}</h1>
+<div class="meta">${escH(d.capitulo||'')} · ${trf('{n} aulas',{n:d.aulas.length})} · ${trf('{n} capítulos',{n:nCaps})} · ${trf('{n} vídeos',{n:nVids})} · ${tr('duração total')} ${fmtS(discDurSeg(d))} · ${tr('gerado em')} ${hoje}</div>
 ${corpo}
 </body></html>`;
 }
@@ -757,7 +764,7 @@ function relWord(){
 function relPDF(){
   if(relDiscId==null)return;
   const w=window.open('','_blank');
-  if(!w){alert('Permita pop-ups para gerar o PDF.');return;}
+  if(!w){alert(tr('Permita pop-ups para gerar o PDF.'));return;}
   w.document.write(buildRelatorioHTML(relDiscId));
   w.document.close();w.focus();
   setTimeout(()=>w.print(),350);
@@ -779,12 +786,12 @@ function onVidLink(){
   clearTimeout(vidTimer);
   const link=document.getElementById('vf-link').value.trim();const id=ytId(link);
   const hint=document.getElementById('vf-hint');
-  if(id){hint.textContent='Link do YouTube reconhecido — buscando título…';document.getElementById('vf-spin').style.display='flex';vidTimer=setTimeout(()=>fetchYT(id),1400);}
-  else{hint.textContent=link.startsWith('http')?'Link detectado.':'';document.getElementById('vf-spin').style.display='none';}
+  if(id){hint.textContent=tr('Link do YouTube reconhecido — buscando título…');document.getElementById('vf-spin').style.display='flex';vidTimer=setTimeout(()=>fetchYT(id),1400);}
+  else{hint.textContent=link.startsWith('http')?tr('Link detectado.'):'';document.getElementById('vf-spin').style.display='none';}
 }
 async function fetchYT(id){
   try{const r=await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${id}&format=json`);if(r.ok){const j=await r.json();if(j.title&&!document.getElementById('vf-nome').value.trim())document.getElementById('vf-nome').value=j.title;}}catch(e){}
-  document.getElementById('vf-spin').style.display='none';document.getElementById('vf-hint').textContent='Título obtido. Preencha a duração se necessário.';
+  document.getElementById('vf-spin').style.display='none';document.getElementById('vf-hint').textContent=tr('Título obtido. Preencha a duração se necessário.');
 }
 function salvarVid(){
   const nome=document.getElementById('vf-nome').value.trim();
@@ -793,7 +800,7 @@ function salvarVid(){
   const resumo=document.getElementById('vf-resumo').value.trim();
   const materiais=formMats.filter(m=>(m.titulo||'').trim()||(m.link||'').trim())
     .map(m=>({titulo:(m.titulo||'').trim(),link:(m.link||'').trim()}));
-  if(!nome){alert('Informe o nome do vídeo.');document.getElementById('vf-nome').focus();return;}
+  if(!nome){alert(tr('Informe o nome do vídeo.'));document.getElementById('vf-nome').focus();return;}
   const durSeg=parseDur(durStr);const dur=durSeg>0?fmtS(durSeg):(durStr||'--:--');
   const disc=getDisc(curDiscId);const aula=getAula(disc,curAulaId);const cap=getCap(aula,curCapId);
   const dup=findDuplicado(disc,nome,link,editVidId);
@@ -803,7 +810,7 @@ function salvarVid(){
   openCaps.add(curCapId); // mostra o capítulo do vídeo salvo
   formArqs=[];agendarLimpeza(); // limpa anexos que foram removidos no formulário
   goBack('s-aula');
-  if(dup)showToast(`<b>Vídeo duplicado nesta série:</b> mesmo nome e link já existem na <b>Aula ${String(dup.aula.numero).padStart(2,'0')}</b> · ${escH(dup.cap.num||'Cap.')} — ${escH(dup.cap.nome)}.`,7000);
+  if(dup)showToast(trf('<b>Vídeo duplicado nesta série:</b> mesmo nome e link já existem na <b>Aula {a}</b> · {c}.',{a:String(dup.aula.numero).padStart(2,'0'),c:escH(dup.cap.num||'Cap.')+' — '+escH(dup.cap.nome)}),7000);
 }
 
 function openModal(title,fields,cb){
@@ -830,7 +837,7 @@ function renderProjetos(){
       <div class="disc-body" onclick="ativarProjeto(${p.id})">
         <div class="disc-av"><i class="ti ti-archive" aria-hidden="true"></i></div>
         <div class="disc-info">
-          <div class="dn">Ano letivo ${escH(p.ano||'—')}</div>
+          <div class="dn">${trf('Ano letivo {a}',{a:escH(p.ano||'—')})}</div>
           <div class="dc">${escH(p.instituicao||'Instituição não informada')}</div>
           <div class="ds">${nd} matéria${nd!==1?'s':''}/série${nd!==1?'s':''} · ${na} aula${na!==1?'s':''}${ativo?' · <b>EM USO</b>':' · toque para abrir'}</div>
         </div>
@@ -846,18 +853,19 @@ function renderProjetos(){
 }
 function novoProjeto(){
   closeMenu();
-  openModal('Criar novo projeto (ano letivo)',[
+  if(!exigirAtivacao())return;
+  openModal(tr('Criar novo projeto (ano letivo)'),[
     {id:'pj-ano',lbl:'Ano',ph:'Ex: '+new Date().getFullYear(),val:String(new Date().getFullYear())},
     {id:'pj-inst',lbl:'Instituição',ph:'Ex: Escola Estadual …'}
   ],()=>{
-    const ano=vi('pj-ano');if(!ano){alert('Informe o ano.');return;}
+    const ano=vi('pj-ano');if(!ano){alert(tr('Informe o ano.'));return;}
     saveDB(); // garante o projeto atual salvo antes de trocar
     const id=nid();
-    try{localStorage.setItem(projKey(id),'{"disciplinas":[]}');}catch(e){alert('Sem espaço no navegador para criar o projeto.');return;}
+    try{localStorage.setItem(projKey(id),'{"disciplinas":[]}');}catch(e){alert(tr('Sem espaço no navegador para criar o projeto.'));return;}
     projReg.projetos.push({id,ano,instituicao:vi('pj-inst'),criadoEm:Date.now()});
     projReg.ativo=id;saveProjects();
     loadDB();closeModal();refreshProjUI();renderDiscs();showScreen('s-main');
-    showToast(`<b>Projeto ${escH(ano)} criado e em uso.</b> O anterior ficou arquivado — troque quando quiser em ☰ → Gerenciar projetos.`,8000);
+    showToast(trf('<b>Projeto {a} criado e em uso.</b> O anterior ficou arquivado — troque quando quiser em ☰ → Gerenciar projetos.',{a:escH(ano)}),8000);
   });
 }
 function ativarProjeto(id){
@@ -866,11 +874,11 @@ function ativarProjeto(id){
   projReg.ativo=id;saveProjects();
   loadDB();refreshProjUI();renderDiscs();showScreen('s-main');
   const p=curProj();
-  showToast(`<b>Projeto ativo:</b> ${escH(projNome(p))}.`,5000);
+  showToast(trf('<b>Projeto ativo:</b> {p}.',{p:escH(projNome(p))}),5000);
 }
 function editProjeto(id){
   const p=projReg.projetos.find(x=>x.id===id);if(!p)return;
-  openModal('Editar projeto',[
+  openModal(tr('Editar projeto'),[
     {id:'pj-ano',lbl:'Ano',val:p.ano},
     {id:'pj-inst',lbl:'Instituição',val:p.instituicao}
   ],()=>{
@@ -879,20 +887,33 @@ function editProjeto(id){
   });
 }
 function delProjeto(id){
-  if(projReg.projetos.length<=1){alert('Este é o único projeto. Crie outro antes de excluir este.');return;}
+  if(projReg.projetos.length<=1){alert(tr('Este é o único projeto. Crie outro antes de excluir este.'));return;}
   const p=projReg.projetos.find(x=>x.id===id);if(!p)return;
-  if(!confirm(`Excluir o projeto "${projNome(p)}" com TODAS as matérias, aulas e documentos dele? Essa ação não pode ser desfeita.`))return;
-  if(!confirm('Tem certeza? Se quiser guardar uma cópia, cancele e use antes o botão de exportar (seta para baixo).'))return;
+  if(!confirm(trf('Excluir o projeto "{p}" com TODAS as matérias, aulas e documentos dele? Essa ação não pode ser desfeita.',{p:projNome(p)})))return;
+  if(!confirm(tr('Tem certeza? Se quiser guardar uma cópia, cancele e use antes o botão de exportar (seta para baixo).')))return;
   try{localStorage.removeItem(projKey(id));}catch(e){}
   projReg.projetos=projReg.projetos.filter(x=>x.id!==id);
   if(projReg.ativo===id){projReg.ativo=projReg.projetos[0].id;loadDB();refreshProjUI();}
   saveProjects();renderProjetos();agendarLimpeza();
 }
+const PROJ_BAR_MAX=7; // quantos projetos de troca rápida aparecem no menu lateral
 function refreshProjUI(){
   const p=curProj();if(!p)return;
   const el=document.getElementById('proj-bar-lbl');
-  if(el)el.textContent=`Ano letivo ${p.ano||'—'}${p.instituicao?' · '+p.instituicao:''}`;
+  if(el)el.textContent=trf('Ano letivo {a}',{a:p.ano||'—'})+(p.instituicao?' · '+p.instituicao:'');
   const a=document.getElementById('dw-proj');if(a)a.textContent=projNome(p);
+  // lista de troca rápida no menu lateral (até 7 projetos): ativo primeiro
+  const box=document.getElementById('dw-projlist');
+  if(box){
+    const ativo=projReg.projetos.find(x=>x.id===projReg.ativo);
+    const outros=projReg.projetos.filter(x=>x.id!==projReg.ativo);
+    const lista=[ativo,...outros].filter(Boolean).slice(0,PROJ_BAR_MAX);
+    box.innerHTML=lista.map(pr=>{
+      const on=pr.id===projReg.ativo;
+      return `<button class="dw-projitem${on?' on':''}" onclick="ativarProjeto(${pr.id})"><i class="ti ti-archive" aria-hidden="true"></i><span>${escH(projNome(pr))}</span>${on?'<b>✓</b>':''}</button>`;
+    }).join('');
+    paintIcons();
+  }
 }
 
 /* ===== Backup em arquivo (.json) — inclui os documentos anexados ===== */
@@ -917,13 +938,13 @@ async function exportBackup(pid){
   a.download=('prometeu-'+(p.ano||'projeto')+(p.instituicao?'-'+p.instituicao:'')).toLowerCase().replace(/[^a-z0-9à-ú]+/gi,'-').slice(0,60)+'.json';
   document.body.appendChild(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(a.href),4000);
-  showToast('<b>Backup exportado.</b> Guarde o arquivo .json em local seguro (Drive, pen-drive…).',6000);
+  showToast(tr('<b>Backup exportado.</b> Guarde o arquivo .json em local seguro (Drive, pen-drive…).'),6000);
 }
 function importBackupPick(){closeMenu();document.getElementById('bk-file').click();}
 async function importBackup(input){
   const f=input.files&&input.files[0];input.value='';if(!f)return;
-  let j;try{j=JSON.parse(await f.text());}catch(e){alert('Arquivo inválido.');return;}
-  if(!j||j.formato!=='prometeu-backup'||!j.db||!Array.isArray(j.db.disciplinas)){alert('Este arquivo não é um backup do Organizador de Aulas.');return;}
+  let j;try{j=JSON.parse(await f.text());}catch(e){alert(tr('Arquivo inválido.'));return;}
+  if(!j||j.formato!=='prometeu-backup'||!j.db||!Array.isArray(j.db.disciplinas)){alert(tr('Este arquivo não é um backup do Organizador de Aulas.'));return;}
   // regrava anexos com ids novos (evita conflito com arquivos já existentes)
   const mapa={};
   for(const arq of (j.arquivos||[])){
@@ -933,11 +954,11 @@ async function importBackup(input){
   j.db.disciplinas.forEach(d=>d.aulas.forEach(a=>a.caps.forEach(c=>c.videos.forEach(v=>(v.arquivos||[]).forEach(x=>{if(mapa[x.fid])x.fid=mapa[x.fid];})))));
   saveDB();
   const id=nid();
-  try{localStorage.setItem(projKey(id),JSON.stringify(j.db));}catch(e){alert('Sem espaço no navegador para importar este projeto.');return;}
+  try{localStorage.setItem(projKey(id),JSON.stringify(j.db));}catch(e){alert(tr('Sem espaço no navegador para importar este projeto.'));return;}
   projReg.projetos.push({id,ano:(j.projeto&&j.projeto.ano)||'?',instituicao:(j.projeto&&j.projeto.instituicao)||'',criadoEm:Date.now()});
   projReg.ativo=id;saveProjects();
   loadDB();refreshProjUI();renderDiscs();showScreen('s-main');
-  showToast('<b>Projeto importado</b> e colocado em uso.',6000);
+  showToast(tr('<b>Projeto importado</b> e colocado em uso.'),6000);
 }
 
 /* ===== Menu lateral (drawer) ===== */
@@ -948,41 +969,50 @@ function closeMenu(){document.getElementById('drawer').classList.remove('open');
 function openInfo(title,html){closeMenu();document.getElementById('im-title').textContent=title;document.getElementById('im-body').innerHTML=html;document.getElementById('imodal').classList.add('open');paintIcons();}
 function closeInfo(){document.getElementById('imodal').classList.remove('open');}
 function showVersao(){
-  openInfo('Versão',`
-    <div><b>Organizador de Aulas — Prometeu</b></div>
-    <div>Versão ${APP_VERSION} · ${APP_DATE}</div>
-    <div>App 100% offline: os dados ficam guardados neste navegador/aparelho — nada é enviado para a internet.</div>
-    <div>Projetos guardados: <b>${projReg.projetos.length}</b> · Matérias no projeto atual: <b>${db.disciplinas.length}</b></div>`);
+  openInfo(tr('Versão'),`
+    <div><b>${tr('Organizador de Aulas — Prometeu')}</b></div>
+    <div>${trf('Versão {v} · {d}',{v:APP_VERSION,d:tr(APP_DATE)})}</div>
+    <div>${tr('App 100% offline: os dados ficam guardados neste navegador/aparelho — nada é enviado para a internet.')}</div>
+    <div>${tr('Projetos guardados:')} <b>${projReg.projetos.length}</b> · ${tr('Matérias no projeto atual:')} <b>${db.disciplinas.length}</b></div>`);
 }
 function showAtualizacao(){
-  openInfo('Atualização',`
-    <div>O app funciona sem internet; uma atualização só chega quando você recebe uma <b>versão nova</b> do arquivo ou do site.</div>
-    <div><b>Versão instalada como app (PWA):</b> toque em “Verificar atualização agora”. Se houver versão nova no site, ela é baixada e aplicada ao fechar e reabrir o app.</div>
-    <div><b>Versão em arquivo único (prometeu.html):</b> basta substituir o arquivo antigo pelo novo. Os dados <b>não se perdem</b> — eles ficam no navegador, não dentro do arquivo.</div>
-    <div><b>Dica:</b> antes de atualizar, exporte um backup (☰ → Arquivo → Exportar backup).</div>
-    <button class="btn-pri" onclick="checarAtualizacao()"><i class="ti ti-refresh" aria-hidden="true"></i> Verificar atualização agora</button>`);
+  openInfo(tr('Atualização'),`
+    <div>${tr('O app funciona sem internet; uma atualização só chega quando você recebe uma <b>versão nova</b> do arquivo ou do site.')}</div>
+    <div>${tr('<b>Versão instalada como app (PWA):</b> toque em “Verificar atualização agora”. Se houver versão nova no site, ela é baixada e aplicada ao fechar e reabrir o app.')}</div>
+    <div>${tr('<b>Versão em arquivo único (prometeu.html):</b> basta substituir o arquivo antigo pelo novo. Os dados <b>não se perdem</b> — eles ficam no navegador, não dentro do arquivo.')}</div>
+    <div>${tr('<b>Dica:</b> antes de atualizar, exporte um backup (☰ → Arquivo → Exportar backup).')}</div>
+    <button class="btn-pri" onclick="checarAtualizacao()"><i class="ti ti-refresh" aria-hidden="true"></i> ${tr('Verificar atualização agora')}</button>`);
 }
 async function checarAtualizacao(){
   if(!('serviceWorker' in navigator)||!location.protocol.startsWith('http')){
-    alert('Esta cópia roda como arquivo único: para atualizar, substitua o prometeu.html por uma versão mais nova. Seus dados não se perdem.');return;
+    alert(tr('Esta cópia roda como arquivo único: para atualizar, substitua o prometeu.html por uma versão mais nova. Seus dados não se perdem.'));return;
   }
   try{
     const reg=await navigator.serviceWorker.getRegistration();
-    if(reg){await reg.update();alert('Verificação concluída. Se houver versão nova, feche e reabra o app para aplicar.');}
-    else alert('O app ainda não está instalado como PWA neste navegador.');
-  }catch(e){alert('Não foi possível verificar agora (sem internet?).');}
+    if(reg){await reg.update();alert(tr('Verificação concluída. Se houver versão nova, feche e reabra o app para aplicar.'));}
+    else alert(tr('O app ainda não está instalado como PWA neste navegador.'));
+  }catch(e){alert(tr('Não foi possível verificar agora (sem internet?).'));}
 }
 
 /* ===== Tutorial ===== */
+/* Figuras SVG compartilhadas entre os idiomas (tokens %FIG0%…%FIG4% no texto).
+   Os rótulos <text> internos são traduzidos pelo translateDOM (i18n.js). */
+const FIGS=[
+'<div class="tut-fig"><svg width="200" height="214" viewBox="0 0 200 214" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="3" width="100" height="26" rx="5"/><text x="100" y="20" text-anchor="middle" fill="currentColor" stroke="none" font-size="10">MATÉRIA</text><path d="M100 29v9"/><path d="M96 34l4 5 4-5"/><rect x="50" y="48" width="100" height="26" rx="5"/><text x="100" y="65" text-anchor="middle" fill="currentColor" stroke="none" font-size="10">SÉRIE / ANO</text><path d="M100 74v9"/><path d="M96 79l4 5 4-5"/><rect x="50" y="93" width="100" height="26" rx="5"/><text x="100" y="110" text-anchor="middle" fill="currentColor" stroke="none" font-size="10">AULA</text><path d="M100 119v9"/><path d="M96 124l4 5 4-5"/><rect x="50" y="138" width="100" height="26" rx="5"/><text x="100" y="155" text-anchor="middle" fill="currentColor" stroke="none" font-size="10">CAPÍTULO</text><path d="M100 164v9"/><path d="M96 169l4 5 4-5"/><rect x="50" y="183" width="100" height="26" rx="5"/><text x="100" y="200" text-anchor="middle" fill="currentColor" stroke="none" font-size="10">VÍDEO</text></svg></div>',
+'<div class="tut-fig"><svg width="250" height="92" viewBox="0 0 250 92" fill="none" stroke="currentColor" stroke-width="1.5"><g opacity="0.4"><rect x="6" y="16" width="108" height="62" rx="7"/><path d="M6 32h108"/><text x="60" y="56" text-anchor="middle" fill="currentColor" stroke="none" font-size="13">2025</text><text x="60" y="70" text-anchor="middle" fill="currentColor" stroke="none" font-size="7">ARQUIVADO</text></g><rect x="136" y="10" width="108" height="70" rx="7"/><path d="M136 27h108"/><text x="190" y="53" text-anchor="middle" fill="currentColor" stroke="none" font-size="13">2026</text><text x="190" y="68" text-anchor="middle" fill="currentColor" stroke="none" font-size="7">EM USO ●</text></svg></div>',
+'<div class="tut-fig"><svg width="250" height="76" viewBox="0 0 250 76" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="6" width="242" height="28" rx="6"/><rect x="14" y="13" width="14" height="14" rx="3"/><path d="M17 20l3 3 6-6"/><text x="40" y="24" fill="currentColor" stroke="none" font-size="9">Cap. 01 — caixinha marcada = ● A MINISTRAR</text><g opacity="0.55"><rect x="4" y="42" width="242" height="28" rx="6"/><rect x="14" y="49" width="14" height="14" rx="3"/><text x="40" y="60" fill="currentColor" stroke="none" font-size="9">Cap. 02 — caixinha vazia = ✓ já ministrado</text></g></svg></div>',
+'<div class="tut-fig"><svg width="250" height="82" viewBox="0 0 250 82" fill="none" stroke="currentColor" stroke-width="1.5"><g transform="translate(10,16) scale(1.9)"><path d="M15 7l-6.5 6.5a1.5 1.5 0 0 0 3 3l6.5-6.5a3 3 0 0 0-6-6l-6.5 6.5a4.5 4.5 0 0 0 9 9l6.5-6.5"/></g><rect x="82" y="12" width="44" height="58" rx="5"/><text x="104" y="45" text-anchor="middle" fill="currentColor" stroke="none" font-size="9">PDF</text><rect x="142" y="12" width="44" height="58" rx="5"/><circle cx="156" cy="30" r="5"/><path d="M144 62l12-14 8 8 6-6 14 12"/><rect x="202" y="12" width="44" height="58" rx="5"/><text x="224" y="45" text-anchor="middle" fill="currentColor" stroke="none" font-size="9">DOC</text></svg></div>',
+'<div class="tut-fig"><svg width="260" height="100" viewBox="0 0 260 100" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="6" width="252" height="88" rx="10"/><path d="M130 6v88" stroke-dasharray="4 4"/><text x="67" y="46" text-anchor="middle" fill="currentColor" stroke="none" font-size="9">ORGANIZADOR</text><text x="67" y="60" text-anchor="middle" fill="currentColor" stroke="none" font-size="9">DE AULAS</text><text x="193" y="46" text-anchor="middle" fill="currentColor" stroke="none" font-size="9">YOUTUBE /</text><text x="193" y="60" text-anchor="middle" fill="currentColor" stroke="none" font-size="9">ANOTAÇÕES</text><circle cx="130" cy="50" r="6" fill="currentColor" stroke="none" opacity="0.7"/></svg></div>'
+];
 const TUT=[
 {ic:'ti-book-2',t:'Visão geral',c:`
 <p>O <b>Organizador de Aulas</b> organiza suas aulas em vídeo em 5 níveis, do geral para o específico:</p>
-<div class="tut-fig"><svg width="200" height="214" viewBox="0 0 200 214" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="3" width="100" height="26" rx="5"/><text x="100" y="20" text-anchor="middle" fill="currentColor" stroke="none" font-size="10">MATÉRIA</text><path d="M100 29v9"/><path d="M96 34l4 5 4-5"/><rect x="50" y="48" width="100" height="26" rx="5"/><text x="100" y="65" text-anchor="middle" fill="currentColor" stroke="none" font-size="10">SÉRIE / ANO</text><path d="M100 74v9"/><path d="M96 79l4 5 4-5"/><rect x="50" y="93" width="100" height="26" rx="5"/><text x="100" y="110" text-anchor="middle" fill="currentColor" stroke="none" font-size="10">AULA</text><path d="M100 119v9"/><path d="M96 124l4 5 4-5"/><rect x="50" y="138" width="100" height="26" rx="5"/><text x="100" y="155" text-anchor="middle" fill="currentColor" stroke="none" font-size="10">CAPÍTULO</text><path d="M100 164v9"/><path d="M96 169l4 5 4-5"/><rect x="50" y="183" width="100" height="26" rx="5"/><text x="100" y="200" text-anchor="middle" fill="currentColor" stroke="none" font-size="10">VÍDEO</text></svg></div>
+%FIG0%
 <p>Exemplo: <b>HISTÓRIA</b> → <b>2° ano EM</b> → <b>Aula 12 (Revolução Francesa)</b> → <b>Cap. 01</b> → <b>vídeo do YouTube</b>.</p>
 <p>Tudo funciona <b>sem internet</b> e é salvo automaticamente no aparelho a cada alteração.</p>`},
 {ic:'ti-archive',t:'Projetos — anos letivos',c:`
 <p>Cada <b>projeto</b> guarda um ano letivo completo (Ano + Instituição), com todas as matérias, aulas e documentos.</p>
-<div class="tut-fig"><svg width="250" height="92" viewBox="0 0 250 92" fill="none" stroke="currentColor" stroke-width="1.5"><g opacity="0.4"><rect x="6" y="16" width="108" height="62" rx="7"/><path d="M6 32h108"/><text x="60" y="56" text-anchor="middle" fill="currentColor" stroke="none" font-size="13">2025</text><text x="60" y="70" text-anchor="middle" fill="currentColor" stroke="none" font-size="7">ARQUIVADO</text></g><rect x="136" y="10" width="108" height="70" rx="7"/><path d="M136 27h108"/><text x="190" y="53" text-anchor="middle" fill="currentColor" stroke="none" font-size="13">2026</text><text x="190" y="68" text-anchor="middle" fill="currentColor" stroke="none" font-size="7">EM USO ●</text></svg></div>
+%FIG1%
 <ul>
 <li><b>Criar:</b> menu ☰ → <b>Criar novo projeto</b> → preencha <b>Ano</b> e <b>Instituição</b>. O projeto novo começa vazio e vira o projeto em uso.</li>
 <li><b>Arquivar:</b> nada se perde — o ano anterior fica guardado na lista de projetos.</li>
@@ -1000,7 +1030,7 @@ const TUT=[
 </ul>`},
 {ic:'ti-player-play',t:'Aulas e capítulos',c:`
 <p>Dentro da série ficam as <b>aulas</b> (numeradas automaticamente) e, dentro de cada aula, os <b>capítulos</b>.</p>
-<div class="tut-fig"><svg width="250" height="76" viewBox="0 0 250 76" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="6" width="242" height="28" rx="6"/><rect x="14" y="13" width="14" height="14" rx="3"/><path d="M17 20l3 3 6-6"/><text x="40" y="24" fill="currentColor" stroke="none" font-size="9">Cap. 01 — caixinha marcada = ● A MINISTRAR</text><g opacity="0.55"><rect x="4" y="42" width="242" height="28" rx="6"/><rect x="14" y="49" width="14" height="14" rx="3"/><text x="40" y="60" fill="currentColor" stroke="none" font-size="9">Cap. 02 — caixinha vazia = ✓ já ministrado</text></g></svg></div>
+%FIG2%
 <ul>
 <li>A <b>caixinha</b> do capítulo controla a pendência: marcada = ainda falta dar essa aula; vazia = já ministrada. Os contadores “● a ministrar” sobem para aula, série e matéria.</li>
 <li>Os <b>chips CP1…CP11</b> acendem quando o capítulo tem conteúdo; tocar num chip aceso rola até o capítulo.</li>
@@ -1017,7 +1047,7 @@ const TUT=[
 <p>Na lista, o <b>▶</b> abre o link do vídeo e os ícones ao lado do tempo mostram se há resumo, materiais ou documentos anexados.</p>`},
 {ic:'ti-paperclip',t:'Material didático e documentos',c:`
 <p>No formulário do vídeo, a seção <b>“Material didático e documentos”</b> fica recolhida — toque nela para expandir.</p>
-<div class="tut-fig"><svg width="250" height="82" viewBox="0 0 250 82" fill="none" stroke="currentColor" stroke-width="1.5"><g transform="translate(10,16) scale(1.9)"><path d="M15 7l-6.5 6.5a1.5 1.5 0 0 0 3 3l6.5-6.5a3 3 0 0 0-6-6l-6.5 6.5a4.5 4.5 0 0 0 9 9l6.5-6.5"/></g><rect x="82" y="12" width="44" height="58" rx="5"/><text x="104" y="45" text-anchor="middle" fill="currentColor" stroke="none" font-size="9">PDF</text><rect x="142" y="12" width="44" height="58" rx="5"/><circle cx="156" cy="30" r="5"/><path d="M144 62l12-14 8 8 6-6 14 12"/><rect x="202" y="12" width="44" height="58" rx="5"/><text x="224" y="45" text-anchor="middle" fill="currentColor" stroke="none" font-size="9">DOC</text></svg></div>
+%FIG3%
 <ul>
 <li><b>Materiais citados:</b> lista simples de título + autor/editora/link (livros citados no vídeo).</li>
 <li><b>Documentos anexados:</b> toque em <b>Importar PDF, imagem ou Word</b> para guardar até <b>10 arquivos por vídeo</b> (até 15 MB cada) dentro do próprio app.</li>
@@ -1048,7 +1078,7 @@ const TUT=[
 </ul>`},
 {ic:'ti-device-tablet',t:'No tablet Samsung (Galaxy Tab S)',c:`
 <p>O app foi ajustado para tablets — tela cheia, <b>tela dividida</b> e <b>exibição pop-up</b> do One UI:</p>
-<div class="tut-fig"><svg width="260" height="100" viewBox="0 0 260 100" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="6" width="252" height="88" rx="10"/><path d="M130 6v88" stroke-dasharray="4 4"/><text x="67" y="46" text-anchor="middle" fill="currentColor" stroke="none" font-size="9">ORGANIZADOR</text><text x="67" y="60" text-anchor="middle" fill="currentColor" stroke="none" font-size="9">DE AULAS</text><text x="193" y="46" text-anchor="middle" fill="currentColor" stroke="none" font-size="9">YOUTUBE /</text><text x="193" y="60" text-anchor="middle" fill="currentColor" stroke="none" font-size="9">ANOTAÇÕES</text><circle cx="130" cy="50" r="6" fill="currentColor" stroke="none" opacity="0.7"/></svg></div>
+%FIG4%
 <ul>
 <li><b>Instalar:</b> abra o site no Chrome → menu ⋮ → <b>“Instalar aplicativo”</b> (ou “Adicionar à tela inicial”). O app passa a abrir em janela própria, sem barra do navegador.</li>
 <li><b>Tela dividida:</b> toque em <b>Recentes</b> (botão ▯|▯ ou gesto), toque no <b>ícone do app</b> no topo do cartão → <b>“Abrir em visualização em tela dividida”</b> → escolha o segundo app (ex.: YouTube). A divisória central ajusta o tamanho.</li>
@@ -1061,17 +1091,20 @@ const TUT=[
 <li><b>☰ → Ajuda → Versão:</b> mostra a versão instalada e um resumo dos dados guardados.</li>
 </ul>`}
 ];
-const TUTORIAL_HTML=TUT.map((s,i)=>`
+function buildTutorial(){
+  const secs=(typeof TUT_ML!=='undefined'&&TUT_ML[LANG])||TUT; // pt-BR e pt-PT usam o original
+  return secs.map((s,i)=>`
   <div class="tut-sec">
     <button class="tut-t${i===0?' open':''}" id="tut-t-${i}" onclick="toggleTut(${i})" aria-expanded="${i===0}">
       <i class="ti ${s.ic} tic" aria-hidden="true"></i><span>${i+1}. ${s.t}</span><i class="ti ti-chevron-down chev" aria-hidden="true"></i>
     </button>
-    <div class="tree-wrap${i===0?' open':''}" id="tut-w-${i}"><div class="tree-inner"><div class="tut-c">${s.c}</div></div></div>
+    <div class="tree-wrap${i===0?' open':''}" id="tut-w-${i}"><div class="tree-inner"><div class="tut-c">${s.c.replace(/%FIG(\d)%/g,(m,k)=>FIGS[+k]||'')}</div></div></div>
   </div>`).join('');
+}
 function openTutorial(){
   closeMenu();
   const b=document.getElementById('tut-body');
-  if(!b.dataset.ok){b.innerHTML=TUTORIAL_HTML;b.dataset.ok='1';paintIcons();}
+  if(b.dataset.ok!==LANG){b.innerHTML=buildTutorial();b.dataset.ok=LANG;paintIcons();}
   showScreen('s-tut');
 }
 function toggleTut(i){
@@ -1080,6 +1113,309 @@ function toggleTut(i){
   const o=!w.classList.contains('open');
   w.classList.toggle('open',o);
   if(t){t.classList.toggle('open',o);t.setAttribute('aria-expanded',o);}
+}
+
+/* ===== Consentimento (primeiro uso) ===== */
+const CONSENT_KEY='prometeu.consent.v1';
+function checkConsent(){
+  try{if(localStorage.getItem(CONSENT_KEY))return;}catch(e){return;}
+  document.getElementById('cmodal').classList.add('open');
+}
+function aceitarConsent(){
+  try{localStorage.setItem(CONSENT_KEY,JSON.stringify({v:1,quando:new Date().toISOString()}));}catch(e){}
+  document.getElementById('cmodal').classList.remove('open');
+  offerTutorial(); // logo após aceitar, oferece o tutorial rápido (só no 1º uso)
+}
+/* ===== Oferta de tutorial rápido (apenas no primeiríssimo uso) ===== */
+const TUTOFFER_KEY='prometeu.tutoffer.v1';
+function offerTutorial(){
+  try{if(localStorage.getItem(TUTOFFER_KEY))return;}catch(e){}
+  try{localStorage.setItem(TUTOFFER_KEY,'1');}catch(e){}
+  document.getElementById('tmodal').classList.add('open');
+}
+function aceitarTutorial(){document.getElementById('tmodal').classList.remove('open');demoStart();}
+function recusarTutorial(){document.getElementById('tmodal').classList.remove('open');}
+
+/* ===== Privacidade / Termos (resumo no app + documento completo online) ===== */
+const LEGAL_PT={
+priv:'<p><b>Resumo:</b></p><ul><li>O app funciona 100% offline. Todo o conteúdo que você cria fica guardado apenas no navegador deste aparelho (localStorage/IndexedDB).</li><li>Nenhum dado pessoal é coletado, transmitido ou vendido. Não há anúncios, rastreadores nem estatísticas.</li><li>Funções online opcionais: buscar o título de um vídeo no YouTube (envia só o link do vídeo ao YouTube) e carregar fontes do Google Fonts. Ambas são opcionais — o app funciona sem elas.</li><li>Os backups (.json) são criados por você e ficam onde você os guardar.</li><li>Para apagar tudo: exclua os projetos no app ou limpe os dados do site/app nas configurações do aparelho.</li><li>Contato: organizadordeaulas.Prometeu@gmail.com</li></ul>',
+termos:'<p><b>Resumo:</b></p><ul><li>Licença pessoal e intransferível, para uso de quem adquiriu o app.</li><li>É proibida a revenda, redistribuição ou exploração comercial por terceiros sem autorização prévia, por escrito, do autor.</li><li>O app é fornecido "como está"; mantenha backups dos seus dados (☰ → Arquivo → Exportar backup).</li><li>O conteúdo que você cadastra (aulas, links, arquivos) é seu e é de sua responsabilidade.</li><li>Contato: organizadordeaulas.Prometeu@gmail.com</li></ul>'
+};
+function openLegal(k){
+  const titulo=k==='priv'?tr('Política de Privacidade'):tr('Termos de Uso');
+  let html=tr(k==='priv'?'LEGAL_PRIV':'LEGAL_TERMS');
+  if(html==='LEGAL_PRIV'||html==='LEGAL_TERMS')html=LEGAL_PT[k==='priv'?'priv':'termos'];
+  if(location.protocol.startsWith('http')){
+    const arq=k==='priv'?'privacidade.html':'termos.html';
+    html+=`<button class="btn-sec" onclick="window.open('${arq}','_blank')"><i class="ti ti-eye" aria-hidden="true"></i> ${tr('Ver documento completo (online)')}</button>`;
+  }
+  openInfo(titulo,html);
+}
+
+/* ===== Seletor de idioma ===== */
+function openIdioma(){
+  const html=Object.keys(LANG_META).map(k=>
+    `<button class="btn-sec" style="width:100%;margin-bottom:8px${k===LANG?';font-weight:700':''}" onclick="setLang('${k}')">${LANG_META[k].label}${k===LANG?' ✓':''}</button>`
+  ).join('');
+  openInfo(tr('Escolha o idioma'),html);
+}
+
+/* ===== Modo demonstração (para gravar o vídeo promocional) =====
+   Roda com um banco de EXEMPLO temporário, que aparece só durante a
+   animação e é descartado no fim — o banco real do usuário nunca é tocado
+   (saveDB é bloqueado enquanto demoOn=true). */
+let demoTimer=null,demoIdx=0,demoTheme0=0,demoBak=null,demoTotal=0;
+const DEMO_CONTENT={
+'pt-BR':{subj:'HISTÓRIA',grade:'2° ANO — ENSINO MÉDIO',unit:'Exemplo (apague quando quiser)',
+  l1:'A Revolução Francesa',c1a:'Antecedentes e causas',v1a:'A Revolução Francesa — resumo',
+  c1b:'A Queda da Bastilha',v1b:'1789: o povo nas ruas',
+  l2:'A Revolução Industrial',c2a:'A máquina a vapor',v2a:'Das oficinas às fábricas',
+  sum:'A Revolução Francesa (1789) marcou o fim do Antigo Regime e a ascensão da burguesia, difundindo os ideais de liberdade, igualdade e fraternidade.',
+  mat:'O Antigo Regime e a Revolução — Alexis de Tocqueville'},
+'en':{subj:'HISTORY',grade:'11th grade',unit:'Sample (delete anytime)',
+  l1:'The French Revolution',c1a:'Background and causes',v1a:'The French Revolution — overview',
+  c1b:'The Storming of the Bastille',v1b:'1789: the people in the streets',
+  l2:'The Industrial Revolution',c2a:'The steam engine',v2a:'From workshops to factories',
+  sum:'The French Revolution (1789) ended the Ancien Régime and raised the bourgeoisie, spreading the ideals of liberty, equality and fraternity.',
+  mat:'The Old Regime and the Revolution — Alexis de Tocqueville'},
+'es':{subj:'HISTORIA',grade:'2.º de bachillerato',unit:'Ejemplo (borra cuando quieras)',
+  l1:'La Revolución Francesa',c1a:'Antecedentes y causas',v1a:'La Revolución Francesa — resumen',
+  c1b:'La toma de la Bastilla',v1b:'1789: el pueblo en las calles',
+  l2:'La Revolución Industrial',c2a:'La máquina de vapor',v2a:'De los talleres a las fábricas',
+  sum:'La Revolución Francesa (1789) puso fin al Antiguo Régimen y elevó a la burguesía, difundiendo los ideales de libertad, igualdad y fraternidad.',
+  mat:'El Antiguo Régimen y la Revolución — Alexis de Tocqueville'},
+'zh':{subj:'历史',grade:'高二',unit:'示例（可随时删除）',
+  l1:'法国大革命',c1a:'背景与原因',v1a:'法国大革命 — 概述',
+  c1b:'攻占巴士底狱',v1b:'1789：人民走上街头',
+  l2:'工业革命',c2a:'蒸汽机',v2a:'从作坊到工厂',
+  sum:'法国大革命（1789 年）终结了旧制度，使资产阶级崛起，传播了自由、平等、博爱的理念。',
+  mat:'旧制度与大革命 — 阿历克西·德·托克维尔'}
+};
+function demoContent(){return DEMO_CONTENT[LANG]||DEMO_CONTENT['pt-BR'];}
+/* Narração da demonstração — texto-fonte pt-BR; en/es/zh vêm do i18n (chaves DEMO_1..10) */
+const DEMO_NARR_PT={
+DEMO_1:'Este é o Organizador de Aulas: as matérias ficam na tela inicial, agrupadas automaticamente.',
+DEMO_2:'Dentro de uma matéria ficam as séries/anos. O botão de seta mostra a árvore de aulas.',
+DEMO_3:'Cada série reúne aulas numeradas, com duração total e contadores de pendências.',
+DEMO_4:'Dentro de uma aula: os capítulos. A caixinha marca o que ainda falta ministrar.',
+DEMO_5:'Cada capítulo guarda vídeos, com links, resumos, materiais e documentos anexados.',
+DEMO_6:'O formulário do vídeo busca o título no YouTube e exporta resumos em Word/PDF.',
+DEMO_7:'Cinco temas visuais, incluindo o HUD sci-fi Prometeu.',
+DEMO_8:'Os projetos arquivam anos letivos inteiros — troque quando quiser, com backup em arquivo.',
+DEMO_9:'Os relatórios da série exportam toda a estrutura em Word ou PDF.',
+DEMO_10:'Tudo 100% offline: seus dados nunca saem do aparelho. Organizador de Aulas.'
+};
+function demoTxt(code){
+  const d=I18N[LANG];const v=d&&d[code];
+  if(v!=null)return typeof v==='function'?v({}):v;
+  return DEMO_NARR_PT[code]||code; // pt-BR e pt-PT usam o texto-fonte
+}
+function buildDemoDB(){
+  const t=demoContent();
+  const mk=(base,n)=>base*100+n;
+  const disc={id:9000001,nome:t.subj,turma:t.grade,capitulo:t.unit,aulas:[
+    {id:9010001,numero:1,titulo:t.l1,cps:[],caps:[
+      {id:9020001,num:'Cap. 01',nome:t.c1a,apresentado:false,obs:'',videos:[
+        {id:9030001,nome:t.v1a,link:'',dur:'12:30',durSeg:750,resumo:t.sum,
+         materiais:[{titulo:t.mat,link:''}],arquivos:[]}]},
+      {id:9020002,num:'Cap. 02',nome:t.c1b,apresentado:false,obs:'',videos:[
+        {id:9030002,nome:t.v1b,link:'',dur:'08:15',durSeg:495,resumo:'',materiais:[],arquivos:[]}]}
+    ]},
+    {id:9010002,numero:2,titulo:t.l2,cps:[],caps:[
+      {id:9020003,num:'Cap. 01',nome:t.c2a,apresentado:true,obs:'',videos:[
+        {id:9030003,nome:t.v2a,link:'',dur:'15:40',durSeg:940,resumo:'',materiais:[],arquivos:[]}]}
+    ]}
+  ]};
+  return {disciplinas:[disc]};
+}
+function demoSteps(){
+  const d0=db.disciplinas[0];
+  const a0=d0&&d0.aulas[0];
+  const c0=a0&&a0.caps[0];
+  const v0=c0&&c0.videos[0];
+  return [
+    {c:'DEMO_1',ms:5600,sel:'#list-discs .card',f:()=>{showScreen('s-main');renderDiscs();}},
+    {c:'DEMO_2',ms:6000,sel:'#list-series .tree-toggle',f:()=>{openMat(0);const dd=matDiscs(curMat)[0];if(dd&&!openSeries.has(dd.id))toggleTree(dd.id);}},
+    {c:'DEMO_3',ms:5600,sel:'#list-aulas .card',f:()=>{if(d0)openDisc(d0.id);}},
+    {c:'DEMO_4',ms:6000,sel:'.cap-check',f:()=>{if(a0){curDiscId=d0.id;openAula(a0.id);}}},
+    {c:'DEMO_5',ms:5600,sel:'#list-caps .cap-card',f:()=>{if(c0&&!openCaps.has(c0.id))toggleCap(c0.id);}},
+    {c:'DEMO_6',ms:6400,sel:'.form-wrap',f:()=>{if(c0)goToFormVid(c0.id,v0?v0.id:null);}},
+    {c:'DEMO_7',ms:2800,sel:'.theme-btn',f:()=>{goBack('s-main');toggleTheme();}},
+    {c:'DEMO_7',ms:2600,sel:'.theme-btn',f:toggleTheme},
+    {c:'DEMO_7',ms:2600,sel:'.theme-btn',f:toggleTheme},
+    {c:'DEMO_8',ms:5600,sel:'#list-proj .card',f:()=>{openProjetos();}},
+    {c:'DEMO_9',ms:5600,sel:'#rmodal .modal-box',f:()=>{goBack('s-main');if(d0)openRelatorio(d0.id);}},
+    {c:'DEMO_10',ms:6000,sel:null,f:()=>{closeRModal();renderProjetos();showScreen('s-proj');}}
+  ];
+}
+function demoStart(){
+  closeMenu();
+  if(demoOn)return;
+  demoOn=true;demoIdx=0;demoTheme0=themeIdx;demoTotal=demoSteps().length;
+  demoBak=JSON.stringify(db);          // guarda o banco real do usuário
+  db=buildDemoDB();                    // carrega a amostra temporária
+  curMat=null;curDiscId=null;curAulaId=null;curCapId=null;
+  openSeries.clear();openCaps.clear();openObs.clear();
+  showScreen('s-main');renderDiscs();
+  // holofote (aponta o elemento explicado) + legenda grande
+  const spot=document.createElement('div');spot.id='demo-spot';document.body.appendChild(spot);
+  const cap=document.createElement('div');cap.id='demo-cap';
+  cap.innerHTML=`<span class="demo-badge" id="demo-step"></span><span id="demo-txt"></span>`+
+    `<button class="demo-x" onclick="demoStop()" aria-label="${escH(tr('Toque para parar a demonstração'))}"><i class="ti ti-x" aria-hidden="true"></i></button>`;
+  document.body.appendChild(cap);paintIcons();
+  demoNext();
+}
+function demoSpot(sel){
+  const spot=document.getElementById('demo-spot');if(!spot)return;
+  const el=sel?document.querySelector(sel):null;
+  if(el&&el.getBoundingClientRect){
+    const r=el.getBoundingClientRect(),pad=8;
+    // limita a área para não “vazar” atrás da legenda de baixo
+    const maxB=window.innerHeight-140;
+    const top=Math.max(6,r.top-pad), h=Math.min(r.height+pad*2,maxB-top);
+    spot.style.display='block';
+    spot.style.top=top+'px';spot.style.left=Math.max(6,r.left-pad)+'px';
+    spot.style.width=Math.min(r.width+pad*2,window.innerWidth-12)+'px';
+    spot.style.height=Math.max(36,h)+'px';
+  }else spot.style.display='none';
+}
+function demoNext(){
+  if(!demoOn)return;
+  const s=demoSteps()[demoIdx++];
+  if(!s){demoStop();return;}
+  try{s.f();}catch(e){}
+  const el=document.getElementById('demo-txt');if(el)el.textContent=demoTxt(s.c);
+  const st=document.getElementById('demo-step');if(st)st.textContent=demoIdx+'/'+demoTotal;
+  setTimeout(()=>{if(demoOn)demoSpot(s.sel);},420); // espera o render antes de apontar
+  demoTimer=setTimeout(demoNext,s.ms||5200);
+}
+function demoStop(){
+  if(!demoOn)return;
+  demoOn=false;clearTimeout(demoTimer);
+  ['demo-cap','demo-spot'].forEach(id=>{const e=document.getElementById(id);if(e)e.remove();});
+  closeRModal();
+  if(demoBak!=null){try{db=JSON.parse(demoBak);}catch(e){}demoBak=null;} // restaura o banco real
+  curMat=null;curDiscId=null;curAulaId=null;curCapId=null;
+  openSeries.clear();openCaps.clear();openObs.clear();
+  themeIdx=demoTheme0;applyThemeUI(THEMES[themeIdx]);saveTheme();
+  refreshProjUI();renderProjetos();showScreen('s-proj'); // termina em Gerenciar projetos
+}
+
+/* ===== Cobrança / ativação (só na distribuição direta — Pix + chave offline) =====
+   Modelo: 30 dias de uso completo; depois, CRIAR conteúdo novo pede ativação.
+   Ver/editar/exportar NUNCA é bloqueado (o professor nunca perde acesso aos dados).
+   A chave é verificada OFFLINE por assinatura ECDSA P-256 (Web Crypto): a chave
+   privada fica só com o autor (tools/assinador-licenca.html); aqui só a pública. */
+const PIX_CFG={ // PREENCHA antes de publicar a versão direta:
+  chave:'arimardiego@gmail.com',    // chave Pix (e-mail) registrada no banco do autor
+  nome:'ARIMAR DIEGO F DA SILVA',   // máx. 25 caracteres
+  cidade:'MANAUS',                  // máx. 15 caracteres
+  valor:'25.00',                    // valor em R$ (ex.: ~US$5). Vazio = comprador digita
+  preco:'US$ 5 (~R$ 25)',
+  email:'organizadordeaulas.Prometeu@gmail.com'     // para onde o comprador envia o comprovante
+};
+const LIC_PUBKEY={kty:'EC',crv:'P-256',x:'or3swlJ1Zsy8FIxg3oMI8GTeuhjsce1MREgOJCuu1Js',y:'TNSijRdV4gopbyxI0le4IYbGL7GguL5cOQgjM9GDEDU'};
+const LIC_KEY='prometeu.license.v1',INSTALL_KEY='prometeu.install.v1',TRIAL_DIAS=30;
+let licState={ativo:false,email:''};
+/* Canal de instalação: o pacote da Google Play abre com ?src=play (start_url
+   do TWA). Nesse canal o app já foi PAGO na loja: tudo liberado e a tela de
+   Pix fica oculta (política da Play proíbe pagamento externo no app). */
+const CHANNEL_KEY='prometeu.channel.v1';
+let CHANNEL='web';
+try{
+  if(/[?&]src=play\b/.test(location.search))localStorage.setItem(CHANNEL_KEY,'play');
+  CHANNEL=localStorage.getItem(CHANNEL_KEY)||'web';
+}catch(e){}
+function installTs(){
+  try{const r=localStorage.getItem(INSTALL_KEY);if(r)return +JSON.parse(r).t||Date.now();
+    const t=Date.now();localStorage.setItem(INSTALL_KEY,JSON.stringify({t}));return t;
+  }catch(e){return Date.now();}
+}
+function trialDiasRestantes(){return Math.max(0,Math.ceil(TRIAL_DIAS-(Date.now()-installTs())/86400000));}
+function trialAtivo(){return trialDiasRestantes()>0;}
+function podeCriar(){return CHANNEL==='play'||licState.ativo||trialAtivo();}
+function exigirAtivacao(){if(podeCriar())return true;openAtivar();return false;}
+/* Verificação offline da chave (ECDSA) */
+function _b64uBytes(s){s=String(s).replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u;}
+let _licPK=null;
+async function _getLicPK(){if(_licPK)return _licPK;_licPK=await crypto.subtle.importKey('jwk',LIC_PUBKEY,{name:'ECDSA',namedCurve:'P-256'},false,['verify']);return _licPK;}
+async function verificarCodigo(code){
+  try{
+    code=(code||'').trim().replace(/\s+/g,'');
+    const i=code.indexOf('.');if(i<1)return{ok:false};
+    const email=new TextDecoder().decode(_b64uBytes(code.slice(0,i)));
+    const sig=_b64uBytes(code.slice(i+1));
+    const msg=new TextEncoder().encode('prometeu.ativacao.v1|'+email.trim().toLowerCase());
+    const ok=await crypto.subtle.verify({name:'ECDSA',hash:'SHA-256'},await _getLicPK(),sig,msg);
+    return{ok,email};
+  }catch(e){return{ok:false};}
+}
+async function carregarLicenca(){
+  let s=null;try{s=JSON.parse(localStorage.getItem(LIC_KEY)||'null');}catch(e){}
+  if(!s||!s.code)return;
+  licState={ativo:true,email:s.email||''}; // otimista: nunca bloqueia pagante no boot
+  if(!(window.crypto&&crypto.subtle))return; // sem Web Crypto: mantém otimista
+  const r=await verificarCodigo(s.code);
+  if(r.ok)licState={ativo:true,email:r.email};
+  else{licState={ativo:false,email:''};try{localStorage.removeItem(LIC_KEY);}catch(e){}}
+  refreshLicUI();
+}
+async function ativarComCodigo(){
+  const campo=document.getElementById('at-code'),msg=document.getElementById('at-msg');
+  const code=campo?campo.value:'';
+  if(!(window.crypto&&crypto.subtle)){if(msg){msg.textContent=tr('Este navegador não suporta a verificação de licença.');msg.className='at-msg erro';}return;}
+  const r=await verificarCodigo(code);
+  if(r.ok){
+    try{localStorage.setItem(LIC_KEY,JSON.stringify({code:code.trim().replace(/\s+/g,''),email:r.email,quando:new Date().toISOString()}));}catch(e){}
+    licState={ativo:true,email:r.email};
+    renderAtivar();
+    showToast(trf('<b>Ativado!</b> Obrigado. Licença registrada para {e}.',{e:escH(r.email)}),6000);
+  }else if(msg){msg.textContent=tr('Código inválido. Confira se copiou o código completo do e-mail.');msg.className='at-msg erro';}
+}
+/* Pix copia-e-cola (BR Code EMV + CRC16-CCITT) */
+function _emv(id,v){return id+String(v.length).padStart(2,'0')+v;}
+function _crc16(str){let c=0xFFFF;for(let i=0;i<str.length;i++){c^=str.charCodeAt(i)<<8;for(let j=0;j<8;j++){c=(c&0x8000)?((c<<1)^0x1021):(c<<1);c&=0xFFFF;}}return c.toString(16).toUpperCase().padStart(4,'0');}
+function pixBRCode(){
+  const c=PIX_CFG;
+  const mai=_emv('00','br.gov.bcb.pix')+_emv('01',c.chave||'');
+  let p=_emv('00','01')+_emv('26',mai)+_emv('52','0000')+_emv('53','986');
+  if(c.valor)p+=_emv('54',c.valor);
+  p+=_emv('58','BR')+_emv('59',(c.nome||'').slice(0,25))+_emv('60',(c.cidade||'').slice(0,15))+_emv('62',_emv('05','***'));
+  return p+'6304'+_crc16(p+'6304');
+}
+function copiar(txt,btn){
+  const done=()=>{if(btn){const o=btn.textContent;btn.textContent=tr('Copiado!');setTimeout(()=>btn.textContent=o,1500);}};
+  try{navigator.clipboard.writeText(txt).then(done,()=>done());}
+  catch(e){try{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();done();}catch(_){}}
+}
+const escJS=s=>String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+function openAtivar(){closeMenu();renderAtivar();showScreen('s-ativar');}
+function refreshLicUI(){const s=document.getElementById('s-ativar');if(s&&s.classList.contains('active'))renderAtivar();}
+function renderAtivar(){
+  const el=document.getElementById('at-body');if(!el)return;
+  const dias=trialDiasRestantes();
+  let status;
+  if(licState.ativo)status=`<div class="at-card ok"><i class="ti ti-check" aria-hidden="true"></i><div><b>${tr('Versão completa ativada')}</b><div class="fhint">${escH(licState.email||'')}</div></div></div>`;
+  else if(dias>0)status=`<div class="at-card"><i class="ti ti-clock" aria-hidden="true"></i><div><b>${trf('Período gratuito: {n} dia(s) restante(s)',{n:dias})}</b><div class="fhint">${tr('Você usa tudo livremente. Depois do período, criar conteúdo novo pede ativação — ver e exportar seus dados continua sempre liberado.')}</div></div></div>`;
+  else status=`<div class="at-card fim"><i class="ti ti-alert-triangle" aria-hidden="true"></i><div><b>${tr('Período gratuito encerrado')}</b><div class="fhint">${tr('Ative para criar novos conteúdos. Seus dados e as exportações continuam acessíveis.')}</div></div></div>`;
+  el.innerHTML=status+(licState.ativo?'':`
+    <div class="at-sec">
+      <h3>${tr('Como ativar')} · ${escH(PIX_CFG.preco)}</h3>
+      <ol class="at-steps">
+        <li>${tr('Pague por Pix usando a chave ou o código abaixo.')}</li>
+        <li>${trf('Envie o comprovante e o seu e-mail para {mail}.',{mail:'<b>'+escH(PIX_CFG.email)+'</b>'})}</li>
+        <li>${tr('Você receberá um código de ativação por e-mail — cole-o abaixo.')}</li>
+      </ol>
+      <label class="flbl">${tr('Chave Pix')}</label>
+      <div class="at-copy"><code>${escH(PIX_CFG.chave)}</code><button class="btn-sec" onclick="copiar('${escJS(PIX_CFG.chave)}',this)">${tr('Copiar')}</button></div>
+      <label class="flbl">${tr('Pix copia e cola')}</label>
+      <div class="at-copy"><code class="small">${escH(pixBRCode())}</code><button class="btn-sec" onclick="copiar('${escJS(pixBRCode())}',this)">${tr('Copiar')}</button></div>
+      <label class="flbl" style="margin-top:16px">${tr('Código de ativação (recebido por e-mail)')}</label>
+      <textarea class="finput" id="at-code" rows="3" placeholder="${tr('Cole aqui o código de ativação')}"></textarea>
+      <div class="at-msg" id="at-msg"></div>
+      <button class="btn-pri" style="margin-top:10px" onclick="ativarComCodigo()">${tr('Ativar')}</button>
+    </div>`);
+  paintIcons();
 }
 
 /* ===== Inicialização ===== */
@@ -1091,6 +1427,10 @@ applyThemeUI(THEMES[themeIdx]);
 refreshProjUI();
 const _dv=document.getElementById('dw-ver');if(_dv)_dv.textContent='Prometeu · v'+APP_VERSION;
 paintIcons();
+if(window.i18nBoot)i18nBoot(); // traduz a interface estática e o título
+installTs();checkConsent();
+if(CHANNEL==='play'){const _bb=document.querySelector('.dw-buy');if(_bb)_bb.style.display='none';} // Play: comprado na loja
+else carregarLicenca(); // distribuição direta: verifica a licença guardada (offline, async)
 setTimeout(()=>sweepOrphans().catch(()=>{}),1600); // faxina de anexos órfãos, sem travar a abertura
 
 /* ===== PWA: registra o service worker (só quando servido via http/https) ===== */

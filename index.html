@@ -150,6 +150,15 @@
   <div class="content tut-body" id="tut-body"></div>
 </div>
 
+<div class="screen" id="s-ativar">
+  <div class="topbar">
+    <button class="tbk" onclick="goBack('s-main')" aria-label="Voltar"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
+    <span class="ttl">Ativação</span>
+    <button class="theme-btn" onclick="toggleTheme()"><i class="ti ti-moon" id="ti7" aria-hidden="true"></i></button>
+  </div>
+  <div class="content" id="at-body"></div>
+</div>
+
 <div class="drawer-ov" id="drawer-ov" onclick="closeMenu()"></div>
 <nav class="drawer" id="drawer" aria-label="Menu principal">
   <div class="dw-head">
@@ -162,6 +171,8 @@
     <div><span class="dw-plbl">Projeto em uso</span><b id="dw-proj"></b></div>
     <i class="ti ti-chevron-down" style="transform:rotate(-90deg);font-size:13px" aria-hidden="true"></i>
   </button>
+  <div id="dw-projlist"></div>
+  <button class="dw-item dw-buy" onclick="openAtivar()"><i class="ti ti-key" aria-hidden="true"></i> Ativar / Comprar</button>
   <div class="dw-sec">Arquivo</div>
   <button class="dw-item" onclick="novoProjeto()"><i class="ti ti-plus" aria-hidden="true"></i> Criar novo projeto</button>
   <button class="dw-item" onclick="openProjetos()"><i class="ti ti-folder" aria-hidden="true"></i> Gerenciar projetos</button>
@@ -169,12 +180,16 @@
   <button class="dw-item" onclick="importBackupPick()"><i class="ti ti-upload" aria-hidden="true"></i> Importar backup (.json)</button>
   <div class="dw-sec">Ajuda</div>
   <button class="dw-item" onclick="openTutorial()"><i class="ti ti-help" aria-hidden="true"></i> Tutorial</button>
+  <button class="dw-item" onclick="demoStart()"><i class="ti ti-player-play" aria-hidden="true"></i> Modo demonstração</button>
+  <button class="dw-item" onclick="openIdioma()"><i class="ti ti-language" aria-hidden="true"></i> Idioma</button>
+  <button class="dw-item" onclick="openLegal('priv')"><i class="ti ti-shield" aria-hidden="true"></i> Privacidade</button>
+  <button class="dw-item" onclick="openLegal('termos')"><i class="ti ti-file-text" aria-hidden="true"></i> Termos de uso</button>
   <button class="dw-item" onclick="showAtualizacao()"><i class="ti ti-refresh" aria-hidden="true"></i> Atualização</button>
   <button class="dw-item" onclick="showVersao()"><i class="ti ti-info-circle" aria-hidden="true"></i> Versão</button>
   <input type="file" id="bk-file" accept="application/json,.json" style="display:none" onchange="importBackup(this)"/>
 </nav>
 
-<div class="modal-wrap" id="imodal" onclick="if(event.target===this)closeInfo()">
+<div class="modal-wrap" id="imodal" style="z-index:210" onclick="if(event.target===this)closeInfo()">
   <div class="modal-box">
     <div class="modal-title" id="im-title"></div>
     <div class="im-body" id="im-body"></div>
@@ -200,9 +215,38 @@
   </div>
 </div>
 
+<div class="modal-wrap" id="cmodal">
+  <div class="modal-box">
+    <div class="modal-title">Bem-vindo!</div>
+    <div class="im-body">
+      <div>Seus dados ficam somente neste aparelho — nada é enviado para a internet. Ao continuar, você concorda com os Termos de Uso e a Política de Privacidade (disponíveis no menu ☰ → Ajuda).</div>
+      <div class="btn-row" style="margin-top:4px">
+        <button class="btn-sec" onclick="openLegal('termos')">Termos de Uso</button>
+        <button class="btn-sec" onclick="openLegal('priv')">Política de Privacidade</button>
+      </div>
+    </div>
+    <button class="btn-pri" onclick="aceitarConsent()">Aceitar e começar</button>
+  </div>
+</div>
+
+<div class="modal-wrap" id="tmodal">
+  <div class="modal-box">
+    <div class="modal-title">Tutorial rápido?</div>
+    <div class="im-body">
+      <div>Quer ver uma demonstração rápida de como o app funciona? O app navega sozinho mostrando cada função.</div>
+      <div class="fhint">Você pode revê-la quando quiser em ☰ → Modo demonstração.</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-sec" onclick="recusarTutorial()">Agora não</button>
+      <button class="btn-pri" onclick="aceitarTutorial()">Ver tutorial</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast-zone" aria-live="polite"></div>
 
 </div>
+<script src="i18n.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
