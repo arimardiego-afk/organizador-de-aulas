@@ -1,12 +1,16 @@
 /* Service Worker — Organizador de Aulas (Prometeu)
-   Cache do "app shell" para funcionamento offline. */
-const CACHE = 'prometeu-v15';
+   Cache do "app shell" para funcionamento offline.
+   CACHE e as URLs versionadas (?v=) são preenchidos pelo build.py a partir de
+   um hash do conteúdo — isso garante que toda publicação com mudança real
+   gera um service-worker.js diferente (o navegador detecta sozinho) e URLs
+   novas para os arquivos versionados (o cache HTTP nunca serve versão velha). */
+const CACHE = 'prometeu-bf5e665dfe';
 const ASSETS = [
   './',
   './index.html',
-  './styles.css',
-  './app.js',
-  './i18n.js',
+  './styles.css?v=bf5e665dfe',
+  './app.js?v=bf5e665dfe',
+  './i18n.js?v=bf5e665dfe',
   './privacidade.html',
   './termos.html',
   './manifest.json',
@@ -16,10 +20,16 @@ const ASSETS = [
   './icons/favicon-64.png'
 ];
 
-// Instala e pré-carrega os arquivos locais no cache
+// Instala e pré-carrega os arquivos locais no cache, ignorando o cache HTTP
+// do navegador (cache:'reload') — sem isso, o addAll poderia reaproveitar uma
+// resposta antiga já guardada pelo navegador para a mesma URL.
 self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open(CACHE).then((c) => c.addAll(ASSETS)).then(() => self.skipWaiting())
+    caches.open(CACHE).then((c) =>
+      Promise.all(ASSETS.map((url) =>
+        fetch(url, { cache: 'reload' }).then((res) => c.put(url, res))
+      ))
+    ).then(() => self.skipWaiting())
   );
 });
 
