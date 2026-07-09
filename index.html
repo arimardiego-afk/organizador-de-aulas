@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
 <title>Organizador de Aulas</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#050b13">
@@ -22,7 +22,7 @@
 
 <div class="screen active" id="s-main">
   <div class="topbar">
-    <button class="tbk" onclick="openMenu()" aria-label="Abrir menu"><i class="ti ti-menu-2" aria-hidden="true"></i></button>
+    <button class="tbk" id="menuBtn" onclick="openMenu()" aria-label="Abrir menu"><i class="ti ti-menu-2" aria-hidden="true"></i></button>
     <span class="ttl">Organizador de Aulas</span>
     <button class="theme-btn" onclick="toggleTheme()"><i class="ti ti-moon" id="ti0" aria-hidden="true"></i><span id="tl0">Escuro</span></button>
   </div>
@@ -118,10 +118,12 @@
         <label class="flbl">Livros e links citados no vídeo</label>
         <div id="vf-mats"></div>
         <button class="add-mat" onclick="addMat()"><i class="ti ti-book" aria-hidden="true"></i> Adicionar material</button>
-        <label class="flbl" style="margin-top:14px">Documentos anexados (PDF, imagem ou Word) · <span class="pg-count" id="arq-count">0/10</span></label>
+        <label class="flbl" style="margin-top:14px">Documentos anexados (PDF, imagem, Word ou áudio) · <span class="pg-count" id="arq-count">0/10</span></label>
         <div id="vf-arqs"></div>
-        <button class="add-mat" onclick="pickArq()"><i class="ti ti-paperclip" aria-hidden="true"></i> Importar PDF, imagem ou Word</button>
-        <input type="file" id="vf-file" multiple accept="application/pdf,image/*,.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="display:none" onchange="onArqPick(this)"/>
+        <button class="add-mat" onclick="pickArq()"><i class="ti ti-paperclip" aria-hidden="true"></i> Importar PDF, imagem, Word ou áudio</button>
+        <button class="add-mat" style="margin-top:6px" onclick="pickFoto()"><i class="ti ti-camera" aria-hidden="true"></i> Tirar foto</button>
+        <input type="file" id="vf-file" multiple accept="application/pdf,image/*,audio/*,.doc,.docx" style="display:none" onchange="onArqPick(this)"/>
+        <input type="file" id="vf-foto" accept="image/*" capture="environment" style="display:none" onchange="onArqPick(this)"/>
       </div></div></div>
     </div>
     <div class="btn-row">
@@ -181,9 +183,11 @@
   <div class="dw-sec">Ajuda</div>
   <button class="dw-item" onclick="openTutorial()"><i class="ti ti-help" aria-hidden="true"></i> Tutorial</button>
   <button class="dw-item" onclick="demoStart()"><i class="ti ti-player-play" aria-hidden="true"></i> Modo demonstração</button>
+  <button class="dw-item" onclick="enviarFeedback()"><i class="ti ti-mail" aria-hidden="true"></i> Enviar críticas ou sugestões</button>
   <button class="dw-item" onclick="openIdioma()"><i class="ti ti-language" aria-hidden="true"></i> Idioma</button>
   <button class="dw-item" onclick="openLegal('priv')"><i class="ti ti-shield" aria-hidden="true"></i> Privacidade</button>
   <button class="dw-item" onclick="openLegal('termos')"><i class="ti ti-file-text" aria-hidden="true"></i> Termos de uso</button>
+  <button class="dw-item" id="dw-install" onclick="instalarApp()"><i class="ti ti-download" aria-hidden="true"></i> Instalar aplicativo</button>
   <button class="dw-item" onclick="showAtualizacao()"><i class="ti ti-refresh" aria-hidden="true"></i> Atualização</button>
   <button class="dw-item" onclick="showVersao()"><i class="ti ti-info-circle" aria-hidden="true"></i> Versão</button>
   <input type="file" id="bk-file" accept="application/json,.json" style="display:none" onchange="importBackup(this)"/>

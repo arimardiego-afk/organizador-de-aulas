@@ -1,6 +1,6 @@
 /* Service Worker — Organizador de Aulas (Prometeu)
    Cache do "app shell" para funcionamento offline. */
-const CACHE = 'prometeu-v13';
+const CACHE = 'prometeu-v15';
 const ASSETS = [
   './',
   './index.html',

@@ -136,6 +136,11 @@ const I18N={
 'Cancelar':'Cancel','Salvar':'Save','Salvar vídeo':'Save video','Editar':'Edit','Remover':'Delete',
 'Tutorial':'Tutorial','Atualização':'Updates','Versão':'Version','Arquivo':'File','Ajuda':'Help',
 'Idioma':'Language','Privacidade':'Privacy','Termos de uso':'Terms of use','Modo demonstração':'Demo mode',
+'Enviar críticas ou sugestões':'Send feedback or suggestions',
+'Críticas e sugestões — Organizador de Aulas':'Feedback and suggestions — Lesson Organizer',
+'Instalar aplicativo':'Install app',
+'O app já está instalado neste aparelho.':'The app is already installed on this device.',
+'INSTALL_HELP':'<p>In <b>Chrome</b> (Android): tap the <b>⋮</b> menu and choose <b>“Install app”</b> (or “Add to Home screen”).</p><p>If the option does not appear, the browser may not support installation (e.g. Mi Browser) — open this site in Chrome and try again.</p><p>On a computer: use the install icon in the Chrome or Edge address bar.</p>',
 'Projeto em uso':'Current project','Gerenciar projetos':'Manage projects','Criar novo projeto':'Create new project',
 'Exportar backup (.json)':'Export backup (.json)','Importar backup (.json)':'Import backup (.json)',
 'Nova matéria':'New subject','Nova série/ano':'New grade/year','Nova aula':'New lesson','Novo capítulo':'New chapter','Novo vídeo':'New video',
@@ -169,8 +174,10 @@ const I18N={
 'Material didático e documentos':'Teaching materials & documents',
 'Livros e links citados no vídeo':'Books and links mentioned in the video',
 'Adicionar material':'Add material',
-'Documentos anexados (PDF, imagem ou Word) ·':'Attached documents (PDF, image or Word) ·',
-'Importar PDF, imagem ou Word':'Import PDF, image or Word',
+'Documentos anexados (PDF, imagem, Word ou áudio) ·':'Attached documents (PDF, image, Word or audio) ·',
+'Importar PDF, imagem, Word ou áudio':'Import PDF, image, Word or audio',
+'Tirar foto':'Take a photo',
+'"{f}" não é um tipo aceito (PDF, imagem, Word ou áudio).':'"{f}" is not an accepted type (PDF, image, Word or audio).',
 'Título (ex: Casa-Grande & Senzala)':'Title (e.g.: The Odyssey)','Autor, editora ou link':'Author, publisher or link',
 'Título':'Title','Autor':'Author','Remover material':'Remove material','Abrir arquivo':'Open file','Remover arquivo':'Remove file',
 'Ex: A Primeira Revolução Industrial':'E.g.: The First Industrial Revolution',
@@ -265,8 +272,8 @@ const I18N={
 'Código inválido. Confira se copiou o código completo do e-mail.':'Invalid code. Check that you copied the complete code from the e-mail.',
 '<b>Ativado!</b> Obrigado. Licença registrada para {e}.':'<b>Activated!</b> Thank you. License registered to {e}.',
 'Este navegador não suporta a verificação de licença.':'This browser does not support license verification.',
-'LEGAL_PRIV':'<p><b>Summary:</b></p><ul><li>The app works 100% offline. All content you create is stored only in this device\'s browser (localStorage/IndexedDB).</li><li>No personal data is collected, transmitted or sold. There are no ads, trackers or analytics.</li><li>Optional online features: fetching a video title from YouTube (sends only the video link to YouTube) and loading fonts from Google Fonts. Both are optional and the app works without them.</li><li>Backups (.json) are created by you and stay wherever you save them.</li><li>To erase everything: delete the projects in the app or clear the site/app data in your device settings.</li><li>Contact: organizadordeaulas.Prometeu@gmail.com</li></ul>',
-'LEGAL_TERMS':'<p><b>Summary:</b></p><ul><li>Personal, non-transferable license for use by the purchaser.</li><li>Resale, redistribution or commercial exploitation by third parties without prior written authorization from the author is prohibited.</li><li>The app is provided "as is"; keep backups of your data (☰ → File → Export backup).</li><li>Content you register (lessons, links, files) is yours and is your responsibility.</li><li>Contact: organizadordeaulas.Prometeu@gmail.com</li></ul>',
+'LEGAL_PRIV':'<p><b>Summary:</b></p><ul><li>The app works 100% offline. All content you create is stored only in this device\'s browser (localStorage/IndexedDB).</li><li>No personal data is collected, transmitted or sold. There are no ads, trackers or analytics.</li><li>Optional online features: fetching a video title from YouTube (sends only the video link to YouTube) and loading fonts from Google Fonts. Both are optional and the app works without them.</li><li>Backups (.json) are created by you and stay wherever you save them.</li><li>To erase everything: delete the projects in the app or clear the site/app data in your device settings.</li><li>Contact: organizadordeaulas.prometeu@gmail.com</li></ul>',
+'LEGAL_TERMS':'<p><b>Summary:</b></p><ul><li>Personal, non-transferable license for use by the purchaser.</li><li>Resale, redistribution or commercial exploitation by third parties without prior written authorization from the author is prohibited.</li><li>The app is provided "as is"; keep backups of your data (☰ → File → Export backup).</li><li>Content you register (lessons, links, files) is yours and is your responsibility.</li><li>Contact: organizadordeaulas.prometeu@gmail.com</li></ul>',
 'Iniciar demonstração':'Start demo','Parar demonstração':'Stop demo','Toque para parar a demonstração':'Tap to stop the demo',
 'DEMO_1':'This is the Lesson Organizer: subjects on the home screen, grouped automatically.',
 'DEMO_2':'Inside a subject live the grades/years. The arrow button shows the lesson tree.',
@@ -278,6 +285,8 @@ const I18N={
 'DEMO_8':'Projects archive whole school years — switch anytime, with backup to a file.',
 'DEMO_9':'Grade reports export the entire structure to Word or PDF.',
 'DEMO_10':'All of it 100% offline: your data never leaves the device. Lesson Organizer.',
+'DEMO_MENU':'It all starts in the ☰ menu: projects, backup, language, help and full-version activation.',
+'Comece por aqui: toque no menu ☰':'Start here: tap the ☰ menu',
 /* Figuras SVG do tutorial */
 'MATÉRIA':'SUBJECT','SÉRIE / ANO':'GRADE / YEAR','AULA':'LESSON','CAPÍTULO':'CHAPTER','VÍDEO':'VIDEO',
 'ARQUIVADO':'ARCHIVED','EM USO ●':'IN USE ●','ORGANIZADOR':'LESSON','DE AULAS':'ORGANIZER','YOUTUBE /':'YOUTUBE /','ANOTAÇÕES':'NOTES',
@@ -313,8 +322,8 @@ const I18N={
 'Quer ver uma demonstração rápida de como o app funciona? O app navega sozinho mostrando cada função.':'Quer ver uma demonstração rápida de como a aplicação funciona? A aplicação navega sozinha mostrando cada função.',
 'App 100% offline: os dados ficam guardados neste navegador/aparelho — nada é enviado para a internet.':'Aplicação 100% offline: os dados ficam guardados neste navegador/aparelho — nada é enviado para a internet.',
 '<b>Dica:</b> antes de atualizar, exporte um backup (☰ → Arquivo → Exportar backup).':'<b>Dica:</b> antes de atualizar, exporte uma cópia de segurança (☰ → Ficheiro → Exportar).',
-'LEGAL_PRIV':'<p><b>Resumo:</b></p><ul><li>A aplicação funciona 100% offline. Todo o conteúdo fica guardado apenas no navegador deste aparelho (localStorage/IndexedDB).</li><li>Nenhum dado pessoal é recolhido, transmitido ou vendido. Não há anúncios, rastreadores nem estatísticas.</li><li>Funções online opcionais: obter o título de um vídeo do YouTube (envia apenas o link do vídeo ao YouTube) e carregar tipos de letra do Google Fonts. Ambas são opcionais.</li><li>As cópias de segurança (.json) são criadas por si e ficam onde as guardar.</li><li>Para apagar tudo: elimine os projetos na aplicação ou limpe os dados do site/aplicação nas definições do aparelho.</li><li>Contacto: organizadordeaulas.Prometeu@gmail.com</li></ul>',
-'LEGAL_TERMS':'<p><b>Resumo:</b></p><ul><li>Licença pessoal e intransmissível, para uso de quem a adquiriu.</li><li>É proibida a revenda, redistribuição ou exploração comercial por terceiros sem autorização prévia, por escrito, do autor.</li><li>A aplicação é fornecida "tal como está"; mantenha cópias de segurança dos seus dados.</li><li>O conteúdo que registar (aulas, links, ficheiros) é seu e é da sua responsabilidade.</li><li>Contacto: organizadordeaulas.Prometeu@gmail.com</li></ul>'
+'LEGAL_PRIV':'<p><b>Resumo:</b></p><ul><li>A aplicação funciona 100% offline. Todo o conteúdo fica guardado apenas no navegador deste aparelho (localStorage/IndexedDB).</li><li>Nenhum dado pessoal é recolhido, transmitido ou vendido. Não há anúncios, rastreadores nem estatísticas.</li><li>Funções online opcionais: obter o título de um vídeo do YouTube (envia apenas o link do vídeo ao YouTube) e carregar tipos de letra do Google Fonts. Ambas são opcionais.</li><li>As cópias de segurança (.json) são criadas por si e ficam onde as guardar.</li><li>Para apagar tudo: elimine os projetos na aplicação ou limpe os dados do site/aplicação nas definições do aparelho.</li><li>Contacto: organizadordeaulas.prometeu@gmail.com</li></ul>',
+'LEGAL_TERMS':'<p><b>Resumo:</b></p><ul><li>Licença pessoal e intransmissível, para uso de quem a adquiriu.</li><li>É proibida a revenda, redistribuição ou exploração comercial por terceiros sem autorização prévia, por escrito, do autor.</li><li>A aplicação é fornecida "tal como está"; mantenha cópias de segurança dos seus dados.</li><li>O conteúdo que registar (aulas, links, ficheiros) é seu e é da sua responsabilidade.</li><li>Contacto: organizadordeaulas.prometeu@gmail.com</li></ul>'
 },
 
 /* ---------- ESPANHOL ---------- */
@@ -324,6 +333,11 @@ const I18N={
 'Cancelar':'Cancelar','Salvar':'Guardar','Salvar vídeo':'Guardar vídeo','Editar':'Editar','Remover':'Eliminar',
 'Tutorial':'Tutorial','Atualização':'Actualización','Versão':'Versión','Arquivo':'Archivo','Ajuda':'Ayuda',
 'Idioma':'Idioma','Privacidade':'Privacidad','Termos de uso':'Términos de uso','Modo demonstração':'Modo demostración',
+'Enviar críticas ou sugestões':'Enviar críticas o sugerencias',
+'Críticas e sugestões — Organizador de Aulas':'Críticas y sugerencias — Organizador de Clases',
+'Instalar aplicativo':'Instalar aplicación',
+'O app já está instalado neste aparelho.':'La app ya está instalada en este dispositivo.',
+'INSTALL_HELP':'<p>En <b>Chrome</b> (Android): toca el menú <b>⋮</b> y elige <b>«Instalar aplicación»</b> (o «Añadir a pantalla de inicio»).</p><p>Si la opción no aparece, puede que el navegador no admita la instalación (p. ej. Mi Browser) — abre este sitio en Chrome e inténtalo de nuevo.</p><p>En el ordenador: usa el icono de instalación en la barra de direcciones de Chrome o Edge.</p>',
 'Projeto em uso':'Proyecto en uso','Gerenciar projetos':'Gestionar proyectos','Criar novo projeto':'Crear nuevo proyecto',
 'Exportar backup (.json)':'Exportar copia de seguridad (.json)','Importar backup (.json)':'Importar copia de seguridad (.json)',
 'Nova matéria':'Nueva asignatura','Nova série/ano':'Nuevo curso/año','Nova aula':'Nueva clase','Novo capítulo':'Nuevo capítulo','Novo vídeo':'Nuevo vídeo',
@@ -356,8 +370,10 @@ const I18N={
 'Material didático e documentos':'Material didáctico y documentos',
 'Livros e links citados no vídeo':'Libros y enlaces citados en el vídeo',
 'Adicionar material':'Añadir material',
-'Documentos anexados (PDF, imagem ou Word) ·':'Documentos adjuntos (PDF, imagen o Word) ·',
-'Importar PDF, imagem ou Word':'Importar PDF, imagen o Word',
+'Documentos anexados (PDF, imagem, Word ou áudio) ·':'Documentos adjuntos (PDF, imagen, Word o audio) ·',
+'Importar PDF, imagem, Word ou áudio':'Importar PDF, imagen, Word o audio',
+'Tirar foto':'Tomar foto',
+'"{f}" não é um tipo aceito (PDF, imagem, Word ou áudio).':'"{f}" no es un tipo aceptado (PDF, imagen, Word o audio).',
 'Título (ex: Casa-Grande & Senzala)':'Título (ej.: Cien años de soledad)','Autor, editora ou link':'Autor, editorial o enlace',
 'Título':'Título','Autor':'Autor','Remover material':'Quitar material','Abrir arquivo':'Abrir archivo','Remover arquivo':'Quitar archivo',
 'Ex: A Primeira Revolução Industrial':'Ej.: La Primera Revolución Industrial',
@@ -451,8 +467,8 @@ const I18N={
 'Código inválido. Confira se copiou o código completo do e-mail.':'Código no válido. Comprueba que copiaste el código completo del correo.',
 '<b>Ativado!</b> Obrigado. Licença registrada para {e}.':'<b>¡Activado!</b> Gracias. Licencia registrada para {e}.',
 'Este navegador não suporta a verificação de licença.':'Este navegador no admite la verificación de licencia.',
-'LEGAL_PRIV':'<p><b>Resumen:</b></p><ul><li>La app funciona 100% sin conexión. Todo lo que creas se guarda solo en el navegador de este dispositivo (localStorage/IndexedDB).</li><li>No se recopila, transmite ni vende ningún dato personal. No hay anuncios, rastreadores ni analíticas.</li><li>Funciones en línea opcionales: obtener el título de un vídeo de YouTube (envía solo el enlace del vídeo a YouTube) y cargar fuentes de Google Fonts. Ambas son opcionales.</li><li>Las copias de seguridad (.json) las creas tú y quedan donde las guardes.</li><li>Para borrarlo todo: elimina los proyectos en la app o borra los datos del sitio/app en los ajustes del dispositivo.</li><li>Contacto: organizadordeaulas.Prometeu@gmail.com</li></ul>',
-'LEGAL_TERMS':'<p><b>Resumen:</b></p><ul><li>Licencia personal e intransferible, para uso de quien la adquirió.</li><li>Queda prohibida la reventa, redistribución o explotación comercial por terceros sin autorización previa por escrito del autor.</li><li>La app se ofrece "tal cual"; mantén copias de seguridad de tus datos.</li><li>El contenido que registres (clases, enlaces, archivos) es tuyo y es tu responsabilidad.</li><li>Contacto: organizadordeaulas.Prometeu@gmail.com</li></ul>',
+'LEGAL_PRIV':'<p><b>Resumen:</b></p><ul><li>La app funciona 100% sin conexión. Todo lo que creas se guarda solo en el navegador de este dispositivo (localStorage/IndexedDB).</li><li>No se recopila, transmite ni vende ningún dato personal. No hay anuncios, rastreadores ni analíticas.</li><li>Funciones en línea opcionales: obtener el título de un vídeo de YouTube (envía solo el enlace del vídeo a YouTube) y cargar fuentes de Google Fonts. Ambas son opcionales.</li><li>Las copias de seguridad (.json) las creas tú y quedan donde las guardes.</li><li>Para borrarlo todo: elimina los proyectos en la app o borra los datos del sitio/app en los ajustes del dispositivo.</li><li>Contacto: organizadordeaulas.prometeu@gmail.com</li></ul>',
+'LEGAL_TERMS':'<p><b>Resumen:</b></p><ul><li>Licencia personal e intransferible, para uso de quien la adquirió.</li><li>Queda prohibida la reventa, redistribución o explotación comercial por terceros sin autorización previa por escrito del autor.</li><li>La app se ofrece "tal cual"; mantén copias de seguridad de tus datos.</li><li>El contenido que registres (clases, enlaces, archivos) es tuyo y es tu responsabilidad.</li><li>Contacto: organizadordeaulas.prometeu@gmail.com</li></ul>',
 'Iniciar demonstração':'Iniciar demostración','Parar demonstração':'Detener demostración','Toque para parar a demonstração':'Toca para detener la demostración',
 'DEMO_1':'Este es el Organizador de Clases: asignaturas en la pantalla inicial, agrupadas automáticamente.',
 'DEMO_2':'Dentro de cada asignatura viven los cursos/años. El botón con flecha muestra el árbol de clases.',
@@ -464,6 +480,8 @@ const I18N={
 'DEMO_8':'Los proyectos archivan años lectivos completos — cambia cuando quieras, con copia a archivo.',
 'DEMO_9':'Los informes del curso exportan toda la estructura a Word o PDF.',
 'DEMO_10':'Todo 100% sin conexión: tus datos nunca salen del dispositivo. Organizador de Clases.',
+'DEMO_MENU':'Todo empieza en el menú ☰: proyectos, copia, idioma, ayuda y activación de la versión completa.',
+'Comece por aqui: toque no menu ☰':'Empieza aquí: toca el menú ☰',
 'MATÉRIA':'ASIGNATURA','SÉRIE / ANO':'CURSO / AÑO','AULA':'CLASE','CAPÍTULO':'CAPÍTULO','VÍDEO':'VÍDEO',
 'ARQUIVADO':'ARCHIVADO','EM USO ●':'EN USO ●','ORGANIZADOR':'ORGANIZADOR','DE AULAS':'DE CLASES','ANOTAÇÕES':'NOTAS',
 'Cap. 01 — caixinha marcada = ● A MINISTRAR':'Cap. 01 — casilla marcada = ● POR IMPARTIR',
@@ -477,6 +495,11 @@ const I18N={
 'Cancelar':'取消','Salvar':'保存','Salvar vídeo':'保存视频','Editar':'编辑','Remover':'删除',
 'Tutorial':'使用教程','Atualização':'更新','Versão':'版本','Arquivo':'文件','Ajuda':'帮助',
 'Idioma':'语言','Privacidade':'隐私','Termos de uso':'使用条款','Modo demonstração':'演示模式',
+'Enviar críticas ou sugestões':'发送意见或建议',
+'Críticas e sugestões — Organizador de Aulas':'意见与建议 — 课程管理器',
+'Instalar aplicativo':'安装应用',
+'O app já está instalado neste aparelho.':'应用已安装在此设备上。',
+'INSTALL_HELP':'<p>在 <b>Chrome</b>（Android）中：点按 <b>⋮</b> 菜单，选择<b>“安装应用”</b>（或“添加到主屏幕”）。</p><p>如果没有该选项，可能是浏览器不支持安装（如 Mi Browser）— 请在 Chrome 中打开本站后重试。</p><p>在电脑上：使用 Chrome 或 Edge 地址栏中的安装图标。</p>',
 'Projeto em uso':'当前项目','Gerenciar projetos':'管理项目','Criar novo projeto':'新建项目',
 'Exportar backup (.json)':'导出备份 (.json)','Importar backup (.json)':'导入备份 (.json)',
 'Nova matéria':'新科目','Nova série/ano':'新年级','Nova aula':'新课','Novo capítulo':'新章节','Novo vídeo':'新视频',
@@ -509,8 +532,10 @@ const I18N={
 'Material didático e documentos':'教学材料与文档',
 'Livros e links citados no vídeo':'视频中提到的书籍和链接',
 'Adicionar material':'添加材料',
-'Documentos anexados (PDF, imagem ou Word) ·':'附件文档（PDF、图片或 Word）·',
-'Importar PDF, imagem ou Word':'导入 PDF、图片或 Word',
+'Documentos anexados (PDF, imagem, Word ou áudio) ·':'附件文档（PDF、图片、Word 或音频）·',
+'Importar PDF, imagem, Word ou áudio':'导入 PDF、图片、Word 或音频',
+'Tirar foto':'拍照',
+'"{f}" não é um tipo aceito (PDF, imagem, Word ou áudio).':'"{f}" 不是可接受的类型（PDF、图片、Word 或音频）。',
 'Título (ex: Casa-Grande & Senzala)':'标题（例：红楼梦）','Autor, editora ou link':'作者、出版社或链接',
 'Título':'标题','Autor':'作者','Remover material':'移除材料','Abrir arquivo':'打开文件','Remover arquivo':'移除文件',
 'Ex: A Primeira Revolução Industrial':'例：第一次工业革命',
@@ -603,8 +628,8 @@ const I18N={
 'Código inválido. Confira se copiou o código completo do e-mail.':'激活码无效。请确认已从邮件中复制完整的激活码。',
 '<b>Ativado!</b> Obrigado. Licença registrada para {e}.':'<b>已激活！</b>谢谢。许可证已登记给 {e}。',
 'Este navegador não suporta a verificação de licença.':'此浏览器不支持许可证验证。',
-'LEGAL_PRIV':'<p><b>摘要：</b></p><ul><li>应用 100% 离线运行。你创建的所有内容仅保存在此设备的浏览器中（localStorage/IndexedDB）。</li><li>不收集、不传输、不出售任何个人数据。没有广告、跟踪器或分析工具。</li><li>可选的联网功能：从 YouTube 获取视频标题（仅向 YouTube 发送视频链接）和加载 Google Fonts 字体。两者均为可选。</li><li>备份文件 (.json) 由你自行创建，保存在你选择的位置。</li><li>要清除全部数据：在应用中删除项目，或在设备设置中清除该网站/应用的数据。</li><li>联系方式：organizadordeaulas.Prometeu@gmail.com</li></ul>',
-'LEGAL_TERMS':'<p><b>摘要：</b></p><ul><li>个人许可，不可转让，仅限购买者使用。</li><li>未经作者事先书面授权，禁止第三方转售、再分发或进行商业利用。</li><li>应用按"现状"提供；请保留数据备份（☰ → 文件 → 导出备份）。</li><li>你录入的内容（课程、链接、文件）归你所有，由你负责。</li><li>联系方式：organizadordeaulas.Prometeu@gmail.com</li></ul>',
+'LEGAL_PRIV':'<p><b>摘要：</b></p><ul><li>应用 100% 离线运行。你创建的所有内容仅保存在此设备的浏览器中（localStorage/IndexedDB）。</li><li>不收集、不传输、不出售任何个人数据。没有广告、跟踪器或分析工具。</li><li>可选的联网功能：从 YouTube 获取视频标题（仅向 YouTube 发送视频链接）和加载 Google Fonts 字体。两者均为可选。</li><li>备份文件 (.json) 由你自行创建，保存在你选择的位置。</li><li>要清除全部数据：在应用中删除项目，或在设备设置中清除该网站/应用的数据。</li><li>联系方式：organizadordeaulas.prometeu@gmail.com</li></ul>',
+'LEGAL_TERMS':'<p><b>摘要：</b></p><ul><li>个人许可，不可转让，仅限购买者使用。</li><li>未经作者事先书面授权，禁止第三方转售、再分发或进行商业利用。</li><li>应用按"现状"提供；请保留数据备份（☰ → 文件 → 导出备份）。</li><li>你录入的内容（课程、链接、文件）归你所有，由你负责。</li><li>联系方式：organizadordeaulas.prometeu@gmail.com</li></ul>',
 'Iniciar demonstração':'开始演示','Parar demonstração':'停止演示','Toque para parar a demonstração':'点按停止演示',
 'DEMO_1':'这是课程管理器：主屏幕显示自动分组的科目。',
 'DEMO_2':'每个科目下是年级。箭头按钮可展开课程树。',
@@ -616,6 +641,8 @@ const I18N={
 'DEMO_8':'项目可归档整个学年 — 随时切换，并可备份到文件。',
 'DEMO_9':'年级报告可将整个结构导出为 Word 或 PDF。',
 'DEMO_10':'一切 100% 离线：你的数据绝不离开设备。课程管理器。',
+'DEMO_MENU':'一切从 ☰ 菜单开始：项目、备份、语言、帮助和完整版激活。',
+'Comece por aqui: toque no menu ☰':'从这里开始：点按 ☰ 菜单',
 'MATÉRIA':'科目','SÉRIE / ANO':'年级','AULA':'课程','CAPÍTULO':'章节','VÍDEO':'视频',
 'ARQUIVADO':'已归档','EM USO ●':'使用中 ●','ORGANIZADOR':'课程','DE AULAS':'管理器','ANOTAÇÕES':'笔记',
 'Cap. 01 — caixinha marcada = ● A MINISTRAR':'第 1 章 — 勾选 = ● 待授课',
@@ -634,6 +661,15 @@ const TUT_ML={
 %FIG0%
 <p>Example: <b>HISTORY</b> → <b>11th grade</b> → <b>Lesson 12 (French Revolution)</b> → <b>Chap. 01</b> → <b>YouTube video</b>.</p>
 <p>Everything works <b>without internet</b> and is saved automatically on the device after every change.</p>`},
+{ic:'ti-menu-2',t:'The ☰ menu',c:`
+<p>The <b>☰</b> button (top-left of the home screen) opens the <b>menu</b> — the app's starting point. Inside you'll find:</p>
+<ul>
+<li><b>Current project</b> and the quick-switch list (up to 7 school years).</li>
+<li><b>File:</b> create and manage projects, and export/import the <b>backup (.json)</b>.</li>
+<li><b>Activate / Buy:</b> unlock the full version (in the copy bought from the website).</li>
+<li><b>Help:</b> Tutorial, <b>Demo mode</b>, Language, Privacy, Terms of use, Updates and Version.</li>
+</ul>
+<p>To close the menu, tap the dark area beside it or the <b>✕</b>.</p>`},
 {ic:'ti-archive',t:'Projects — school years',c:`
 <p>Each <b>project</b> holds a full school year (Year + Institution), with all subjects, lessons and documents.</p>
 %FIG1%
@@ -707,7 +743,7 @@ const TUT_ML={
 <li><b>Install:</b> open the site in Chrome → ⋮ menu → <b>“Install app”</b> (or “Add to home screen”). The app then opens in its own window, without the browser bar.</li>
 <li><b>Split screen:</b> tap <b>Recents</b>, tap the <b>app icon</b> at the top of the card → <b>“Open in split screen view”</b> → choose the second app (e.g. YouTube). The middle divider adjusts the size.</li>
 <li><b>Pop-up view:</b> in Recents, tap the app icon → <b>“Open in pop-up view”</b> — the app becomes a floating window over another app.</li>
-<li>The layout reorganizes itself at any window size; the S Pen works in every field.</li>
+<li>The layout reorganizes itself at any window size. In the Notes field, stylus handwriting-to-text is disabled (use the keyboard) to avoid conversion errors.</li>
 </ul>`},
 {ic:'ti-help',t:'Updates and version',c:`
 <ul>
@@ -721,6 +757,15 @@ const TUT_ML={
 %FIG0%
 <p>Ejemplo: <b>HISTORIA</b> → <b>2.º de bachillerato</b> → <b>Clase 12 (Revolución Francesa)</b> → <b>Cap. 01</b> → <b>vídeo de YouTube</b>.</p>
 <p>Todo funciona <b>sin internet</b> y se guarda automáticamente en el dispositivo con cada cambio.</p>`},
+{ic:'ti-menu-2',t:'El menú ☰',c:`
+<p>El botón <b>☰</b> (arriba a la izquierda de la pantalla inicial) abre el <b>menú</b> — el punto de partida de la app. Dentro encontrarás:</p>
+<ul>
+<li><b>Proyecto en uso</b> y la lista de cambio rápido (hasta 7 años lectivos).</li>
+<li><b>Archivo:</b> crear y gestionar proyectos, y exportar/importar la <b>copia (.json)</b>.</li>
+<li><b>Activar / Comprar:</b> desbloquear la versión completa (en la copia adquirida desde el sitio web).</li>
+<li><b>Ayuda:</b> Tutorial, <b>Modo demostración</b>, Idioma, Privacidad, Términos de uso, Actualización y Versión.</li>
+</ul>
+<p>Para cerrar el menú, toca el área oscura al lado o la <b>✕</b>.</p>`},
 {ic:'ti-archive',t:'Proyectos — años lectivos',c:`
 <p>Cada <b>proyecto</b> guarda un año lectivo completo (Año + Institución), con todas las asignaturas, clases y documentos.</p>
 %FIG1%
@@ -794,7 +839,7 @@ const TUT_ML={
 <li><b>Instalar:</b> abre el sitio en Chrome → menú ⋮ → <b>«Instalar aplicación»</b> (o «Añadir a pantalla de inicio»). La app pasa a abrirse en su propia ventana, sin barra del navegador.</li>
 <li><b>Pantalla dividida:</b> toca <b>Recientes</b>, toca el <b>icono de la app</b> en la parte superior de la tarjeta → <b>«Abrir en vista de pantalla dividida»</b> → elige la segunda app (p. ej. YouTube).</li>
 <li><b>Vista emergente:</b> en Recientes, toca el icono de la app → <b>«Abrir en vista emergente»</b> — la app se convierte en una ventana flotante sobre otra app.</li>
-<li>El diseño se reorganiza solo en cualquier tamaño de ventana; el S Pen funciona en todos los campos.</li>
+<li>El diseño se reorganiza solo en cualquier tamaño de ventana. En las Notas, la escritura a mano del lápiz queda desactivada (usa el teclado) para evitar errores de conversión.</li>
 </ul>`},
 {ic:'ti-help',t:'Actualización y versión',c:`
 <ul>
@@ -808,6 +853,15 @@ const TUT_ML={
 %FIG0%
 <p>示例：<b>历史</b> → <b>高二</b> → <b>第 12 课（法国大革命）</b> → <b>第 1 章</b> → <b>YouTube 视频</b>。</p>
 <p>一切<b>无需网络</b>即可使用，每次更改都会自动保存在设备上。</p>`},
+{ic:'ti-menu-2',t:'☰ 菜单',c:`
+<p><b>☰</b> 按钮（主屏幕左上角）打开<b>菜单</b> —— 这是使用应用的起点。里面有：</p>
+<ul>
+<li><b>当前项目</b>和快速切换列表（最多 7 个学年）。</li>
+<li><b>文件：</b>新建和管理项目，导出/导入<b>备份 (.json)</b>。</li>
+<li><b>激活 / 购买：</b>解锁完整版（通过网站购买的版本）。</li>
+<li><b>帮助：</b>使用教程、<b>演示模式</b>、语言、隐私、使用条款、更新和版本。</li>
+</ul>
+<p>点按菜单旁边的深色区域或 <b>✕</b> 即可关闭。</p>`},
 {ic:'ti-archive',t:'项目 — 学年',c:`
 <p>每个<b>项目</b>保存一个完整学年（年份 + 学校），包含全部科目、课程和文档。</p>
 %FIG1%
@@ -881,7 +935,7 @@ const TUT_ML={
 <li><b>安装：</b>在 Chrome 中打开网站 → ⋮ 菜单 → <b>“安装应用”</b>（或“添加到主屏幕”）。应用将在独立窗口中打开，没有浏览器栏。</li>
 <li><b>分屏：</b>点按<b>最近任务</b>，点按卡片顶部的<b>应用图标</b> → <b>“在分屏视图中打开”</b> → 选择第二个应用（如 YouTube）。</li>
 <li><b>弹窗视图：</b>在最近任务中点按应用图标 → <b>“在弹窗视图中打开”</b> — 应用变为悬浮在其他应用上的小窗口。</li>
-<li>布局会在任何窗口尺寸下自动调整；S Pen 可在所有输入框中使用。</li>
+<li>布局会在任何窗口尺寸下自动调整。在“备注”栏中已停用手写笔的手写转文字功能（请使用键盘），以避免转换错误。</li>
 </ul>`},
 {ic:'ti-help',t:'更新与版本',c:`
 <ul>

@@ -39,7 +39,10 @@ const ICONS={
 'ti-palette':'<path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25"/><path d="M8.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M12.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M16.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>',
 'ti-shield':'<path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1 -8.5 15a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3"/>',
 'ti-language':'<path d="M4 5h7"/><path d="M9 3v2c0 4.418 -2.239 8 -5 8"/><path d="M5 9c0 2.144 2.952 3.908 6.7 4"/><path d="M12 20l4 -9l4 9"/><path d="M19.1 18h-6.2"/>',
-'ti-key':'<path d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.977a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.977a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0z"/><path d="M15 9h.01"/>'
+'ti-key':'<path d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.977a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.977a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0z"/><path d="M15 9h.01"/>',
+'ti-mail':'<path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"/><path d="M3 7l9 6l9 -6"/>',
+'ti-music':'<path d="M3 17a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M13 17a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M9 17v-13h10v13"/><path d="M9 8h10"/>',
+'ti-camera':'<path d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2"/><path d="M9 13a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/>'
 };
 function paintIcons(){
   document.querySelectorAll('i.ti').forEach(el=>{
@@ -64,7 +67,7 @@ const THEME_META={
 const SEED={"disciplinas":[]}; // app entregue vazio — o usuario cria as proprias materias
 
 /* ===== Projetos (anos letivos) — cada projeto guarda um banco completo ===== */
-const APP_VERSION='2.1', APP_DATE='julho de 2026';
+const APP_VERSION='2.2', APP_DATE='julho de 2026';
 const PROJ_KEY='prometeu.projects.v1';
 let projReg=null;
 function loadProjects(){
@@ -118,8 +121,8 @@ function normalizeDB(){
   })));
 }
 function capTem(c){return c.videos.length>0||c.videos.some(v=>(v.resumo||'').trim()||(v.materiais||[]).length);}
-function aulaPend(a){return a.caps.filter(c=>capTem(c)&&!c.apresentado).length;}
-function aulaMinistrados(a){return a.caps.filter(c=>capTem(c)&&c.apresentado).length;}
+function aulaPend(a){return a.caps.filter(c=>!c.apresentado).length;}
+function aulaMinistrados(a){return a.caps.filter(c=>c.apresentado).length;}
 function saveDB(){
   if(demoOn)return; // durante a demonstração o banco é temporário — nunca persiste
   try{localStorage.setItem(dbKey(),JSON.stringify(db));}catch(e){}
@@ -172,6 +175,7 @@ function matDiscs(mat){return db.disciplinas.filter(d=>matKey(d)===mat);}
 
 function renderDiscs(){ // TELA 1: apenas as matérias
   saveDB();
+  if(window.fireMenuHint)fireMenuHint(); // destaque do ☰ quando a home aparece (1º uso)
   const el=document.getElementById('list-discs');
   if(!db.disciplinas.length){el.innerHTML='<div class="empty"><i class="ti ti-books" aria-hidden="true"></i><p>Nenhuma matéria.<br>Toque em <b>Nova matéria</b>.</p></div>';return;}
   const groups={};
@@ -367,9 +371,9 @@ function renderCaps(){
   const nCPs=Math.max(11,aula.caps.length);
   document.getElementById('chips-cp').innerHTML=Array.from({length:nCPs},(_,i)=>{
     const cap=aula.caps[i];
-    const lit=!!(cap&&(cap.videos.length>0||cap.videos.some(v=>(v.resumo||'').trim()||(v.materiais||[]).length)));
+    const lit=!!(cap&&capTem(cap));
     const sel=selCP===i+1;
-    return `<span class="chip${lit?' on':''}${sel?' sel':''}" id="cp-${i+1}" ${lit?`onclick="selectCP(${i+1},${cap.id})"`:''} role="button" aria-pressed="${sel}">CP${i+1}</span>`;
+    return `<span class="chip${lit?' on':''}${sel?' sel':''}" id="cp-${i+1}" ${cap?`onclick="selectCP(${i+1},${cap.id})"`:''} role="button" aria-pressed="${sel}">CP${i+1}</span>`;
   }).join('');
   const el=document.getElementById('list-caps');
   if(!aula.caps.length){el.innerHTML='<div class="empty"><i class="ti ti-player-play" aria-hidden="true"></i><p>Nenhum capítulo ainda.<br>Toque em <b>Novo capítulo</b>.</p></div>';return;}
@@ -390,8 +394,7 @@ function renderCaps(){
           <button class="iBtn-sm del" onclick="removeVid(${cap.id},${vid.id})" aria-label="Remover vídeo"><i class="ti ti-trash" aria-hidden="true"></i></button>
         </div>
       </div>`).join('');
-    const tem=capTem(cap);
-    const pend=tem&&!cap.apresentado;
+    const pend=!cap.apresentado;
     return `
     <div class="cap-card${pend?' pend':''}" id="cc-${cap.id}">
       <div class="cap-header">
@@ -405,12 +408,12 @@ function renderCaps(){
             &nbsp;·&nbsp;
             <i class="ti ti-clock" style="font-size:11px" aria-hidden="true"></i>
             <span class="cap-total-dur">${durSeg>0?fmtS(durSeg):'--:--'}</span>
-            ${tem?(pend?'<span class="ta-pend" style="margin-left:6px">● A MINISTRAR</span>':'<span style="margin-left:6px;color:var(--txt3)">✓ ministrado</span>'):''}
+            ${pend?'<span class="ta-pend" style="margin-left:6px">● A MINISTRAR</span>':'<span style="margin-left:6px;color:var(--txt3)">✓ ministrado</span>'}
           </div>
         </div>
         <div class="cap-hbtns">
           <button class="iBtn edt" onclick="openEditCap(${cap.id})" aria-label="Editar capítulo"><i class="ti ti-edit" aria-hidden="true"></i></button>
-          <button class="cap-check${cap.apresentado?'':' checked'}${tem?'':' disabled'}" onclick="${tem?`toggleApresentado(${cap.id})`:''}" aria-label="${cap.apresentado?'Marcar como a ministrar':'Marcar como ministrado'}" role="checkbox" aria-checked="${!cap.apresentado&&tem}" title="Marcado = a ministrar; vazio = já ministrado"><span class="box"><i class="ti ti-check" aria-hidden="true"></i></span></button>
+          <button class="cap-check${cap.apresentado?'':' checked'}" onclick="toggleApresentado(${cap.id})" aria-label="${cap.apresentado?'Marcar como a ministrar':'Marcar como ministrado'}" role="checkbox" aria-checked="${!cap.apresentado}" title="Marcado = a ministrar; vazio = já ministrado"><span class="box"><i class="ti ti-check" aria-hidden="true"></i></span></button>
           <button class="iBtn del" onclick="removeCap(${cap.id})" aria-label="Remover capítulo"><i class="ti ti-trash" aria-hidden="true"></i></button>
         </div>
       </div>
@@ -431,7 +434,7 @@ function renderCaps(){
         <span class="obs-dot" id="obsdot-${cap.id}" style="display:${(cap.obs||'').trim()?'inline':'none'}">●</span>
       </button>
       <div class="tree-wrap${openObs.has(cap.id)?' open':''}" id="two-${cap.id}"><div class="tree-inner">
-        <div class="obs-box"><textarea class="finput obs-ta" placeholder="Anotações deste capítulo (lembretes, tarefas, páginas do livro…)" oninput="setObs(${cap.id},this.value)">${escH(cap.obs||'')}</textarea></div>
+        <div class="obs-box"><textarea class="finput obs-ta" handwriting="false" placeholder="Anotações deste capítulo (lembretes, tarefas, páginas do livro…)" oninput="setObs(${cap.id},this.value)">${escH(cap.obs||'')}</textarea></div>
       </div></div>
     </div>`;
   }).join('')+`<button class="add-cap-btn" onclick="openAddCap()"><i class="ti ti-plus" aria-hidden="true"></i> Novo capítulo</button>`;
@@ -466,7 +469,7 @@ function openEditCap(capId){const disc=getDisc(curDiscId);const aula=getAula(dis
 function removeCap(capId){const disc=getDisc(curDiscId);const aula=getAula(disc,curAulaId);if(!confirm(tr('Remover este capítulo e todos os seus vídeos?')))return;aula.caps=aula.caps.filter(c=>c.id!==capId);renderCaps();agendarLimpeza();}
 function toggleApresentado(capId){
   const disc=getDisc(curDiscId);const aula=getAula(disc,curAulaId);const cap=getCap(aula,capId);
-  if(!cap||!capTem(cap))return;
+  if(!cap)return;
   cap.apresentado=!cap.apresentado; // marcado(checked)=a ministrar; vazio=ministrado
   renderCaps();
 }
@@ -577,10 +580,20 @@ function pickArq(){
   if(formArqs.length>=ARQ_MAX){alert(trf('Limite de {n} documentos por vídeo.',{n:ARQ_MAX}));return;}
   document.getElementById('vf-file').click();
 }
+function pickFoto(){
+  if(formArqs.length>=ARQ_MAX){alert(trf('Limite de {n} documentos por vídeo.',{n:ARQ_MAX}));return;}
+  document.getElementById('vf-foto').click();
+}
+function arqTipoOk(f){ // validação em JS (o accept do input é curto p/ o seletor abrir em qualquer Android)
+  if(/^(application\/pdf|image\/|audio\/)/.test(f.type))return true;
+  if(/(msword|wordprocessingml)/.test(f.type))return true;
+  return /\.(pdf|docx?|jpe?g|png|gif|webp|bmp|heic|mp3|m4a|aac|ogg|opus|wav|3gp|amr)$/i.test(f.name||'');
+}
 async function onArqPick(input){
   const files=[...(input.files||[])];input.value='';
   for(const f of files){
     if(formArqs.length>=ARQ_MAX){alert(trf('Limite de {n} documentos por vídeo — os demais não foram importados.',{n:ARQ_MAX}));break;}
+    if(!arqTipoOk(f)){alert(trf('"{f}" não é um tipo aceito (PDF, imagem, Word ou áudio).',{f:f.name}));continue;}
     if(f.size>ARQ_MB*1024*1024){alert(trf('"{f}" passa de {n} MB e não foi importado.',{f:f.name,n:ARQ_MB}));continue;}
     const fid=nid();
     try{await fPut({fid,nome:f.name,tipo:f.type,blob:f});}
@@ -589,7 +602,7 @@ async function onArqPick(input){
   }
   renderArqs();
 }
-function arqIcon(t){return /pdf/.test(t)?'ti-file-text':/^image\//.test(t)?'ti-photo':'ti-file';}
+function arqIcon(t){return /pdf/.test(t)?'ti-file-text':/^image\//.test(t)?'ti-photo':/^audio\//.test(t)?'ti-music':'ti-file';}
 function fmtKB(n){return n>=1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';}
 function renderArqs(){
   const box=document.getElementById('vf-arqs');if(!box)return;
@@ -615,7 +628,7 @@ async function abrirArq(fid){
     const r=await fGet(fid);
     if(!r||!r.blob){alert(tr('Arquivo não encontrado no armazenamento deste navegador.'));return;}
     const url=URL.createObjectURL(r.blob);
-    const visual=/pdf/.test(r.tipo)||/^image\//.test(r.tipo);
+    const visual=/pdf/.test(r.tipo)||/^image\//.test(r.tipo)||/^audio\//.test(r.tipo);
     if(visual){const w=window.open(url,'_blank');if(!w)alert(tr('Permita pop-ups para visualizar o arquivo.'));}
     else{const a=document.createElement('a');a.href=url;a.download=r.nome||'arquivo';document.body.appendChild(a);a.click();a.remove();}
     setTimeout(()=>URL.revokeObjectURL(url),60000);
@@ -707,7 +720,7 @@ function buildRelatorioHTML(discId){
     corpo+=`<h2>${trf('Aula {n}',{n:String(a.numero).padStart(2,'0')})} — ${escH(a.titulo)} <span class="dur">${fmtS(aulaDurSeg(a))}</span></h2>`;
     if(!a.caps.length){corpo+=`<p class="vazio">${tr('Sem capítulos.')}</p>`;return;}
     a.caps.forEach(c=>{
-      const st=capTem(c)?(c.apresentado?` <span class="ok">${tr('✓ ministrado')}</span>`:` <span class="pend">${tr('● a ministrar')}</span>`):'';
+      const st=c.apresentado?` <span class="ok">${tr('✓ ministrado')}</span>`:` <span class="pend">${tr('● a ministrar')}</span>`;
       corpo+=`<h3>${escH(c.num||'Cap.')} — ${escH(c.nome)}${st}</h3>`;
       if((c.obs||'').trim())corpo+=`<p class="obs">${tr('Obs.:')} ${escH(c.obs.trim()).replace(/\n/g,'<br>')}</p>`;
       if(!c.videos.length){corpo+=`<p class="vazio">${tr('Sem vídeos.')}</p>`;return;}
@@ -962,7 +975,7 @@ async function importBackup(input){
 }
 
 /* ===== Menu lateral (drawer) ===== */
-function openMenu(){refreshProjUI();document.getElementById('drawer').classList.add('open');document.getElementById('drawer-ov').classList.add('open');}
+function openMenu(){clearMenuHint();refreshProjUI();document.getElementById('drawer').classList.add('open');document.getElementById('drawer-ov').classList.add('open');}
 function closeMenu(){document.getElementById('drawer').classList.remove('open');document.getElementById('drawer-ov').classList.remove('open');}
 
 /* ===== Modal de informações (Ajuda) ===== */
@@ -1010,6 +1023,15 @@ const TUT=[
 %FIG0%
 <p>Exemplo: <b>HISTÓRIA</b> → <b>2° ano EM</b> → <b>Aula 12 (Revolução Francesa)</b> → <b>Cap. 01</b> → <b>vídeo do YouTube</b>.</p>
 <p>Tudo funciona <b>sem internet</b> e é salvo automaticamente no aparelho a cada alteração.</p>`},
+{ic:'ti-menu-2',t:'O menu ☰',c:`
+<p>O botão <b>☰</b> (canto superior esquerdo da tela inicial) abre o <b>menu</b> — é por ele que se começa a usar o app. Lá dentro estão:</p>
+<ul>
+<li><b>Projeto em uso</b> e a lista de troca rápida (até 7 anos letivos).</li>
+<li><b>Arquivo:</b> criar e gerenciar projetos, e exportar/importar o <b>backup (.json)</b>.</li>
+<li><b>Ativar / Comprar:</b> ativar a versão completa (na cópia adquirida pelo site).</li>
+<li><b>Ajuda:</b> Tutorial, <b>Modo demonstração</b>, Idioma, Privacidade, Termos de uso, Atualização e Versão.</li>
+</ul>
+<p>Para fechar o menu, toque na área escura ao lado ou no <b>✕</b>.</p>`},
 {ic:'ti-archive',t:'Projetos — anos letivos',c:`
 <p>Cada <b>projeto</b> guarda um ano letivo completo (Ano + Instituição), com todas as matérias, aulas e documentos.</p>
 %FIG1%
@@ -1083,7 +1105,7 @@ const TUT=[
 <li><b>Instalar:</b> abra o site no Chrome → menu ⋮ → <b>“Instalar aplicativo”</b> (ou “Adicionar à tela inicial”). O app passa a abrir em janela própria, sem barra do navegador.</li>
 <li><b>Tela dividida:</b> toque em <b>Recentes</b> (botão ▯|▯ ou gesto), toque no <b>ícone do app</b> no topo do cartão → <b>“Abrir em visualização em tela dividida”</b> → escolha o segundo app (ex.: YouTube). A divisória central ajusta o tamanho.</li>
 <li><b>Exibição pop-up:</b> em Recentes, toque no ícone do app → <b>“Abrir em exibição pop-up”</b> — o app vira uma janelinha flutuante sobre outro app.</li>
-<li>O layout se reorganiza sozinho em qualquer tamanho de janela; a caneta S Pen funciona em todos os campos.</li>
+<li>O layout se reorganiza sozinho em qualquer tamanho de janela. Nas Observações, a conversão de escrita à mão da caneta fica desativada (use o teclado) para evitar erros.</li>
 </ul>`},
 {ic:'ti-help',t:'Atualização e versão',c:`
 <ul>
@@ -1124,6 +1146,7 @@ function checkConsent(){
 function aceitarConsent(){
   try{localStorage.setItem(CONSENT_KEY,JSON.stringify({v:1,quando:new Date().toISOString()}));}catch(e){}
   document.getElementById('cmodal').classList.remove('open');
+  _menuHintPending=true; // 1º uso: destaca o botão ☰ quando a home aparecer
   offerTutorial(); // logo após aceitar, oferece o tutorial rápido (só no 1º uso)
 }
 /* ===== Oferta de tutorial rápido (apenas no primeiríssimo uso) ===== */
@@ -1134,12 +1157,33 @@ function offerTutorial(){
   document.getElementById('tmodal').classList.add('open');
 }
 function aceitarTutorial(){document.getElementById('tmodal').classList.remove('open');demoStart();}
-function recusarTutorial(){document.getElementById('tmodal').classList.remove('open');}
+function recusarTutorial(){document.getElementById('tmodal').classList.remove('open');setTimeout(fireMenuHint,220);}
+
+/* ===== Destaque do botão ☰ na primeiríssima abertura ===== */
+let _menuHintPending=false;
+const MENUHINT_KEY='prometeu.menuhint.v1';
+function fireMenuHint(){
+  if(!_menuHintPending||demoOn)return;
+  try{if(localStorage.getItem(MENUHINT_KEY))return;}catch(e){}
+  if(!document.getElementById('s-main').classList.contains('active'))return;
+  if(['cmodal','tmodal','modal','imodal','rmodal'].some(id=>{const e=document.getElementById(id);return e&&e.classList.contains('open');}))return;
+  const btn=document.getElementById('menuBtn');if(!btn)return;
+  _menuHintPending=false;try{localStorage.setItem(MENUHINT_KEY,'1');}catch(e){}
+  btn.classList.add('hint');
+  const b=document.createElement('div');b.id='menuHintBubble';
+  b.innerHTML=`<span>${escH(tr('Comece por aqui: toque no menu ☰'))}</span><span class="x" onclick="clearMenuHint()">✕</span>`;
+  document.body.appendChild(b);
+  setTimeout(()=>{if(document.getElementById('menuHintBubble'))clearMenuHint();},12000);
+}
+function clearMenuHint(){
+  const btn=document.getElementById('menuBtn');if(btn)btn.classList.remove('hint');
+  const b=document.getElementById('menuHintBubble');if(b)b.remove();
+}
 
 /* ===== Privacidade / Termos (resumo no app + documento completo online) ===== */
 const LEGAL_PT={
-priv:'<p><b>Resumo:</b></p><ul><li>O app funciona 100% offline. Todo o conteúdo que você cria fica guardado apenas no navegador deste aparelho (localStorage/IndexedDB).</li><li>Nenhum dado pessoal é coletado, transmitido ou vendido. Não há anúncios, rastreadores nem estatísticas.</li><li>Funções online opcionais: buscar o título de um vídeo no YouTube (envia só o link do vídeo ao YouTube) e carregar fontes do Google Fonts. Ambas são opcionais — o app funciona sem elas.</li><li>Os backups (.json) são criados por você e ficam onde você os guardar.</li><li>Para apagar tudo: exclua os projetos no app ou limpe os dados do site/app nas configurações do aparelho.</li><li>Contato: organizadordeaulas.Prometeu@gmail.com</li></ul>',
-termos:'<p><b>Resumo:</b></p><ul><li>Licença pessoal e intransferível, para uso de quem adquiriu o app.</li><li>É proibida a revenda, redistribuição ou exploração comercial por terceiros sem autorização prévia, por escrito, do autor.</li><li>O app é fornecido "como está"; mantenha backups dos seus dados (☰ → Arquivo → Exportar backup).</li><li>O conteúdo que você cadastra (aulas, links, arquivos) é seu e é de sua responsabilidade.</li><li>Contato: organizadordeaulas.Prometeu@gmail.com</li></ul>'
+priv:'<p><b>Resumo:</b></p><ul><li>O app funciona 100% offline. Todo o conteúdo que você cria fica guardado apenas no navegador deste aparelho (localStorage/IndexedDB).</li><li>Nenhum dado pessoal é coletado, transmitido ou vendido. Não há anúncios, rastreadores nem estatísticas.</li><li>Funções online opcionais: buscar o título de um vídeo no YouTube (envia só o link do vídeo ao YouTube) e carregar fontes do Google Fonts. Ambas são opcionais — o app funciona sem elas.</li><li>Os backups (.json) são criados por você e ficam onde você os guardar.</li><li>Para apagar tudo: exclua os projetos no app ou limpe os dados do site/app nas configurações do aparelho.</li><li>Contato: organizadordeaulas.prometeu@gmail.com</li></ul>',
+termos:'<p><b>Resumo:</b></p><ul><li>Licença pessoal e intransferível, para uso de quem adquiriu o app.</li><li>É proibida a revenda, redistribuição ou exploração comercial por terceiros sem autorização prévia, por escrito, do autor.</li><li>O app é fornecido "como está"; mantenha backups dos seus dados (☰ → Arquivo → Exportar backup).</li><li>O conteúdo que você cadastra (aulas, links, arquivos) é seu e é de sua responsabilidade.</li><li>Contato: organizadordeaulas.prometeu@gmail.com</li></ul>'
 };
 function openLegal(k){
   const titulo=k==='priv'?tr('Política de Privacidade'):tr('Termos de Uso');
@@ -1150,6 +1194,33 @@ function openLegal(k){
     html+=`<button class="btn-sec" onclick="window.open('${arq}','_blank')"><i class="ti ti-eye" aria-hidden="true"></i> ${tr('Ver documento completo (online)')}</button>`;
   }
   openInfo(titulo,html);
+}
+
+/* ===== Instalação como app (PWA) ===== */
+let _bipEvt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();_bipEvt=e;});
+function isStandalone(){try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;}catch(e){return false;}}
+const INSTALL_PT='<p>No <b>Chrome</b> (Android): toque no menu <b>⋮</b> e escolha <b>“Instalar aplicativo”</b> (ou “Adicionar à tela inicial”).</p><p>Se a opção não aparecer, o navegador pode não suportar a instalação (ex.: Mi Browser) — abra este site no Chrome e tente de novo.</p><p>No computador: use o ícone de instalação na barra de endereço do Chrome ou Edge.</p>';
+function instalarApp(){
+  closeMenu();
+  if(isStandalone()){openInfo(tr('Instalar aplicativo'),'<p>'+tr('O app já está instalado neste aparelho.')+'</p>');return;}
+  if(_bipEvt){const e=_bipEvt;_bipEvt=null;e.prompt();return;}
+  let html=tr('INSTALL_HELP');if(html==='INSTALL_HELP')html=INSTALL_PT;
+  openInfo(tr('Instalar aplicativo'),html);
+}
+
+/* ===== Teclado móvel: mantém o campo focado visível acima do teclado ===== */
+window.addEventListener('focusin',e=>{
+  const el=e.target;
+  if(!el||(el.tagName!=='INPUT'&&el.tagName!=='TEXTAREA'))return;
+  const mov=matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth';
+  setTimeout(()=>{try{el.scrollIntoView({block:'center',behavior:mov});}catch(_){}},300);
+});
+
+/* ===== Críticas e sugestões (e-mail do autor) ===== */
+function enviarFeedback(){
+  closeMenu();
+  location.href='mailto:organizadordeaulas.prometeu@gmail.com?subject='+encodeURIComponent(tr('Críticas e sugestões — Organizador de Aulas'));
 }
 
 /* ===== Seletor de idioma ===== */
@@ -1195,6 +1266,7 @@ function demoContent(){return DEMO_CONTENT[LANG]||DEMO_CONTENT['pt-BR'];}
 /* Narração da demonstração — texto-fonte pt-BR; en/es/zh vêm do i18n (chaves DEMO_1..10) */
 const DEMO_NARR_PT={
 DEMO_1:'Este é o Organizador de Aulas: as matérias ficam na tela inicial, agrupadas automaticamente.',
+DEMO_MENU:'Tudo começa no menu ☰: projetos, backup, idioma, ajuda e ativação da versão completa.',
 DEMO_2:'Dentro de uma matéria ficam as séries/anos. O botão de seta mostra a árvore de aulas.',
 DEMO_3:'Cada série reúne aulas numeradas, com duração total e contadores de pendências.',
 DEMO_4:'Dentro de uma aula: os capítulos. A caixinha marca o que ainda falta ministrar.',
@@ -1235,7 +1307,8 @@ function demoSteps(){
   const v0=c0&&c0.videos[0];
   return [
     {c:'DEMO_1',ms:5600,sel:'#list-discs .card',f:()=>{showScreen('s-main');renderDiscs();}},
-    {c:'DEMO_2',ms:6000,sel:'#list-series .tree-toggle',f:()=>{openMat(0);const dd=matDiscs(curMat)[0];if(dd&&!openSeries.has(dd.id))toggleTree(dd.id);}},
+    {c:'DEMO_MENU',ms:6200,sel:'.drawer',f:()=>{showScreen('s-main');renderDiscs();openMenu();}},
+    {c:'DEMO_2',ms:6000,sel:'#list-series .tree-toggle',f:()=>{closeMenu();openMat(0);const dd=matDiscs(curMat)[0];if(dd&&!openSeries.has(dd.id))toggleTree(dd.id);}},
     {c:'DEMO_3',ms:5600,sel:'#list-aulas .card',f:()=>{if(d0)openDisc(d0.id);}},
     {c:'DEMO_4',ms:6000,sel:'.cap-check',f:()=>{if(a0){curDiscId=d0.id;openAula(a0.id);}}},
     {c:'DEMO_5',ms:5600,sel:'#list-caps .cap-card',f:()=>{if(c0&&!openCaps.has(c0.id))toggleCap(c0.id);}},
@@ -1245,7 +1318,7 @@ function demoSteps(){
     {c:'DEMO_7',ms:2600,sel:'.theme-btn',f:toggleTheme},
     {c:'DEMO_8',ms:5600,sel:'#list-proj .card',f:()=>{openProjetos();}},
     {c:'DEMO_9',ms:5600,sel:'#rmodal .modal-box',f:()=>{goBack('s-main');if(d0)openRelatorio(d0.id);}},
-    {c:'DEMO_10',ms:6000,sel:null,f:()=>{closeRModal();renderProjetos();showScreen('s-proj');}}
+    {c:'DEMO_10',ms:6000,sel:null,f:()=>{closeRModal();showScreen('s-main');renderDiscs();}}
   ];
 }
 function demoStart(){
@@ -1293,29 +1366,29 @@ function demoStop(){
   if(!demoOn)return;
   demoOn=false;clearTimeout(demoTimer);
   ['demo-cap','demo-spot'].forEach(id=>{const e=document.getElementById(id);if(e)e.remove();});
-  closeRModal();
+  closeMenu();closeRModal();
   if(demoBak!=null){try{db=JSON.parse(demoBak);}catch(e){}demoBak=null;} // restaura o banco real
   curMat=null;curDiscId=null;curAulaId=null;curCapId=null;
   openSeries.clear();openCaps.clear();openObs.clear();
   themeIdx=demoTheme0;applyThemeUI(THEMES[themeIdx]);saveTheme();
-  refreshProjUI();renderProjetos();showScreen('s-proj'); // termina em Gerenciar projetos
+  showScreen('s-main');renderDiscs();openMenu(); // termina na tela inicial com o menu ☰ aberto
 }
 
 /* ===== Cobrança / ativação (só na distribuição direta — Pix + chave offline) =====
-   Modelo: 30 dias de uso completo; depois, CRIAR conteúdo novo pede ativação.
+   Modelo: 14 dias de uso completo; depois, CRIAR conteúdo novo pede ativação.
    Ver/editar/exportar NUNCA é bloqueado (o professor nunca perde acesso aos dados).
    A chave é verificada OFFLINE por assinatura ECDSA P-256 (Web Crypto): a chave
    privada fica só com o autor (tools/assinador-licenca.html); aqui só a pública. */
 const PIX_CFG={ // PREENCHA antes de publicar a versão direta:
-  chave:'arimardiego@gmail.com',    // chave Pix (e-mail) registrada no banco do autor
+  chave:'organizadordeaulas.prometeu@gmail.com', // chave Pix (e-mail) registrada no banco do autor
   nome:'ARIMAR DIEGO F DA SILVA',   // máx. 25 caracteres
   cidade:'MANAUS',                  // máx. 15 caracteres
   valor:'25.00',                    // valor em R$ (ex.: ~US$5). Vazio = comprador digita
   preco:'US$ 5 (~R$ 25)',
-  email:'organizadordeaulas.Prometeu@gmail.com'     // para onde o comprador envia o comprovante
+  email:'organizadordeaulas.prometeu@gmail.com'     // para onde o comprador envia o comprovante
 };
 const LIC_PUBKEY={kty:'EC',crv:'P-256',x:'or3swlJ1Zsy8FIxg3oMI8GTeuhjsce1MREgOJCuu1Js',y:'TNSijRdV4gopbyxI0le4IYbGL7GguL5cOQgjM9GDEDU'};
-const LIC_KEY='prometeu.license.v1',INSTALL_KEY='prometeu.install.v1',TRIAL_DIAS=30;
+const LIC_KEY='prometeu.license.v1',INSTALL_KEY='prometeu.install.v1',TRIAL_DIAS=14;
 let licState={ativo:false,email:''};
 /* Canal de instalação: o pacote da Google Play abre com ?src=play (start_url
    do TWA). Nesse canal o app já foi PAGO na loja: tudo liberado e a tela de
@@ -1426,6 +1499,7 @@ renderDiscs();
 applyThemeUI(THEMES[themeIdx]);
 refreshProjUI();
 const _dv=document.getElementById('dw-ver');if(_dv)_dv.textContent='Prometeu · v'+APP_VERSION;
+if(isStandalone()){const _bi=document.getElementById('dw-install');if(_bi)_bi.style.display='none';} // já instalado
 paintIcons();
 if(window.i18nBoot)i18nBoot(); // traduz a interface estática e o título
 installTs();checkConsent();
