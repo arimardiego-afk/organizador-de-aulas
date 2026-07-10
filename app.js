@@ -23,6 +23,7 @@ const ICONS={
 'ti-alert-triangle':'<path d="M12 9v4"/><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z"/><path d="M12 16h.01"/>',
 'ti-check':'<path d="M5 12l5 5l10 -10"/>',
 'ti-search':'<path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/>',
+'ti-share':'<path d="M6 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M18 6m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M8.7 10.7l6.6 -3.4"/><path d="M8.7 13.3l6.6 3.4"/>',
 'ti-menu-2':'<path d="M4 6l16 0"/><path d="M4 12l16 0"/><path d="M4 18l16 0"/>',
 'ti-archive':'<path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"/><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10"/><path d="M10 12l4 0"/>',
 'ti-folder':'<path d="M5 4h4l3 3h7a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2"/>',
@@ -67,7 +68,7 @@ const THEME_META={
 const SEED={"disciplinas":[]}; // app entregue vazio — o usuario cria as proprias materias
 
 /* ===== Projetos (anos letivos) — cada projeto guarda um banco completo ===== */
-const APP_VERSION='2.2', APP_DATE='julho de 2026';
+const APP_VERSION='2.3', APP_DATE='julho de 2026';
 const PROJ_KEY='prometeu.projects.v1';
 let projReg=null;
 function loadProjects(){
@@ -166,7 +167,7 @@ function toggleTheme(){
   saveTheme();
 }
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
-function goBack(to){closeModal();showScreen(to);if(to==='s-main')renderDiscs();else if(to==='s-series')renderSeries();else if(to==='s-disc')renderAulas();else if(to==='s-aula')renderCaps();}
+function goBack(to){if(document.getElementById('s-vid').classList.contains('active'))limparDraft();closeModal();showScreen(to);if(to==='s-main')renderDiscs();else if(to==='s-series')renderSeries();else if(to==='s-disc')renderAulas();else if(to==='s-aula')renderCaps();}
 
 let curMat=null,MATS=[];
 function discPend(d){return d.aulas.reduce((s,a)=>s+aulaPend(a),0);}
@@ -502,6 +503,10 @@ function goToFormVid(capId,vidId){
   matsOpen=false; // seção de material começa recolhida
   const twm=document.getElementById('tw-mats'),ttm=document.getElementById('tt-mats');
   if(twm)twm.classList.remove('open');if(ttm)ttm.classList.remove('open');
+  resumoOpen=!!(vid?.resumo); // resumo recolhido; abre se o vídeo já tem texto
+  const twr=document.getElementById('tw-resumo'),ttr=document.getElementById('tt-resumo');
+  if(twr)twr.classList.toggle('open',resumoOpen);
+  if(ttr){ttr.classList.toggle('open',resumoOpen);ttr.setAttribute('aria-expanded',resumoOpen);}
   renderMats();renderArqs();updPg();
   document.getElementById('vf-hint').textContent=vid?.link?tr('Link cadastrado'):'';
   document.getElementById('vf-dur-info').innerHTML=vid?.durSeg>0?`<i class="ti ti-clock" aria-hidden="true"></i> ${vid.dur}`:'';
@@ -517,6 +522,17 @@ function updPg(){
   const el=document.getElementById('vf-pg');
   el.textContent=trf('≈ {p} pág. ({n}/9000)',{p:pg,n:len});
   el.classList.toggle('warn',pg>=3);
+  const rc=document.getElementById('resumo-count');
+  if(rc)rc.textContent=len?trf('Resumo do vídeo (≈ {p} pág.)',{p:pg}):tr('Resumo do vídeo');
+}
+
+/* ===== Resumo (seção recolhível no formulário do vídeo) ===== */
+let resumoOpen=false;
+function toggleResumo(){
+  resumoOpen=!resumoOpen;
+  const w=document.getElementById('tw-resumo'),t=document.getElementById('tt-resumo');
+  if(w)w.classList.toggle('open',resumoOpen);
+  if(t){t.classList.toggle('open',resumoOpen);t.setAttribute('aria-expanded',resumoOpen);}
 }
 
 /* ===== Materiais didáticos (seção recolhível no formulário do vídeo) ===== */
@@ -538,16 +554,26 @@ function renderMats(){
     <div class="mat-row">
       <input class="finput mat-t" placeholder="Título (ex: Casa-Grande & Senzala)" value="${(m.titulo||'').replace(/"/g,'&quot;')}" oninput="formMats[${i}].titulo=this.value"/>
       <input class="finput mat-l" placeholder="Autor, editora ou link" value="${(m.link||'').replace(/"/g,'&quot;')}" oninput="formMats[${i}].link=this.value"/>
+      <button class="mat-x mat-s" onclick="buscarMat(${i})" aria-label="Buscar este material em PDF na internet" title="Buscar PDF grátis na internet"><i class="ti ti-search" aria-hidden="true"></i></button>
       <button class="mat-x" onclick="formMats.splice(${i},1);renderMats()" aria-label="Remover material"><i class="ti ti-x" aria-hidden="true"></i></button>
     </div>`).join('');
   updMatCount();
+  agendarDraft();
+}
+function buscarMat(i){ // busca o livro/material em PDF gratuito na internet
+  const m=formMats[i]||{};
+  const t=(m.titulo||'').trim();
+  if(!t){alert(tr('Preencha o título do material primeiro.'));return;}
+  const extra=(m.link||'').trim();
+  const q=`"${t}" ${/^https?:\/\//i.test(extra)?'':extra} pdf`.replace(/\s+/g,' ').trim();
+  window.open('https://www.google.com/search?q='+encodeURIComponent(q),'_blank');
 }
 function addMat(){if(!matsOpen)toggleMats();formMats.push({titulo:'',link:''});renderMats();
   const rows=document.querySelectorAll('#vf-mats .mat-t');if(rows.length)rows[rows.length-1].focus();}
 
 /* ===== Documentos anexados (PDF / imagem / Word) — blobs no IndexedDB ===== */
 let formArqs=[];
-const ARQ_MAX=10, ARQ_MB=15;
+const ARQ_MAX=10, ARQ_MB=100;
 let _idb=null;
 function idbOpen(){
   return new Promise((res,rej)=>{
@@ -571,6 +597,7 @@ async function sweepOrphans(){ // apaga do IndexedDB arquivos que nenhum projeto
     else{try{coleta(JSON.parse(localStorage.getItem(projKey(p.id))||'{"disciplinas":[]}'));}catch(e){}}
   });
   formArqs.forEach(a=>usados.add(a.fid)); // protege anexos de um formulário ainda aberto
+  try{const d=JSON.parse(localStorage.getItem(DRAFT_KEY)||'null');((d&&d.arqs)||[]).forEach(a=>usados.add(a.fid));}catch(e){} // e do rascunho guardado
   const keys=await fKeys();
   await fDel(keys.filter(k=>!usados.has(k)));
 }
@@ -604,11 +631,18 @@ async function onArqPick(input){
 }
 function arqIcon(t){return /pdf/.test(t)?'ti-file-text':/^image\//.test(t)?'ti-photo':/^audio\//.test(t)?'ti-music':'ti-file';}
 function fmtKB(n){return n>=1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';}
+function arqBadge(a){ // pré-visualização: miniatura p/ imagem, selo colorido p/ os demais tipos
+  if(/^image\//.test(a.tipo))return `<img class="arq-thumb" id="arqth-${a.fid}" alt="">`;
+  if(/pdf/.test(a.tipo)||/\.pdf$/i.test(a.nomeArq))return '<span class="arq-badge b-pdf" aria-hidden="true">PDF</span>';
+  if(/(msword|wordprocessingml)/.test(a.tipo)||/\.docx?$/i.test(a.nomeArq))return '<span class="arq-badge b-doc" aria-hidden="true">DOC</span>';
+  if(/^audio\//.test(a.tipo)||/\.(mp3|m4a|aac|ogg|opus|wav|3gp|amr)$/i.test(a.nomeArq))return '<span class="arq-badge b-aud" aria-hidden="true">♪</span>';
+  return `<i class="ti ${arqIcon(a.tipo)} arq-ic" aria-hidden="true"></i>`;
+}
 function renderArqs(){
   const box=document.getElementById('vf-arqs');if(!box)return;
   box.innerHTML=formArqs.map((a,i)=>`
     <div class="arq-row">
-      <i class="ti ${arqIcon(a.tipo)} arq-ic" aria-hidden="true"></i>
+      ${arqBadge(a)}
       <div class="arq-campos">
         <input class="finput" placeholder="Título" value="${(a.titulo||'').replace(/"/g,'&quot;')}" oninput="formArqs[${i}].titulo=this.value"/>
         <input class="finput" placeholder="Autor" value="${(a.autor||'').replace(/"/g,'&quot;')}" oninput="formArqs[${i}].autor=this.value"/>
@@ -616,23 +650,59 @@ function renderArqs(){
       </div>
       <div class="arq-btns">
         <button class="iBtn-sm play" onclick="abrirArq(${a.fid})" aria-label="Abrir arquivo"><i class="ti ti-eye" aria-hidden="true"></i></button>
+        <button class="iBtn-sm play" onclick="shareArq(${a.fid})" aria-label="Compartilhar arquivo" title="Compartilhar (WhatsApp, e-mail…)"><i class="ti ti-share" aria-hidden="true"></i></button>
         <button class="iBtn-sm del" onclick="formArqs.splice(${i},1);renderArqs()" aria-label="Remover arquivo"><i class="ti ti-x" aria-hidden="true"></i></button>
       </div>
     </div>`).join('');
   const c=document.getElementById('arq-count');if(c)c.textContent=`${formArqs.length}/${ARQ_MAX}`;
   updMatCount();
   paintIcons();
+  agendarDraft();
+  formArqs.forEach(a=>{ // carrega as miniaturas de imagem a partir do IndexedDB
+    if(!/^image\//.test(a.tipo))return;
+    fGet(a.fid).then(r=>{
+      const img=document.getElementById('arqth-'+a.fid);
+      if(!img||!r||!r.blob)return;
+      const url=URL.createObjectURL(r.blob);
+      img.onload=()=>URL.revokeObjectURL(url);
+      img.src=url;
+    }).catch(()=>{});
+  });
+}
+function baixarBlob(r){
+  const url=URL.createObjectURL(r.blob);
+  const a=document.createElement('a');a.href=url;a.download=r.nome||'arquivo';
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),60000);
 }
 async function abrirArq(fid){
+  let r=null;
+  try{r=await fGet(fid);}catch(e){}
+  if(!r||!r.blob){alert(tr('Arquivo não encontrado no armazenamento deste navegador.'));return;}
+  try{
+    const url=URL.createObjectURL(r.blob);
+    const visual=/pdf/.test(r.tipo)||/^image\//.test(r.tipo)||/^audio\//.test(r.tipo);
+    if(visual){
+      const w=window.open(url,'_blank');
+      if(!w&&confirm(tr('A visualização não abriu (pop-up bloqueado). Baixar o arquivo em vez disso?')))baixarBlob(r);
+    }
+    else baixarBlob(r);
+    setTimeout(()=>URL.revokeObjectURL(url),60000);
+  }catch(e){alert(tr('Não foi possível abrir este arquivo. Teste com outro documento — se o outro abrir, o problema é o arquivo em si, não o app.'));}
+}
+async function shareArq(fid){
   try{
     const r=await fGet(fid);
     if(!r||!r.blob){alert(tr('Arquivo não encontrado no armazenamento deste navegador.'));return;}
-    const url=URL.createObjectURL(r.blob);
-    const visual=/pdf/.test(r.tipo)||/^image\//.test(r.tipo)||/^audio\//.test(r.tipo);
-    if(visual){const w=window.open(url,'_blank');if(!w)alert(tr('Permita pop-ups para visualizar o arquivo.'));}
-    else{const a=document.createElement('a');a.href=url;a.download=r.nome||'arquivo';document.body.appendChild(a);a.click();a.remove();}
-    setTimeout(()=>URL.revokeObjectURL(url),60000);
-  }catch(e){alert(tr('Não foi possível abrir o arquivo.'));}
+    const file=new File([r.blob],r.nome||'documento',{type:r.tipo||r.blob.type||''});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      try{await navigator.share({files:[file],title:r.nome||''});}catch(e){} // usuário cancelar é normal
+      return;
+    }
+    // sem share sheet (ex.: PC) — baixa para enviar por WhatsApp Web, e-mail etc.
+    alert(tr('Este navegador não tem a janela de compartilhamento — o arquivo será baixado para você enviar por WhatsApp Web, e-mail etc.'));
+    baixarBlob(r);
+  }catch(e){alert(tr('Não foi possível compartilhar o arquivo.'));}
 }
 
 /* ===== Exportação do resumo (Word / PDF) — offline ===== */
@@ -802,9 +872,50 @@ function onVidLink(){
   if(id){hint.textContent=tr('Link do YouTube reconhecido — buscando título…');document.getElementById('vf-spin').style.display='flex';vidTimer=setTimeout(()=>fetchYT(id),1400);}
   else{hint.textContent=link.startsWith('http')?tr('Link detectado.'):'';document.getElementById('vf-spin').style.display='none';}
 }
+/* Duração automática via YouTube IFrame API (sem chave; opcional — sem internet segue o manual) */
+let _ytApiP=null;
+function ytApi(){
+  if(window.YT&&window.YT.Player)return Promise.resolve(window.YT);
+  if(_ytApiP)return _ytApiP;
+  _ytApiP=new Promise((res,rej)=>{
+    const prev=window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady=()=>{try{prev&&prev();}catch(e){}res(window.YT);};
+    const s=document.createElement('script');
+    s.src='https://www.youtube.com/iframe_api';
+    s.onerror=()=>rej(new Error('offline'));
+    document.head.appendChild(s);
+    setTimeout(()=>rej(new Error('timeout')),8000);
+  });
+  _ytApiP.catch(()=>{_ytApiP=null;}); // permite tentar de novo se falhou (ex.: voltou a internet)
+  return _ytApiP;
+}
+function fetchYTDur(id){
+  return ytApi().then(YT=>new Promise((res,rej)=>{
+    const host=document.createElement('div');
+    host.style.cssText='position:fixed;left:-9999px;top:0;width:2px;height:2px;overflow:hidden';
+    document.body.appendChild(host);
+    const alvo=document.createElement('div');host.appendChild(alvo);
+    let done=false,p=null;
+    const fim=seg=>{if(done)return;done=true;try{p&&p.destroy();}catch(e){}host.remove();seg>0?res(seg):rej(new Error('sem duração'));};
+    try{
+      p=new YT.Player(alvo,{videoId:id,playerVars:{mute:1},events:{
+        onReady:e=>fim(Math.round(e.target.getDuration()||0)),
+        onError:()=>fim(0)
+      }});
+    }catch(e){fim(0);}
+    setTimeout(()=>fim(0),8000);
+  }));
+}
 async function fetchYT(id){
   try{const r=await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${id}&format=json`);if(r.ok){const j=await r.json();if(j.title&&!document.getElementById('vf-nome').value.trim())document.getElementById('vf-nome').value=j.title;}}catch(e){}
-  document.getElementById('vf-spin').style.display='none';document.getElementById('vf-hint').textContent=tr('Título obtido. Preencha a duração se necessário.');
+  let durOk=false;
+  try{
+    const seg=await fetchYTDur(id);
+    const el=document.getElementById('vf-dur');
+    if(seg>0&&el&&!el.value.trim()){el.value=fmtS(seg);durOk=true;}
+  }catch(e){}
+  document.getElementById('vf-spin').style.display='none';
+  document.getElementById('vf-hint').textContent=durOk?tr('Título e duração obtidos.'):tr('Título obtido. Preencha a duração se necessário.');
 }
 function salvarVid(){
   const nome=document.getElementById('vf-nome').value.trim();
@@ -824,6 +935,51 @@ function salvarVid(){
   formArqs=[];agendarLimpeza(); // limpa anexos que foram removidos no formulário
   goBack('s-aula');
   if(dup)showToast(trf('<b>Vídeo duplicado nesta série:</b> mesmo nome e link já existem na <b>Aula {a}</b> · {c}.',{a:String(dup.aula.numero).padStart(2,'0'),c:escH(dup.cap.num||'Cap.')+' — '+escH(dup.cap.nome)}),7000);
+}
+
+/* ===== Rascunho automático do formulário de vídeo =====
+   O resto do app salva a cada ação; só aqui dava para perder texto digitado.
+   O vídeo continua entrando na lista apenas ao tocar "Salvar vídeo". */
+const DRAFT_KEY='prometeu.vidDraft.v1';
+let _draftT=null;
+function draftTemConteudo(d){
+  return !!((d.nome||'').trim()||(d.link||'').trim()||(d.dur||'').trim()||(d.resumo||'').trim()
+    ||(d.mats||[]).some(m=>(m.titulo||'').trim()||(m.link||'').trim())||(d.arqs||[]).length);
+}
+function salvarDraft(){
+  if(demoOn)return;
+  const tela=document.getElementById('s-vid');
+  if(!tela||!tela.classList.contains('active'))return;
+  const d={proj:projReg.ativo,disc:curDiscId,aula:curAulaId,cap:curCapId,vid:editVidId,
+    nome:vi('vf-nome'),link:vi('vf-link'),dur:vi('vf-dur'),
+    resumo:(document.getElementById('vf-resumo')||{}).value||'',
+    mats:formMats,arqs:formArqs,ts:Date.now()};
+  try{
+    if(draftTemConteudo(d))localStorage.setItem(DRAFT_KEY,JSON.stringify(d));
+    else localStorage.removeItem(DRAFT_KEY);
+  }catch(e){}
+}
+function agendarDraft(){clearTimeout(_draftT);_draftT=setTimeout(salvarDraft,600);}
+function limparDraft(){clearTimeout(_draftT);try{localStorage.removeItem(DRAFT_KEY);}catch(e){}}
+function checarDraft(){ // no boot: oferece restaurar um formulário que ficou aberto
+  let d=null;try{d=JSON.parse(localStorage.getItem(DRAFT_KEY)||'null');}catch(e){}
+  if(!d||!draftTemConteudo(d))return;
+  if(d.proj!==projReg.ativo)return; // rascunho de outro projeto — fica guardado até ele ser aberto
+  const disc=getDisc(d.disc);const aula=disc&&getAula(disc,d.aula);const cap=aula&&getCap(aula,d.cap);
+  if(!cap){limparDraft();return;} // a estrutura foi apagada/alterada
+  if(!confirm(trf('Você tinha um vídeo não salvo ("{n}"). Restaurar o rascunho?',{n:(d.nome||'').trim()||tr('sem nome')}))){limparDraft();return;}
+  if(d.vid&&!cap.videos.some(v=>v.id===d.vid))d.vid=null;
+  curMat=matKey(disc);curDiscId=d.disc;curAulaId=d.aula;
+  goToFormVid(d.cap,d.vid||null);
+  if(!document.getElementById('s-vid').classList.contains('active'))return; // ex.: ativação exigida
+  document.getElementById('vf-nome').value=d.nome||'';
+  document.getElementById('vf-link').value=d.link||'';
+  document.getElementById('vf-dur').value=d.dur||'';
+  document.getElementById('vf-resumo').value=d.resumo||'';
+  formMats=(d.mats||[]).map(m=>({titulo:m.titulo||'',link:m.link||''}));
+  formArqs=(d.arqs||[]).map(a=>({...a}));
+  renderMats();renderArqs();updPg();
+  if((d.resumo||'').trim()&&!resumoOpen)toggleResumo();
 }
 
 function openModal(title,fields,cb){
@@ -938,8 +1094,9 @@ async function exportBackup(pid){
   let data;
   if(p.id===projReg.ativo){saveDB();data=db;}
   else{try{data=JSON.parse(localStorage.getItem(projKey(p.id))||'{"disciplinas":[]}');}catch(e){data={disciplinas:[]};}}
-  const fids=[];
-  data.disciplinas.forEach(d=>d.aulas.forEach(a=>a.caps.forEach(c=>c.videos.forEach(v=>(v.arquivos||[]).forEach(x=>fids.push(x.fid))))));
+  const fids=[];let totalArq=0;
+  data.disciplinas.forEach(d=>d.aulas.forEach(a=>a.caps.forEach(c=>c.videos.forEach(v=>(v.arquivos||[]).forEach(x=>{fids.push(x.fid);totalArq+=x.tamanho||0;})))));
+  if(totalArq>200*1024*1024&&!confirm(trf('Os documentos anexados somam {n} — o backup vai ficar pesado e pode demorar para gerar e importar. Continuar?',{n:fmtKB(totalArq)})))return;
   const arquivos=[];
   for(const fid of fids){
     try{const r=await fGet(fid);if(r&&r.blob)arquivos.push({fid,nome:r.nome,tipo:r.tipo,b64:await blobB64(r.blob)});}catch(e){}
@@ -1062,19 +1219,21 @@ const TUT=[
 <p>Dentro do capítulo, toque em <b>Adicionar vídeo</b>. No formulário você pode:</p>
 <ul>
 <li><b>Nome</b> do vídeo (obrigatório).</li>
-<li><b>Link do YouTube:</b> ao colar, o app tenta buscar o título sozinho (precisa de internet só nessa hora). Sem link, o botão de lupa procura o vídeo pelo nome no YouTube.</li>
-<li><b>Duração</b> (MM:SS ou H:MM:SS) — alimenta os totais de aula, série e matéria.</li>
-<li><b>Resumo</b> de até ≈3 páginas, com exportação em <b>Word (.doc)</b> ou <b>PDF</b>.</li>
+<li><b>Link do YouTube:</b> ao colar, o app preenche sozinho o <b>nome do vídeo</b> e a <b>duração</b> (precisa de internet só nessa hora). Sem link, o botão de lupa procura o vídeo pelo nome no YouTube.</li>
+<li><b>Duração</b> no campo pequeno ao lado do link (MM:SS ou H:MM:SS) — se não for detectada sozinha, preencha à mão; ela alimenta os totais de aula, série e matéria.</li>
+<li><b>Resumo</b> de até ≈3 páginas — fica numa seção recolhida abaixo do botão de busca; toque nela para abrir. Exporta em <b>Word (.doc)</b> ou <b>PDF</b>.</li>
+<li><b>Rascunho automático:</b> o que você digita neste formulário é guardado sozinho; se o app fechar sem salvar, ele oferece restaurar tudo na próxima abertura.</li>
 </ul>
 <p>Na lista, o <b>▶</b> abre o link do vídeo e os ícones ao lado do tempo mostram se há resumo, materiais ou documentos anexados.</p>`},
 {ic:'ti-paperclip',t:'Material didático e documentos',c:`
 <p>No formulário do vídeo, a seção <b>“Material didático e documentos”</b> fica recolhida — toque nela para expandir.</p>
 %FIG3%
 <ul>
-<li><b>Materiais citados:</b> lista simples de título + autor/editora/link (livros citados no vídeo).</li>
-<li><b>Documentos anexados:</b> toque em <b>Importar PDF, imagem ou Word</b> para guardar até <b>10 arquivos por vídeo</b> (até 15 MB cada) dentro do próprio app.</li>
-<li>Cada documento tem <b>Título</b> e <b>Autor</b> editáveis.</li>
-<li>O <b>olhinho</b> abre PDFs e imagens na hora; arquivos Word são baixados para abrir no editor do aparelho.</li>
+<li><b>Materiais citados:</b> lista simples de título + autor/editora/link (livros citados no vídeo). A <b>lupa</b> ao lado de cada material procura na internet uma versão <b>gratuita em PDF</b> do livro.</li>
+<li><b>Documentos anexados:</b> toque em <b>Importar PDF, imagem, Word ou áudio</b> para guardar até <b>10 arquivos por vídeo</b> (até <b>100 MB</b> cada — cabe um livro inteiro) dentro do próprio app.</li>
+<li>Cada documento tem <b>Título</b> e <b>Autor</b> editáveis, além de <b>miniatura</b> (fotos) ou <b>selo colorido</b> (PDF, DOC, áudio) para reconhecer o tipo de longe.</li>
+<li>O <b>olhinho</b> abre PDFs e imagens na hora; arquivos Word são baixados para abrir no editor do aparelho. Se um PDF não abrir, teste outro documento — alguns arquivos já vêm com defeito de origem.</li>
+<li>O botão de <b>compartilhar</b> envia o documento por <b>WhatsApp</b>, e-mail ou qualquer outro app do aparelho.</li>
 <li>Os anexos entram no backup do projeto e saem nos relatórios.</li>
 </ul>`},
 {ic:'ti-palette',t:'Temas',c:`
@@ -1085,6 +1244,12 @@ const TUT=[
 <li><b>Prometeu</b> — HUD sci-fi ciano (assinatura do app).</li>
 <li><b>P. Vermelho</b> e <b>P. Azul</b> — variações do Prometeu.</li>
 </ol>`},
+{ic:'ti-eye',t:'Letras maiores e zoom',c:`
+<p>Para quem prefere letras e botões maiores:</p>
+<ul>
+<li><b>☰ → Tamanho do texto:</b> toque em <b>A+</b> para aumentar as letras e os botões do app inteiro (até 150%) e em <b>A−</b> para voltar. A escolha fica salva.</li>
+<li><b>Zoom de pinça:</b> em celulares e tablets, você também pode ampliar qualquer tela afastando dois dedos sobre ela (movimento de pinça).</li>
+</ul>`},
 {ic:'ti-report',t:'Relatórios e exportações',c:`
 <ul>
 <li><b>Relatório da série:</b> ícone de relatório no cartão da série → Word ou PDF com aulas, capítulos, vídeos, links, observações, pendências e documentos.</li>
@@ -1385,7 +1550,8 @@ const PIX_CFG={ // PREENCHA antes de publicar a versão direta:
   cidade:'MANAUS',                  // máx. 15 caracteres
   valor:'25.00',                    // valor em R$ (ex.: ~US$5). Vazio = comprador digita
   preco:'US$ 5 (~R$ 25)',
-  email:'organizadordeaulas.prometeu@gmail.com'     // para onde o comprador envia o comprovante
+  email:'organizadordeaulas.prometeu@gmail.com',    // para onde o comprador envia o comprovante
+  link:'https://mpago.la/2KJhprv'  // link de pagamento do Mercado Pago (etapa P3)
 };
 const LIC_PUBKEY={kty:'EC',crv:'P-256',x:'or3swlJ1Zsy8FIxg3oMI8GTeuhjsce1MREgOJCuu1Js',y:'TNSijRdV4gopbyxI0le4IYbGL7GguL5cOQgjM9GDEDU'};
 const LIC_KEY='prometeu.license.v1',INSTALL_KEY='prometeu.install.v1',TRIAL_DIAS=14;
@@ -1474,6 +1640,10 @@ function renderAtivar(){
   el.innerHTML=status+(licState.ativo?'':`
     <div class="at-sec">
       <h3>${tr('Como ativar')} · ${escH(PIX_CFG.preco)}</h3>
+      ${PIX_CFG.link?`
+      <a class="btn-pri at-pay" href="${escH(PIX_CFG.link)}" target="_blank" rel="noopener"><i class="ti ti-key" aria-hidden="true"></i> ${tr('Pagar agora (Pix ou cartão)')}</a>
+      <div class="fhint" style="margin:8px 0 4px">${tr('Pagamento seguro pelo Mercado Pago. O código de ativação chega em poucos minutos no e-mail usado no pagamento — cole-o no campo abaixo.')}</div>
+      <div class="at-alt">${tr('Prefere Pix manual? Siga os passos abaixo (o código é enviado por uma pessoa, pode demorar mais).')}</div>`:''}
       <ol class="at-steps">
         <li>${tr('Pague por Pix usando a chave ou o código abaixo.')}</li>
         <li>${trf('Envie o comprovante e o seu e-mail para {mail}.',{mail:'<b>'+escH(PIX_CFG.email)+'</b>'})}</li>
@@ -1491,6 +1661,18 @@ function renderAtivar(){
   paintIcons();
 }
 
+/* ===== Tamanho do texto (acessibilidade — letras e botões maiores) ===== */
+const FS_KEY='prometeu.fontscale.v1';
+const FS_NIVEIS=[100,112,125,137,150];
+let fsIdx=(function(){try{const v=parseInt(localStorage.getItem(FS_KEY)||'100',10);const i=FS_NIVEIS.indexOf(v);return i>=0?i:0;}catch(e){return 0;}})();
+function aplicarFonte(){
+  const pct=FS_NIVEIS[fsIdx]||100;
+  document.body.style.zoom=pct+'%';
+  const el=document.getElementById('dz-val');if(el)el.textContent=pct+'%';
+  try{localStorage.setItem(FS_KEY,String(pct));}catch(e){}
+}
+function mudarFonte(d){fsIdx=Math.max(0,Math.min(FS_NIVEIS.length-1,fsIdx+d));aplicarFonte();}
+
 /* ===== Inicialização ===== */
 loadProjects();
 loadDB();
@@ -1506,6 +1688,9 @@ installTs();checkConsent();
 if(CHANNEL==='play'){const _bb=document.querySelector('.dw-buy');if(_bb)_bb.style.display='none';} // Play: comprado na loja
 else carregarLicenca(); // distribuição direta: verifica a licença guardada (offline, async)
 setTimeout(()=>sweepOrphans().catch(()=>{}),1600); // faxina de anexos órfãos, sem travar a abertura
+aplicarFonte(); // tamanho do texto salvo (menu ☰)
+document.querySelector('#s-vid .form-wrap').addEventListener('input',agendarDraft); // rascunho automático
+setTimeout(checarDraft,400); // oferece restaurar formulário de vídeo não salvo
 
 /* ===== PWA: registra o service worker (só quando servido via http/https) ===== */
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){

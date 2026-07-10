@@ -180,6 +180,24 @@ const I18N={
 '"{f}" não é um tipo aceito (PDF, imagem, Word ou áudio).':'"{f}" is not an accepted type (PDF, image, Word or audio).',
 'Título (ex: Casa-Grande & Senzala)':'Title (e.g.: The Odyssey)','Autor, editora ou link':'Author, publisher or link',
 'Título':'Title','Autor':'Author','Remover material':'Remove material','Abrir arquivo':'Open file','Remover arquivo':'Remove file',
+'Título e duração obtidos.':'Title and duration fetched.',
+'Buscando título e duração no YouTube…':'Fetching title and duration from YouTube…',
+'Resumo do vídeo':'Video summary','Resumo do vídeo (≈ {p} pág.)':'Video summary (≈ {p} pg.)',
+'Preencha o título do material primeiro.':'Fill in the material title first.',
+'Buscar este material em PDF na internet':'Search the internet for this material in PDF',
+'Buscar PDF grátis na internet':'Search for a free PDF online',
+'Compartilhar arquivo':'Share file','Compartilhar (WhatsApp, e-mail…)':'Share (WhatsApp, e-mail…)',
+'A visualização não abriu (pop-up bloqueado). Baixar o arquivo em vez disso?':'The preview did not open (pop-up blocked). Download the file instead?',
+'Não foi possível abrir este arquivo. Teste com outro documento — se o outro abrir, o problema é o arquivo em si, não o app.':'Could not open this file. Try another document — if the other one opens, the problem is the file itself, not the app.',
+'Este navegador não tem a janela de compartilhamento — o arquivo será baixado para você enviar por WhatsApp Web, e-mail etc.':'This browser has no share dialog — the file will be downloaded so you can send it via WhatsApp Web, e-mail etc.',
+'Não foi possível compartilhar o arquivo.':'Could not share the file.',
+'Os documentos anexados somam {n} — o backup vai ficar pesado e pode demorar para gerar e importar. Continuar?':'Attached documents add up to {n} — the backup will be heavy and may take a while to create and import. Continue?',
+'Você tinha um vídeo não salvo ("{n}"). Restaurar o rascunho?':'You had an unsaved video ("{n}"). Restore the draft?',
+'Pagar agora (Pix ou cartão)':'Pay now (Pix or card)',
+'Pagamento seguro pelo Mercado Pago. O código de ativação chega em poucos minutos no e-mail usado no pagamento — cole-o no campo abaixo.':'Secure payment via Mercado Pago. The activation code arrives within minutes at the e-mail used for payment — paste it in the field below.',
+'Prefere Pix manual? Siga os passos abaixo (o código é enviado por uma pessoa, pode demorar mais).':'Prefer manual Pix? Follow the steps below (the code is sent by a person and may take longer).',
+'sem nome':'unnamed','Tamanho do texto':'Text size',
+'Diminuir letras e botões':'Smaller text and buttons','Aumentar letras e botões':'Bigger text and buttons',
 'Ex: A Primeira Revolução Industrial':'E.g.: The First Industrial Revolution',
 'Nome da matéria':'Subject name','Série/Ano':'Grade/Year','Capítulo / unidade':'Chapter / unit',
 'Título da aula':'Lesson title','Número / identificador':'Number / identifier','Nome do capítulo':'Chapter name',
@@ -314,6 +332,13 @@ const I18N={
 'Arquivo não encontrado no armazenamento deste navegador.':'Ficheiro não encontrado no armazenamento deste navegador.',
 'Não foi possível abrir o arquivo.':'Não foi possível abrir o ficheiro.',
 'Abrir arquivo':'Abrir ficheiro','Remover arquivo':'Remover ficheiro','Arquivo inválido.':'Ficheiro inválido.',
+'Compartilhar arquivo':'Partilhar ficheiro','Compartilhar (WhatsApp, e-mail…)':'Partilhar (WhatsApp, e-mail…)',
+'Não foi possível compartilhar o arquivo.':'Não foi possível partilhar o ficheiro.',
+'Este navegador não tem a janela de compartilhamento — o arquivo será baixado para você enviar por WhatsApp Web, e-mail etc.':'Este navegador não tem a janela de partilha — o ficheiro será transferido para o enviar por WhatsApp Web, e-mail etc.',
+'Não foi possível abrir este arquivo. Teste com outro documento — se o outro abrir, o problema é o arquivo em si, não o app.':'Não foi possível abrir este ficheiro. Teste com outro documento — se o outro abrir, o problema é o próprio ficheiro, não a app.',
+'A visualização não abriu (pop-up bloqueado). Baixar o arquivo em vez disso?':'A pré-visualização não abriu (pop-up bloqueado). Transferir o ficheiro?',
+'Os documentos anexados somam {n} — o backup vai ficar pesado e pode demorar para gerar e importar. Continuar?':'Os documentos anexados somam {n} — a cópia de segurança vai ficar pesada e pode demorar a gerar e importar. Continuar?',
+'Você tinha um vídeo não salvo ("{n}"). Restaurar o rascunho?':'Tinha um vídeo por guardar ("{n}"). Restaurar o rascunho?',
 'Exportar arquivo deste projeto':'Exportar ficheiro deste projeto',
 'Este arquivo não é um backup do Organizador de Aulas.':'Este ficheiro não é uma cópia de segurança do Organizador de Aulas.',
 '<b>Backup exportado.</b> Guarde o arquivo .json em local seguro (Drive, pen-drive…).':'<b>Cópia de segurança exportada.</b> Guarde o ficheiro .json em local seguro (Drive, pen…).',
@@ -376,6 +401,24 @@ const I18N={
 '"{f}" não é um tipo aceito (PDF, imagem, Word ou áudio).':'"{f}" no es un tipo aceptado (PDF, imagen, Word o audio).',
 'Título (ex: Casa-Grande & Senzala)':'Título (ej.: Cien años de soledad)','Autor, editora ou link':'Autor, editorial o enlace',
 'Título':'Título','Autor':'Autor','Remover material':'Quitar material','Abrir arquivo':'Abrir archivo','Remover arquivo':'Quitar archivo',
+'Título e duração obtidos.':'Título y duración obtenidos.',
+'Buscando título e duração no YouTube…':'Buscando el título y la duración en YouTube…',
+'Resumo do vídeo':'Resumen del vídeo','Resumo do vídeo (≈ {p} pág.)':'Resumen del vídeo (≈ {p} pág.)',
+'Preencha o título do material primeiro.':'Rellena primero el título del material.',
+'Buscar este material em PDF na internet':'Buscar este material en PDF en internet',
+'Buscar PDF grátis na internet':'Buscar PDF gratis en internet',
+'Compartilhar arquivo':'Compartir archivo','Compartilhar (WhatsApp, e-mail…)':'Compartir (WhatsApp, correo…)',
+'A visualização não abriu (pop-up bloqueado). Baixar o arquivo em vez disso?':'La vista previa no se abrió (pop-up bloqueado). ¿Descargar el archivo?',
+'Não foi possível abrir este arquivo. Teste com outro documento — se o outro abrir, o problema é o arquivo em si, não o app.':'No se pudo abrir este archivo. Prueba con otro documento: si el otro se abre, el problema es el archivo, no la app.',
+'Este navegador não tem a janela de compartilhamento — o arquivo será baixado para você enviar por WhatsApp Web, e-mail etc.':'Este navegador no tiene ventana de compartir: el archivo se descargará para que lo envíes por WhatsApp Web, correo, etc.',
+'Não foi possível compartilhar o arquivo.':'No se pudo compartir el archivo.',
+'Os documentos anexados somam {n} — o backup vai ficar pesado e pode demorar para gerar e importar. Continuar?':'Los documentos adjuntos suman {n}: la copia será pesada y puede tardar en generarse e importarse. ¿Continuar?',
+'Você tinha um vídeo não salvo ("{n}"). Restaurar o rascunho?':'Tenías un vídeo sin guardar ("{n}"). ¿Restaurar el borrador?',
+'Pagar agora (Pix ou cartão)':'Pagar ahora (Pix o tarjeta)',
+'Pagamento seguro pelo Mercado Pago. O código de ativação chega em poucos minutos no e-mail usado no pagamento — cole-o no campo abaixo.':'Pago seguro por Mercado Pago. El código de activación llega en pocos minutos al correo usado en el pago: pégalo en el campo de abajo.',
+'Prefere Pix manual? Siga os passos abaixo (o código é enviado por uma pessoa, pode demorar mais).':'¿Prefieres Pix manual? Sigue los pasos de abajo (el código lo envía una persona y puede tardar más).',
+'sem nome':'sin nombre','Tamanho do texto':'Tamaño del texto',
+'Diminuir letras e botões':'Reducir letras y botones','Aumentar letras e botões':'Agrandar letras y botones',
 'Ex: A Primeira Revolução Industrial':'Ej.: La Primera Revolución Industrial',
 'Nome da matéria':'Nombre de la asignatura','Série/Ano':'Curso/Año','Capítulo / unidade':'Capítulo / unidad',
 'Título da aula':'Título de la clase','Número / identificador':'Número / identificador','Nome do capítulo':'Nombre del capítulo',
@@ -538,6 +581,24 @@ const I18N={
 '"{f}" não é um tipo aceito (PDF, imagem, Word ou áudio).':'"{f}" 不是可接受的类型（PDF、图片、Word 或音频）。',
 'Título (ex: Casa-Grande & Senzala)':'标题（例：红楼梦）','Autor, editora ou link':'作者、出版社或链接',
 'Título':'标题','Autor':'作者','Remover material':'移除材料','Abrir arquivo':'打开文件','Remover arquivo':'移除文件',
+'Título e duração obtidos.':'已获取标题和时长。',
+'Buscando título e duração no YouTube…':'正在从 YouTube 获取标题和时长……',
+'Resumo do vídeo':'视频摘要','Resumo do vídeo (≈ {p} pág.)':'视频摘要（约 {p} 页）',
+'Preencha o título do material primeiro.':'请先填写材料的标题。',
+'Buscar este material em PDF na internet':'在网上搜索该材料的 PDF 版本',
+'Buscar PDF grátis na internet':'在网上搜索免费 PDF',
+'Compartilhar arquivo':'分享文件','Compartilhar (WhatsApp, e-mail…)':'分享（WhatsApp、电子邮件……）',
+'A visualização não abriu (pop-up bloqueado). Baixar o arquivo em vez disso?':'预览未能打开（弹窗被拦截）。改为下载文件？',
+'Não foi possível abrir este arquivo. Teste com outro documento — se o outro abrir, o problema é o arquivo em si, não o app.':'无法打开此文件。请换一个文档试试——如果另一个能打开，问题出在文件本身，而不是应用。',
+'Este navegador não tem a janela de compartilhamento — o arquivo será baixado para você enviar por WhatsApp Web, e-mail etc.':'此浏览器没有分享窗口——文件将被下载，您可通过 WhatsApp 网页版、电子邮件等发送。',
+'Não foi possível compartilhar o arquivo.':'无法分享文件。',
+'Os documentos anexados somam {n} — o backup vai ficar pesado e pode demorar para gerar e importar. Continuar?':'附件文档共 {n} —— 备份会很大，生成和导入可能较慢。继续？',
+'Você tinha um vídeo não salvo ("{n}"). Restaurar o rascunho?':'您有一个未保存的视频（"{n}"）。要恢复草稿吗？',
+'Pagar agora (Pix ou cartão)':'立即支付（Pix 或银行卡）',
+'Pagamento seguro pelo Mercado Pago. O código de ativação chega em poucos minutos no e-mail usado no pagamento — cole-o no campo abaixo.':'通过 Mercado Pago 安全支付。激活码将在几分钟内发送到付款所用的电子邮箱——请粘贴到下方输入框。',
+'Prefere Pix manual? Siga os passos abaixo (o código é enviado por uma pessoa, pode demorar mais).':'想使用人工 Pix？请按下面的步骤操作（激活码由人工发送，可能较慢）。',
+'sem nome':'未命名','Tamanho do texto':'文字大小',
+'Diminuir letras e botões':'缩小文字和按钮','Aumentar letras e botões':'放大文字和按钮',
 'Ex: A Primeira Revolução Industrial':'例：第一次工业革命',
 'Nome da matéria':'科目名称','Série/Ano':'年级','Capítulo / unidade':'章节 / 单元',
 'Título da aula':'课程标题','Número / identificador':'编号 / 标识','Nome do capítulo':'章节名称',
@@ -700,19 +761,21 @@ const TUT_ML={
 <p>Inside a chapter, tap <b>Add video</b>. In the form you can set:</p>
 <ul>
 <li>The video <b>name</b> (required).</li>
-<li><b>YouTube link:</b> when pasted, the app tries to fetch the title automatically (internet needed only at that moment). Without a link, the magnifier button searches YouTube by name.</li>
-<li><b>Duration</b> (MM:SS or H:MM:SS) — feeds the totals for lesson, grade and subject.</li>
-<li>A <b>summary</b> of up to ≈3 pages, exportable as <b>Word (.doc)</b> or <b>PDF</b>.</li>
+<li><b>YouTube link:</b> when pasted, the app fills in the <b>video name</b> and the <b>duration</b> automatically (internet needed only at that moment). Without a link, the magnifier button searches YouTube by name.</li>
+<li><b>Duration</b> in the small field next to the link (MM:SS or H:MM:SS) — if it isn't detected automatically, fill it in by hand; it feeds the totals for lesson, grade and subject.</li>
+<li>A <b>summary</b> of up to ≈3 pages — it sits in a collapsed section below the search button; tap it to open. Exportable as <b>Word (.doc)</b> or <b>PDF</b>.</li>
+<li><b>Automatic draft:</b> whatever you type in this form is saved on its own; if the app closes before you save, it offers to restore everything on the next launch.</li>
 </ul>
 <p>In the list, <b>▶</b> opens the video link, and the icons next to the time show whether there is a summary, materials or attached documents.</p>`},
 {ic:'ti-paperclip',t:'Teaching materials and documents',c:`
 <p>In the video form, the <b>“Teaching materials & documents”</b> section starts collapsed — tap it to expand.</p>
 %FIG3%
 <ul>
-<li><b>Cited materials:</b> a simple list of title + author/publisher/link (books mentioned in the video).</li>
-<li><b>Attached documents:</b> tap <b>Import PDF, image or Word</b> to store up to <b>10 files per video</b> (15 MB each) inside the app itself.</li>
-<li>Each document has an editable <b>Title</b> and <b>Author</b>.</li>
-<li>The <b>eye</b> opens PDFs and images right away; Word files are downloaded to open in the device's editor.</li>
+<li><b>Cited materials:</b> a simple list of title + author/publisher/link (books mentioned in the video). The <b>magnifier</b> next to each material searches the internet for a <b>free PDF</b> version of the book.</li>
+<li><b>Attached documents:</b> tap <b>Import PDF, image, Word or audio</b> to store up to <b>10 files per video</b> (up to <b>100 MB</b> each — enough for a whole book) inside the app itself.</li>
+<li>Each document has an editable <b>Title</b> and <b>Author</b>, plus a <b>thumbnail</b> (photos) or a <b>colored badge</b> (PDF, DOC, audio) so you can spot the type at a glance.</li>
+<li>The <b>eye</b> opens PDFs and images right away; Word files are downloaded to open in the device's editor. If a PDF won't open, try another document — some files are corrupted at the source.</li>
+<li>The <b>share</b> button sends the document via <b>WhatsApp</b>, e-mail or any other app on the device.</li>
 <li>Attachments are included in project backups and in reports.</li>
 </ul>`},
 {ic:'ti-palette',t:'Themes',c:`
@@ -723,6 +786,12 @@ const TUT_ML={
 <li><b>Prometheus</b> — cyan sci-fi HUD (the app's signature).</li>
 <li><b>P. Red</b> and <b>P. Blue</b> — Prometheus variations.</li>
 </ol>`},
+{ic:'ti-eye',t:'Bigger text and zoom',c:`
+<p>If you prefer bigger text and buttons:</p>
+<ul>
+<li><b>☰ → Text size:</b> tap <b>A+</b> to enlarge the text and buttons of the whole app (up to 150%) and <b>A−</b> to go back. The choice is saved.</li>
+<li><b>Pinch zoom:</b> on phones and tablets you can also zoom into any screen by spreading two fingers on it (pinch gesture).</li>
+</ul>`},
 {ic:'ti-report',t:'Reports and exports',c:`
 <ul>
 <li><b>Grade report:</b> report icon on the grade card → Word or PDF with lessons, chapters, videos, links, notes, pending items and documents.</li>
@@ -796,19 +865,21 @@ const TUT_ML={
 <p>Dentro del capítulo, toca <b>Añadir vídeo</b>. En el formulario puedes indicar:</p>
 <ul>
 <li>El <b>nombre</b> del vídeo (obligatorio).</li>
-<li><b>Enlace de YouTube:</b> al pegarlo, la app intenta obtener el título sola (internet solo en ese momento). Sin enlace, el botón de lupa busca el vídeo por nombre en YouTube.</li>
-<li><b>Duración</b> (MM:SS o H:MM:SS) — alimenta los totales de clase, curso y asignatura.</li>
-<li>Un <b>resumen</b> de hasta ≈3 páginas, con exportación en <b>Word (.doc)</b> o <b>PDF</b>.</li>
+<li><b>Enlace de YouTube:</b> al pegarlo, la app rellena sola el <b>nombre del vídeo</b> y la <b>duración</b> (internet solo en ese momento). Sin enlace, el botón de lupa busca el vídeo por nombre en YouTube.</li>
+<li><b>Duración</b> en el campo pequeño junto al enlace (MM:SS o H:MM:SS) — si no se detecta sola, rellénala a mano; alimenta los totales de clase, curso y asignatura.</li>
+<li>Un <b>resumen</b> de hasta ≈3 páginas — está en una sección plegada bajo el botón de búsqueda; tócala para abrirla. Se exporta en <b>Word (.doc)</b> o <b>PDF</b>.</li>
+<li><b>Borrador automático:</b> lo que escribes en este formulario se guarda solo; si la app se cierra sin guardar, ofrece restaurarlo todo en la próxima apertura.</li>
 </ul>
 <p>En la lista, <b>▶</b> abre el enlace del vídeo y los iconos junto al tiempo muestran si hay resumen, materiales o documentos adjuntos.</p>`},
 {ic:'ti-paperclip',t:'Material didáctico y documentos',c:`
 <p>En el formulario del vídeo, la sección <b>«Material didáctico y documentos»</b> está plegada — tócala para expandirla.</p>
 %FIG3%
 <ul>
-<li><b>Materiales citados:</b> lista simple de título + autor/editorial/enlace (libros citados en el vídeo).</li>
-<li><b>Documentos adjuntos:</b> toca <b>Importar PDF, imagen o Word</b> para guardar hasta <b>10 archivos por vídeo</b> (15 MB cada uno) dentro de la propia app.</li>
-<li>Cada documento tiene <b>Título</b> y <b>Autor</b> editables.</li>
-<li>El <b>ojo</b> abre PDF e imágenes al momento; los archivos Word se descargan para abrirlos en el editor del dispositivo.</li>
+<li><b>Materiales citados:</b> lista simple de título + autor/editorial/enlace (libros citados en el vídeo). La <b>lupa</b> junto a cada material busca en internet una versión <b>gratuita en PDF</b> del libro.</li>
+<li><b>Documentos adjuntos:</b> toca <b>Importar PDF, imagen, Word o audio</b> para guardar hasta <b>10 archivos por vídeo</b> (hasta <b>100 MB</b> cada uno — cabe un libro entero) dentro de la propia app.</li>
+<li>Cada documento tiene <b>Título</b> y <b>Autor</b> editables, además de una <b>miniatura</b> (fotos) o un <b>sello de color</b> (PDF, DOC, audio) para reconocer el tipo de un vistazo.</li>
+<li>El <b>ojo</b> abre PDF e imágenes al momento; los archivos Word se descargan para abrirlos en el editor del dispositivo. Si un PDF no se abre, prueba con otro documento — algunos archivos vienen dañados de origen.</li>
+<li>El botón de <b>compartir</b> envía el documento por <b>WhatsApp</b>, correo o cualquier otra app del dispositivo.</li>
 <li>Los adjuntos entran en la copia de seguridad del proyecto y salen en los informes.</li>
 </ul>`},
 {ic:'ti-palette',t:'Temas',c:`
@@ -819,6 +890,12 @@ const TUT_ML={
 <li><b>Prometeo</b> — HUD de ciencia ficción cian (la firma de la app).</li>
 <li><b>P. Rojo</b> y <b>P. Azul</b> — variaciones del Prometeo.</li>
 </ol>`},
+{ic:'ti-eye',t:'Letras más grandes y zoom',c:`
+<p>Para quien prefiere letras y botones más grandes:</p>
+<ul>
+<li><b>☰ → Tamaño del texto:</b> toca <b>A+</b> para agrandar las letras y los botones de toda la app (hasta el 150%) y <b>A−</b> para volver. La elección queda guardada.</li>
+<li><b>Zoom de pellizco:</b> en móviles y tabletas también puedes ampliar cualquier pantalla separando dos dedos sobre ella (gesto de pellizco).</li>
+</ul>`},
 {ic:'ti-report',t:'Informes y exportaciones',c:`
 <ul>
 <li><b>Informe del curso:</b> icono de informe en la tarjeta del curso → Word o PDF con clases, capítulos, vídeos, enlaces, notas, pendientes y documentos.</li>
@@ -892,19 +969,21 @@ const TUT_ML={
 <p>在章节内点按<b>添加视频</b>。在表单中可以填写：</p>
 <ul>
 <li>视频<b>名称</b>（必填）。</li>
-<li><b>YouTube 链接：</b>粘贴后应用会尝试自动获取标题（仅此时需要网络）。没有链接时，放大镜按钮可按名称在 YouTube 上搜索。</li>
-<li><b>时长</b>（MM:SS 或 H:MM:SS）— 计入课程、年级和科目的总时长。</li>
-<li>最多约 3 页的<b>摘要</b>，可导出为 <b>Word (.doc)</b> 或 <b>PDF</b>。</li>
+<li><b>YouTube 链接：</b>粘贴后应用会自动填写<b>视频名称</b>和<b>时长</b>（仅此时需要网络）。没有链接时，放大镜按钮可按名称在 YouTube 上搜索。</li>
+<li><b>时长</b>在链接旁的小输入框中（MM:SS 或 H:MM:SS）— 如未自动检测请手动填写；计入课程、年级和科目的总时长。</li>
+<li>最多约 3 页的<b>摘要</b> — 位于搜索按钮下方的收起区域，点按即可展开。可导出为 <b>Word (.doc)</b> 或 <b>PDF</b>。</li>
+<li><b>自动草稿：</b>在此表单中输入的内容会自动保存；如果应用在保存前关闭，下次打开时会提示恢复全部内容。</li>
 </ul>
 <p>在列表中，<b>▶</b> 打开视频链接；时间旁的图标显示是否有摘要、材料或附件。</p>`},
 {ic:'ti-paperclip',t:'教学材料与文档',c:`
 <p>在视频表单中，<b>“教学材料与文档”</b>部分默认收起 — 点按即可展开。</p>
 %FIG3%
 <ul>
-<li><b>引用材料：</b>标题 + 作者/出版社/链接的简单列表（视频中提到的书籍）。</li>
-<li><b>附件文档：</b>点按<b>导入 PDF、图片或 Word</b>，每个视频最多可在应用内保存 <b>10 个文件</b>（每个 15 MB）。</li>
-<li>每个文档都有可编辑的<b>标题</b>和<b>作者</b>。</li>
-<li><b>眼睛</b>图标可直接打开 PDF 和图片；Word 文件会下载后用设备上的编辑器打开。</li>
+<li><b>引用材料：</b>标题 + 作者/出版社/链接的简单列表（视频中提到的书籍）。每条材料旁的<b>放大镜</b>可在网上搜索该书的<b>免费 PDF</b> 版本。</li>
+<li><b>附件文档：</b>点按<b>导入 PDF、图片、Word 或音频</b>，每个视频最多可在应用内保存 <b>10 个文件</b>（每个最大 <b>100 MB</b> — 足以放下一整本书）。</li>
+<li>每个文档都有可编辑的<b>标题</b>和<b>作者</b>，并带有<b>缩略图</b>（照片）或<b>彩色标识</b>（PDF、DOC、音频），一眼即可识别类型。</li>
+<li><b>眼睛</b>图标可直接打开 PDF 和图片；Word 文件会下载后用设备上的编辑器打开。如果某个 PDF 打不开，请换一个文档试试 — 有些文件本身已损坏。</li>
+<li><b>分享</b>按钮可通过 <b>WhatsApp</b>、电子邮件或设备上的其他应用发送文档。</li>
 <li>附件会包含在项目备份和报告中。</li>
 </ul>`},
 {ic:'ti-palette',t:'主题',c:`
@@ -915,6 +994,12 @@ const TUT_ML={
 <li><b>普罗米修斯</b> — 青色科幻 HUD（应用的招牌）。</li>
 <li><b>普罗米修斯·红</b>和<b>普罗米修斯·蓝</b> — 两种变体。</li>
 </ol>`},
+{ic:'ti-eye',t:'放大文字与缩放',c:`
+<p>如果您更喜欢较大的文字和按钮：</p>
+<ul>
+<li><b>☰ → 文字大小：</b>点按 <b>A+</b> 可放大整个应用的文字和按钮（最高 150%），点按 <b>A−</b> 恢复。选择会被保存。</li>
+<li><b>双指缩放：</b>在手机和平板上，也可以在任意屏幕上张开两根手指进行放大（捏合手势）。</li>
+</ul>`},
 {ic:'ti-report',t:'报告与导出',c:`
 <ul>
 <li><b>年级报告：</b>年级卡片上的报告图标 → Word 或 PDF，包含课程、章节、视频、链接、备注、待办和文档。</li>

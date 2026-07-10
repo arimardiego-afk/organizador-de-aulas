@@ -14,7 +14,7 @@
 <link rel="icon" type="image/png" href="icons/favicon-64.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=bf5e665dfe">
+<link rel="stylesheet" href="styles.css?v=0652615fa4">
 </head>
 <body class="L">
 <div id="root" class="L">
@@ -88,26 +88,29 @@
   <div class="form-wrap">
     <div><label class="flbl">Nome do vídeo</label><input class="finput" id="vf-nome" placeholder="Ex: A Primeira Revolução Industrial"/></div>
     <div>
-      <label class="flbl">Link do vídeo (YouTube)</label>
-      <input class="finput" id="vf-link" placeholder="https://youtube.com/watch?v=..." oninput="onVidLink()"/>
+      <div class="link-dur-row">
+        <div class="ld-link"><label class="flbl">Link do vídeo (YouTube)</label><input class="finput" id="vf-link" placeholder="https://youtube.com/watch?v=..." oninput="onVidLink()"/></div>
+        <div class="ld-dur"><label class="flbl">Duração</label><input class="finput" id="vf-dur" placeholder="MM:SS" title="MM:SS ou H:MM:SS"/></div>
+      </div>
       <div class="fhint" id="vf-hint"></div>
       <button class="add-mat" style="margin-top:8px" onclick="ytSearchForm()"><i class="ti ti-search" aria-hidden="true"></i> Buscar este vídeo no YouTube (pelo nome)</button>
     </div>
-    <div class="spin-row" id="vf-spin" style="display:none"><div class="spinner"></div><span>Buscando título no YouTube…</span></div>
+    <div class="spin-row" id="vf-spin" style="display:none"><div class="spinner"></div><span>Buscando título e duração no YouTube…</span></div>
     <div class="fdur" id="vf-dur-info"></div>
-    <div>
-      <label class="flbl">Duração <span style="font-weight:400;color:var(--txt3)">(MM:SS ou H:MM:SS)</span></label>
-      <input class="finput" id="vf-dur" placeholder="Ex: 23:30 ou 1:08:44"/>
-      <div class="fhint">Preencha manualmente caso não seja detectada automaticamente.</div>
-    </div>
-    <div>
-      <label class="flbl">Resumo do vídeo · <span class="pg-count" id="vf-pg">≈ 0 pág.</span></label>
-      <textarea class="finput" id="vf-resumo" maxlength="9000" placeholder="Escreva ou cole aqui o resumo da aula (limite ≈ 3 páginas)" oninput="updPg()"></textarea>
-      <div class="fhint">Limite de ~3 páginas (9.000 caracteres). Exporte abaixo em Word ou PDF.</div>
-      <div class="btn-row" style="margin-top:8px">
-        <button class="btn-sec" onclick="expWord()"><i class="ti ti-file-text" aria-hidden="true"></i> Word (.doc)</button>
-        <button class="btn-sec" onclick="expPDF()"><i class="ti ti-download" aria-hidden="true"></i> PDF</button>
-      </div>
+    <div class="mat-sec">
+      <button class="tree-toggle" id="tt-resumo" onclick="toggleResumo()" aria-expanded="false" type="button">
+        <i class="ti ti-chevron-down chev" aria-hidden="true"></i>
+        <span id="resumo-count">Resumo do vídeo</span>
+      </button>
+      <div class="tree-wrap" id="tw-resumo"><div class="tree-inner"><div class="mat-inner">
+        <label class="flbl">Resumo do vídeo · <span class="pg-count" id="vf-pg">≈ 0 pág.</span></label>
+        <textarea class="finput" id="vf-resumo" maxlength="9000" placeholder="Escreva ou cole aqui o resumo da aula (limite ≈ 3 páginas)" oninput="updPg()"></textarea>
+        <div class="fhint">Limite de ~3 páginas (9.000 caracteres). Exporte abaixo em Word ou PDF.</div>
+        <div class="btn-row" style="margin-top:8px">
+          <button class="btn-sec" onclick="expWord()"><i class="ti ti-file-text" aria-hidden="true"></i> Word (.doc)</button>
+          <button class="btn-sec" onclick="expPDF()"><i class="ti ti-download" aria-hidden="true"></i> PDF</button>
+        </div>
+      </div></div></div>
     </div>
     <div class="mat-sec">
       <button class="tree-toggle" id="tt-mats" onclick="toggleMats()" aria-expanded="false" type="button">
@@ -180,6 +183,12 @@
   <button class="dw-item" onclick="openProjetos()"><i class="ti ti-folder" aria-hidden="true"></i> Gerenciar projetos</button>
   <button class="dw-item" onclick="exportBackup()"><i class="ti ti-download" aria-hidden="true"></i> Exportar backup (.json)</button>
   <button class="dw-item" onclick="importBackupPick()"><i class="ti ti-upload" aria-hidden="true"></i> Importar backup (.json)</button>
+  <div class="dw-sec">Tamanho do texto</div>
+  <div class="dw-zoom">
+    <button class="dz-btn" onclick="mudarFonte(-1)" aria-label="Diminuir letras e botões">A−</button>
+    <span class="dz-val" id="dz-val">100%</span>
+    <button class="dz-btn" onclick="mudarFonte(1)" aria-label="Aumentar letras e botões">A+</button>
+  </div>
   <div class="dw-sec">Ajuda</div>
   <button class="dw-item" onclick="openTutorial()"><i class="ti ti-help" aria-hidden="true"></i> Tutorial</button>
   <button class="dw-item" onclick="demoStart()"><i class="ti ti-player-play" aria-hidden="true"></i> Modo demonstração</button>
@@ -250,7 +259,7 @@
 <div id="toast-zone" aria-live="polite"></div>
 
 </div>
-<script src="i18n.js?v=bf5e665dfe"></script>
-<script src="app.js?v=bf5e665dfe"></script>
+<script src="i18n.js?v=0652615fa4"></script>
+<script src="app.js?v=0652615fa4"></script>
 </body>
 </html>

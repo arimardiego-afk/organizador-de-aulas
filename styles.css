@@ -181,6 +181,9 @@ i.ti svg{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:2;strok
 
 /* textarea / resumo */
 textarea.finput{resize:vertical;min-height:120px;line-height:1.45}
+.link-dur-row{display:flex;gap:8px;align-items:flex-end}
+.link-dur-row .ld-link{flex:1;min-width:0}
+.link-dur-row .ld-dur{width:112px;flex-shrink:0}
 .pg-count{font-weight:600}
 .pg-count.warn{color:var(--amb,#e6a23c)}
 
@@ -190,6 +193,9 @@ textarea.finput{resize:vertical;min-height:120px;line-height:1.45}
 .mat-t{flex:1.1}.mat-l{flex:1.6}
 .mat-x{background:none;border:none;cursor:pointer;color:var(--txt3);width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
 .mat-x:hover{color:#e53935;background:rgba(229,57,53,0.1)}
+.mat-row .mat-s:hover{color:var(--acc);background:var(--chip)}
+.at-pay{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;margin-bottom:4px}
+.at-alt{font-size:12px;color:var(--txt3);margin:10px 0 2px;font-weight:600}
 .add-mat{display:flex;align-items:center;justify-content:center;gap:7px;font-size:12px;font-weight:600;color:var(--acc);background:var(--card2);border:0.5px solid var(--brd);border-radius:8px;padding:9px 12px;cursor:pointer;width:100%}
 .add-mat:hover{background:var(--chip)}
 .vid-badges{display:inline-flex;gap:7px;margin-left:8px;color:var(--acc);font-size:10.5px;align-items:center}
@@ -402,6 +408,11 @@ textarea.finput{resize:vertical;min-height:120px;line-height:1.45}
 .dw-sec{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.6px;font-weight:600;padding:14px 16px 4px}
 .dw-item{display:flex;align-items:center;gap:11px;width:100%;background:none;border:none;padding:11px 16px;font-size:13px;color:var(--txt);cursor:pointer;text-align:left;font-family:inherit}
 .dw-item:hover{background:var(--card2)}
+.dw-zoom{display:flex;align-items:center;gap:10px;padding:6px 16px}
+.dz-btn{background:var(--card2);border:0.5px solid var(--brd);border-radius:8px;color:var(--acc);font-weight:700;font-family:inherit;font-size:15px;padding:8px 16px;cursor:pointer;min-width:56px}
+.dz-btn:hover{background:var(--chip)}
+.dz-val{flex:1;text-align:center;font-size:13px;font-weight:600;color:var(--txt3)}
+.P .dz-btn{border-radius:3px}
 .dw-item i{font-size:17px;color:var(--acc);flex-shrink:0}
 .P .drawer{background:linear-gradient(180deg,#0b2130,var(--card));border-right:1px solid var(--cy);box-shadow:8px 0 30px rgba(0,0,0,.5),0 0 18px rgba(var(--grgb),.18)}
 .P .dw-head b{font-family:'Orbitron',sans-serif;letter-spacing:.5px;font-size:11.5px;text-transform:uppercase}
@@ -420,6 +431,13 @@ textarea.finput{resize:vertical;min-height:120px;line-height:1.45}
 .arq-campos .finput{padding:7px 10px;font-size:12px}
 .arq-meta{font-size:10.5px;color:var(--txt3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .arq-btns{display:flex;flex-direction:column;gap:2px;flex-shrink:0}
+.arq-thumb{width:44px;height:44px;object-fit:cover;border-radius:8px;flex-shrink:0;background:var(--chip);border:0.5px solid var(--brd2);margin-top:2px}
+/* selos de tipo de arquivo — cores fixas do tipo (não do tema), legíveis nos 5 temas */
+.arq-badge{width:44px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:11px;font-weight:700;letter-spacing:.5px;color:#fff;flex-shrink:0;margin-top:6px}
+.b-pdf{background:#c0392b}
+.b-doc{background:#1e5aa8}
+.b-aud{background:#1e8e5a;font-size:15px}
+.P .arq-thumb,.P .arq-badge{border-radius:3px}
 .P .mat-sec{border-radius:4px;border-color:var(--brd)}
 .P .arq-row{border-radius:3px}
 
