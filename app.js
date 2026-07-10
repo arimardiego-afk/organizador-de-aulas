@@ -68,7 +68,7 @@ const THEME_META={
 const SEED={"disciplinas":[]}; // app entregue vazio — o usuario cria as proprias materias
 
 /* ===== Projetos (anos letivos) — cada projeto guarda um banco completo ===== */
-const APP_VERSION='2.3', APP_DATE='julho de 2026';
+const APP_VERSION='2.5', APP_DATE='julho de 2026';
 const PROJ_KEY='prometeu.projects.v1';
 let projReg=null;
 function loadProjects(){
@@ -140,6 +140,10 @@ function parseDur(str){if(!str)return 0;const p=str.trim().split(':').map(Number
 function capDurSeg(cap){return cap.videos.reduce((s,v)=>s+(v.durSeg||0),0);}
 function aulaDurSeg(a){return a.caps.reduce((s,c)=>s+capDurSeg(c),0);}
 function discDurSeg(d){return d.aulas.reduce((s,a)=>s+aulaDurSeg(a),0);}
+/* horas já ministradas (capítulos com apresentado=true) — o resto é "não ministrado" */
+function capMinSeg(c){return c.apresentado?capDurSeg(c):0;}
+function aulaMinSeg(a){return a.caps.reduce((s,c)=>s+capMinSeg(c),0);}
+function discMinSeg(d){return d.aulas.reduce((s,a)=>s+aulaMinSeg(a),0);}
 function getDisc(id){return db.disciplinas.find(d=>d.id===id);}
 function getAula(d,id){return d.aulas.find(a=>a.id===id);}
 function getCap(a,id){return a.caps.find(c=>c.id===id);}
@@ -254,7 +258,12 @@ function renderSeries(){ // TELA 2: séries/anos da matéria; aulas recolhidas n
           <div class="disc-info">
             <div class="dn">${d.turma||'Série/Ano não definido'}</div>
             <div class="dc">${d.capitulo||'Sem capítulo'}</div>
-            <div class="ds">${d.aulas.length} aulas · ${fmtS(discDurSeg(d))}${discPend(d)>0?` · <span class="ta-pend">● ${discPend(d)} a ministrar</span>`:''}</div>
+            <div class="ds">${d.aulas.length} aulas${discPend(d)>0?` · <span class="ta-pend">● ${discPend(d)} a ministrar</span>`:''}</div>
+            ${(()=>{const tot=discDurSeg(d),min=discMinSeg(d),nao=tot-min;return `<div class="hrs-row">
+              <span class="hrs-item"><i class="ti ti-clock" aria-hidden="true"></i><b>${fmtS(tot)}</b> <span class="hrs-l">${tr('Horas totais')}</span></span>
+              <span class="hrs-item ok"><i class="ti ti-check" aria-hidden="true"></i><b>${fmtS(min)}</b> <span class="hrs-l">${tr('Ministradas')}</span></span>
+              <span class="hrs-item pend"><i class="ti ti-alert-triangle" aria-hidden="true"></i><b>${fmtS(nao)}</b> <span class="hrs-l">${tr('Não ministradas')}</span></span>
+            </div>`;})()}
             ${scanBar(discDurSeg(d),maxDur)}
           </div>
         </div>
@@ -271,6 +280,7 @@ function renderSeries(){ // TELA 2: séries/anos da matéria; aulas recolhidas n
       <div class="tree-wrap${isOpen?' open':''}" id="tw-${d.id}"><div class="tree-inner"><div class="tree-aulas">${aulasHtml}</div></div></div>
     </div>`;
   }).join('');
+  paintIcons();
 }
 function openAddSerie(){
   if(!exigirAtivacao())return;
@@ -302,7 +312,7 @@ function renderAulas(){
   const maxDur=Math.max(1,...disc.aulas.map(aulaDurSeg));
   el.innerHTML=disc.aulas.map(a=>`
     <div class="card"><div class="aula-row">
-      <div class="aula-nc"><div class="num-c">A${String(a.numero).padStart(2,'0')}</div></div>
+      <div class="aula-nc" onclick="openAula(${a.id})" aria-label="Abrir aula ${String(a.numero).padStart(2,'0')}"><div class="num-c">A${String(a.numero).padStart(2,'0')}</div></div>
       <div class="aula-body" onclick="openAula(${a.id})">
         <div class="at">${a.titulo}</div>
         <div class="as">${a.caps.length} cap. · ${a.caps.reduce((s,c)=>s+c.videos.length,0)} vídeos · ${fmtS(aulaDurSeg(a))}${aulaPend(a)>0?` · <span class="ta-pend">● ${aulaPend(a)} a ministrar</span>`:''}</div>
@@ -553,7 +563,6 @@ function renderMats(){
   box.innerHTML=formMats.map((m,i)=>`
     <div class="mat-row">
       <input class="finput mat-t" placeholder="Título (ex: Casa-Grande & Senzala)" value="${(m.titulo||'').replace(/"/g,'&quot;')}" oninput="formMats[${i}].titulo=this.value"/>
-      <input class="finput mat-l" placeholder="Autor, editora ou link" value="${(m.link||'').replace(/"/g,'&quot;')}" oninput="formMats[${i}].link=this.value"/>
       <button class="mat-x mat-s" onclick="buscarMat(${i})" aria-label="Buscar este material em PDF na internet" title="Buscar PDF grátis na internet"><i class="ti ti-search" aria-hidden="true"></i></button>
       <button class="mat-x" onclick="formMats.splice(${i},1);renderMats()" aria-label="Remover material"><i class="ti ti-x" aria-hidden="true"></i></button>
     </div>`).join('');
@@ -564,8 +573,7 @@ function buscarMat(i){ // busca o livro/material em PDF gratuito na internet
   const m=formMats[i]||{};
   const t=(m.titulo||'').trim();
   if(!t){alert(tr('Preencha o título do material primeiro.'));return;}
-  const extra=(m.link||'').trim();
-  const q=`"${t}" ${/^https?:\/\//i.test(extra)?'':extra} pdf`.replace(/\s+/g,' ').trim();
+  const q=`"${t}" pdf`;
   window.open('https://www.google.com/search?q='+encodeURIComponent(q),'_blank');
 }
 function addMat(){if(!matsOpen)toggleMats();formMats.push({titulo:'',link:''});renderMats();
@@ -645,7 +653,6 @@ function renderArqs(){
       ${arqBadge(a)}
       <div class="arq-campos">
         <input class="finput" placeholder="Título" value="${(a.titulo||'').replace(/"/g,'&quot;')}" oninput="formArqs[${i}].titulo=this.value"/>
-        <input class="finput" placeholder="Autor" value="${(a.autor||'').replace(/"/g,'&quot;')}" oninput="formArqs[${i}].autor=this.value"/>
         <div class="arq-meta">${escH(a.nomeArq)} · ${fmtKB(a.tamanho)}</div>
       </div>
       <div class="arq-btns">
@@ -898,7 +905,7 @@ function fetchYTDur(id){
     let done=false,p=null;
     const fim=seg=>{if(done)return;done=true;try{p&&p.destroy();}catch(e){}host.remove();seg>0?res(seg):rej(new Error('sem duração'));};
     try{
-      p=new YT.Player(alvo,{videoId:id,playerVars:{mute:1},events:{
+      p=new YT.Player(alvo,{videoId:id,playerVars:{mute:1,playsinline:1},events:{
         onReady:e=>fim(Math.round(e.target.getDuration()||0)),
         onError:()=>fim(0)
       }});
@@ -1204,6 +1211,7 @@ const TUT=[
 <li><b>Nova matéria:</b> botão grande no rodapé da tela inicial.</li>
 <li><b>Nova série:</b> abra a matéria e toque em <b>Nova série/ano</b>.</li>
 <li>Na série, o botão com a <b>setinha (nº de aulas)</b> abre a árvore resumida das aulas.</li>
+<li><b>Horas de cada série:</b> o cartão mostra três indicadores — <b>Horas totais</b> (soma da duração de todos os vídeos), <b>Ministradas</b> (capítulos já marcados como dados) e <b>Não ministradas</b> (o que ainda falta). Eles se atualizam sozinhos conforme você marca os capítulos.</li>
 <li>O ícone de <b>relatório</b> na série gera um documento Word/PDF com toda a estrutura.</li>
 <li>Os ícones de <b>lápis</b> e <b>lixeira</b> editam e removem cada item.</li>
 </ul>`},
@@ -1229,9 +1237,9 @@ const TUT=[
 <p>No formulário do vídeo, a seção <b>“Material didático e documentos”</b> fica recolhida — toque nela para expandir.</p>
 %FIG3%
 <ul>
-<li><b>Materiais citados:</b> lista simples de título + autor/editora/link (livros citados no vídeo). A <b>lupa</b> ao lado de cada material procura na internet uma versão <b>gratuita em PDF</b> do livro.</li>
+<li><b>Materiais citados:</b> lista simples com o <b>título</b> do livro citado no vídeo. A <b>lupa</b> ao lado de cada material procura na internet uma versão <b>gratuita em PDF</b> do livro.</li>
 <li><b>Documentos anexados:</b> toque em <b>Importar PDF, imagem, Word ou áudio</b> para guardar até <b>10 arquivos por vídeo</b> (até <b>100 MB</b> cada — cabe um livro inteiro) dentro do próprio app.</li>
-<li>Cada documento tem <b>Título</b> e <b>Autor</b> editáveis, além de <b>miniatura</b> (fotos) ou <b>selo colorido</b> (PDF, DOC, áudio) para reconhecer o tipo de longe.</li>
+<li>Cada documento tem um <b>Título</b> editável, além de <b>miniatura</b> (fotos) ou <b>selo colorido</b> (PDF, DOC, áudio) para reconhecer o tipo de longe.</li>
 <li>O <b>olhinho</b> abre PDFs e imagens na hora; arquivos Word são baixados para abrir no editor do aparelho. Se um PDF não abrir, teste outro documento — alguns arquivos já vêm com defeito de origem.</li>
 <li>O botão de <b>compartilhar</b> envia o documento por <b>WhatsApp</b>, e-mail ou qualquer outro app do aparelho.</li>
 <li>Os anexos entram no backup do projeto e saem nos relatórios.</li>
@@ -1257,17 +1265,21 @@ const TUT=[
 <li>Para PDF, o navegador abre a tela de impressão: escolha <b>“Salvar como PDF”</b>.</li>
 </ul>`},
 {ic:'ti-shield',t:'Backup e segurança dos dados',c:`
-<p>Os dados moram <b>no navegador deste aparelho</b>. Se o app for desinstalado ou os dados do navegador forem limpos, eles se vão — por isso exporte backups:</p>
+<p><b>O salvamento é automático.</b> Tudo o que você digita é guardado sozinho, a cada alteração, <b>no navegador deste aparelho</b> — não existe botão “salvar”, e nada é enviado para a internet. Se o app for desinstalado ou os dados do navegador forem limpos, porém, eles se vão. Por isso, para <b>trocar de aparelho</b> ou ter uma cópia de segurança, exporte um backup:</p>
 <ul>
-<li><b>Exportar:</b> ☰ → Arquivo → <b>Exportar backup (.json)</b> — gera um arquivo com o projeto inteiro, anexos incluídos. Guarde no Drive, e-mail ou pen-drive.</li>
-<li><b>Importar:</b> ☰ → Arquivo → <b>Importar backup (.json)</b> — recria o projeto em qualquer aparelho.</li>
+<li><b>Exportar:</b> ☰ → Arquivo → <b>Exportar backup (.json)</b> — gera um arquivo com o projeto inteiro, anexos incluídos.</li>
+<li><b>Nome do arquivo:</b> <code>prometeu-&lt;ano&gt;.json</code> (por exemplo, <b>prometeu-2026.json</b>; se o projeto tiver instituição, ela entra no nome). É esse arquivo que você leva para outro aparelho.</li>
+<li><b>Onde ele fica:</b> na <b>pasta de Downloads</b> do aparelho — no <b>Windows</b>, “Downloads” (ou “Transferências”); no <b>Android</b>, “Download”; no <b>iPhone/iPad</b>, app <b>Arquivos</b> → “Transferências/Downloads”. Copie-o para o Google Drive, e-mail ou pen-drive para não perder.</li>
+<li><b>Importar:</b> ☰ → Arquivo → <b>Importar backup (.json)</b> — no aparelho novo, escolha esse arquivo e o projeto inteiro é recriado.</li>
 <li>Sugestão: exporte ao fim de cada bimestre e antes de atualizar o app.</li>
 </ul>`},
 {ic:'ti-device-tablet',t:'No tablet Samsung (Galaxy Tab S)',c:`
 <p>O app foi ajustado para tablets — tela cheia, <b>tela dividida</b> e <b>exibição pop-up</b> do One UI:</p>
 %FIG4%
 <ul>
-<li><b>Instalar:</b> abra o site no Chrome → menu ⋮ → <b>“Instalar aplicativo”</b> (ou “Adicionar à tela inicial”). O app passa a abrir em janela própria, sem barra do navegador.</li>
+<li><b>Instalar no celular/tablet Android:</b> abra o site no Chrome → menu ⋮ → <b>“Instalar aplicativo”</b> (ou “Adicionar à tela inicial”). O app passa a abrir em janela própria, sem barra do navegador.</li>
+<li><b>Instalar no iPhone/iPad:</b> abra o site no <b>Safari</b> → botão <b>Compartilhar</b> (quadrado com seta) → <b>“Adicionar à Tela de Início”</b>.</li>
+<li><b>Instalar no computador (Windows):</b> abra o site no <b>Edge ou Chrome</b> e clique no <b>ícone de instalação</b> que aparece na barra de endereço — o app vira um programa com ícone no menu Iniciar.</li>
 <li><b>Tela dividida:</b> toque em <b>Recentes</b> (botão ▯|▯ ou gesto), toque no <b>ícone do app</b> no topo do cartão → <b>“Abrir em visualização em tela dividida”</b> → escolha o segundo app (ex.: YouTube). A divisória central ajusta o tamanho.</li>
 <li><b>Exibição pop-up:</b> em Recentes, toque no ícone do app → <b>“Abrir em exibição pop-up”</b> — o app vira uma janelinha flutuante sobre outro app.</li>
 <li>O layout se reorganiza sozinho em qualquer tamanho de janela. Nas Observações, a conversão de escrita à mão da caneta fica desativada (use o teclado) para evitar erros.</li>
@@ -1365,12 +1377,16 @@ function openLegal(k){
 let _bipEvt=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();_bipEvt=e;});
 function isStandalone(){try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;}catch(e){return false;}}
-const INSTALL_PT='<p>No <b>Chrome</b> (Android): toque no menu <b>⋮</b> e escolha <b>“Instalar aplicativo”</b> (ou “Adicionar à tela inicial”).</p><p>Se a opção não aparecer, o navegador pode não suportar a instalação (ex.: Mi Browser) — abra este site no Chrome e tente de novo.</p><p>No computador: use o ícone de instalação na barra de endereço do Chrome ou Edge.</p>';
+const INSTALL_PT='<p><b>No computador (Windows) — Edge ou Chrome:</b></p><ol><li>Abra este site no <b>Microsoft Edge</b> ou <b>Google Chrome</b>.</li><li>Confira que o endereço começa com <b>https://</b> e é o site oficial do app.</li><li>Clique no <b>ícone de instalar</b> (um monitor com uma seta ⤓) no fim da barra de endereço — ou menu <b>⋮</b> → <b>“Instalar Organizador de Aulas”</b>.</li><li>Confirme em <b>“Instalar”</b>. O app ganha um ícone no <b>menu Iniciar</b> e passa a abrir em janela própria.</li></ol><p><b>No Android (celular/tablet):</b> abra no <b>Chrome</b> → menu <b>⋮</b> → <b>“Instalar aplicativo”</b> (ou “Adicionar à tela inicial”). Se a opção não aparecer, o navegador pode não suportar a instalação (ex.: Mi Browser) — use o Chrome.</p><p class="fhint">Segurança: instale sempre a partir do site oficial e mantenha o navegador atualizado. O app funciona offline e guarda tudo só neste aparelho.</p>';
+const INSTALL_IOS_PT='<p><b>No iPhone ou iPad — pelo Safari:</b></p><ol><li>Abra este site no <b>Safari</b> (precisa ser o Safari — outros navegadores no iPhone não instalam apps).</li><li>Confira que o endereço começa com <b>https://</b> e é o site oficial do app.</li><li>Toque no botão <b>Compartilhar</b> (o quadrado com uma seta para cima, na barra de baixo).</li><li>Role a lista e toque em <b>“Adicionar à Tela de Início”</b> → <b>“Adicionar”</b>.</li></ol><p>O app ganha um ícone próprio e passa a abrir em tela cheia, como um aplicativo normal.</p><p class="fhint">Segurança: instale sempre pelo Safari a partir do site oficial. O app funciona offline e guarda tudo só neste aparelho.</p>';
+function isIOS(){return /iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);}
 function instalarApp(){
   closeMenu();
   if(isStandalone()){openInfo(tr('Instalar aplicativo'),'<p>'+tr('O app já está instalado neste aparelho.')+'</p>');return;}
   if(_bipEvt){const e=_bipEvt;_bipEvt=null;e.prompt();return;}
-  let html=tr('INSTALL_HELP');if(html==='INSTALL_HELP')html=INSTALL_PT;
+  let html;
+  if(isIOS()){html=tr('INSTALL_HELP_IOS');if(html==='INSTALL_HELP_IOS')html=INSTALL_IOS_PT;}
+  else{html=tr('INSTALL_HELP');if(html==='INSTALL_HELP')html=INSTALL_PT;}
   openInfo(tr('Instalar aplicativo'),html);
 }
 
@@ -1544,13 +1560,9 @@ function demoStop(){
    Ver/editar/exportar NUNCA é bloqueado (o professor nunca perde acesso aos dados).
    A chave é verificada OFFLINE por assinatura ECDSA P-256 (Web Crypto): a chave
    privada fica só com o autor (tools/assinador-licenca.html); aqui só a pública. */
-const PIX_CFG={ // PREENCHA antes de publicar a versão direta:
-  chave:'organizadordeaulas.prometeu@gmail.com', // chave Pix (e-mail) registrada no banco do autor
-  nome:'ARIMAR DIEGO F DA SILVA',   // máx. 25 caracteres
-  cidade:'MANAUS',                  // máx. 15 caracteres
-  valor:'25.00',                    // valor em R$ (ex.: ~US$5). Vazio = comprador digita
+const PIX_CFG={ // pagamento automático (Mercado Pago → worker → e-mail com o código)
   preco:'US$ 5 (~R$ 25)',
-  email:'organizadordeaulas.prometeu@gmail.com',    // para onde o comprador envia o comprovante
+  email:'organizadordeaulas.prometeu@gmail.com',    // suporte: se o código não chegar
   link:'https://mpago.la/2KJhprv'  // link de pagamento do Mercado Pago (etapa P3)
 };
 const LIC_PUBKEY={kty:'EC',crv:'P-256',x:'or3swlJ1Zsy8FIxg3oMI8GTeuhjsce1MREgOJCuu1Js',y:'TNSijRdV4gopbyxI0le4IYbGL7GguL5cOQgjM9GDEDU'};
@@ -1611,23 +1623,6 @@ async function ativarComCodigo(){
     showToast(trf('<b>Ativado!</b> Obrigado. Licença registrada para {e}.',{e:escH(r.email)}),6000);
   }else if(msg){msg.textContent=tr('Código inválido. Confira se copiou o código completo do e-mail.');msg.className='at-msg erro';}
 }
-/* Pix copia-e-cola (BR Code EMV + CRC16-CCITT) */
-function _emv(id,v){return id+String(v.length).padStart(2,'0')+v;}
-function _crc16(str){let c=0xFFFF;for(let i=0;i<str.length;i++){c^=str.charCodeAt(i)<<8;for(let j=0;j<8;j++){c=(c&0x8000)?((c<<1)^0x1021):(c<<1);c&=0xFFFF;}}return c.toString(16).toUpperCase().padStart(4,'0');}
-function pixBRCode(){
-  const c=PIX_CFG;
-  const mai=_emv('00','br.gov.bcb.pix')+_emv('01',c.chave||'');
-  let p=_emv('00','01')+_emv('26',mai)+_emv('52','0000')+_emv('53','986');
-  if(c.valor)p+=_emv('54',c.valor);
-  p+=_emv('58','BR')+_emv('59',(c.nome||'').slice(0,25))+_emv('60',(c.cidade||'').slice(0,15))+_emv('62',_emv('05','***'));
-  return p+'6304'+_crc16(p+'6304');
-}
-function copiar(txt,btn){
-  const done=()=>{if(btn){const o=btn.textContent;btn.textContent=tr('Copiado!');setTimeout(()=>btn.textContent=o,1500);}};
-  try{navigator.clipboard.writeText(txt).then(done,()=>done());}
-  catch(e){try{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();done();}catch(_){}}
-}
-const escJS=s=>String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
 function openAtivar(){closeMenu();renderAtivar();showScreen('s-ativar');}
 function refreshLicUI(){const s=document.getElementById('s-ativar');if(s&&s.classList.contains('active'))renderAtivar();}
 function renderAtivar(){
@@ -1642,21 +1637,12 @@ function renderAtivar(){
       <h3>${tr('Como ativar')} · ${escH(PIX_CFG.preco)}</h3>
       ${PIX_CFG.link?`
       <a class="btn-pri at-pay" href="${escH(PIX_CFG.link)}" target="_blank" rel="noopener"><i class="ti ti-key" aria-hidden="true"></i> ${tr('Pagar agora (Pix ou cartão)')}</a>
-      <div class="fhint" style="margin:8px 0 4px">${tr('Pagamento seguro pelo Mercado Pago. O código de ativação chega em poucos minutos no e-mail usado no pagamento — cole-o no campo abaixo.')}</div>
-      <div class="at-alt">${tr('Prefere Pix manual? Siga os passos abaixo (o código é enviado por uma pessoa, pode demorar mais).')}</div>`:''}
-      <ol class="at-steps">
-        <li>${tr('Pague por Pix usando a chave ou o código abaixo.')}</li>
-        <li>${trf('Envie o comprovante e o seu e-mail para {mail}.',{mail:'<b>'+escH(PIX_CFG.email)+'</b>'})}</li>
-        <li>${tr('Você receberá um código de ativação por e-mail — cole-o abaixo.')}</li>
-      </ol>
-      <label class="flbl">${tr('Chave Pix')}</label>
-      <div class="at-copy"><code>${escH(PIX_CFG.chave)}</code><button class="btn-sec" onclick="copiar('${escJS(PIX_CFG.chave)}',this)">${tr('Copiar')}</button></div>
-      <label class="flbl">${tr('Pix copia e cola')}</label>
-      <div class="at-copy"><code class="small">${escH(pixBRCode())}</code><button class="btn-sec" onclick="copiar('${escJS(pixBRCode())}',this)">${tr('Copiar')}</button></div>
+      <div class="fhint" style="margin:8px 0 4px">${tr('Pagamento seguro pelo Mercado Pago. O código de ativação chega em poucos minutos no e-mail usado no pagamento — cole-o no campo abaixo.')}</div>`:''}
       <label class="flbl" style="margin-top:16px">${tr('Código de ativação (recebido por e-mail)')}</label>
       <textarea class="finput" id="at-code" rows="3" placeholder="${tr('Cole aqui o código de ativação')}"></textarea>
       <div class="at-msg" id="at-msg"></div>
       <button class="btn-pri" style="margin-top:10px" onclick="ativarComCodigo()">${tr('Ativar')}</button>
+      <div class="at-alt" style="margin-top:12px">${trf('Problemas ou não recebeu o código? Escreva para {mail}.',{mail:'<b>'+escH(PIX_CFG.email)+'</b>'})}</div>
     </div>`);
   paintIcons();
 }
@@ -1673,6 +1659,29 @@ function aplicarFonte(){
 }
 function mudarFonte(d){fsIdx=Math.max(0,Math.min(FS_NIVEIS.length-1,fsIdx+d));aplicarFonte();}
 
+/* ===== Aviso remoto (porta de correção pós-publicação) =====
+   Busca um aviso.json opcional publicado junto do site:
+     {"id":1,"msg":"texto do aviso","url":"https://... (opcional)"}
+   Cada id é mostrado uma única vez (prometeu.aviso.v1). 100% degradável:
+   sem internet, em file:// ou sem o arquivo, nada acontece. */
+const AVISO_KEY='prometeu.aviso.v1';
+function checarAviso(){
+  try{
+    if(location.protocol==='file:')return;
+    const ctl=('AbortController' in window)?new AbortController():null;
+    if(ctl)setTimeout(()=>ctl.abort(),6000);
+    fetch('aviso.json',{cache:'no-store',signal:ctl?ctl.signal:undefined})
+      .then(r=>r.ok?r.json():null)
+      .then(a=>{
+        if(!a||!a.id||!(a.msg||'').trim())return;
+        let visto=null;try{visto=localStorage.getItem(AVISO_KEY);}catch(e){}
+        if(String(visto)===String(a.id))return;
+        try{localStorage.setItem(AVISO_KEY,String(a.id));}catch(e){}
+        showToast('<b>'+tr('Aviso')+':</b> '+escH(a.msg)+(a.url?' <a href="'+escH(a.url)+'" target="_blank" rel="noopener">'+tr('Saiba mais')+'</a>':''),12000);
+      }).catch(()=>{});
+  }catch(e){}
+}
+
 /* ===== Inicialização ===== */
 loadProjects();
 loadDB();
@@ -1684,7 +1693,7 @@ const _dv=document.getElementById('dw-ver');if(_dv)_dv.textContent='Prometeu · 
 if(isStandalone()){const _bi=document.getElementById('dw-install');if(_bi)_bi.style.display='none';} // já instalado
 paintIcons();
 if(window.i18nBoot)i18nBoot(); // traduz a interface estática e o título
-installTs();checkConsent();
+installTs();checkConsent();checarAviso();
 if(CHANNEL==='play'){const _bb=document.querySelector('.dw-buy');if(_bb)_bb.style.display='none';} // Play: comprado na loja
 else carregarLicenca(); // distribuição direta: verifica a licença guardada (offline, async)
 setTimeout(()=>sweepOrphans().catch(()=>{}),1600); // faxina de anexos órfãos, sem travar a abertura

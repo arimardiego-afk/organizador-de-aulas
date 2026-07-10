@@ -140,7 +140,8 @@ const I18N={
 'Críticas e sugestões — Organizador de Aulas':'Feedback and suggestions — Lesson Organizer',
 'Instalar aplicativo':'Install app',
 'O app já está instalado neste aparelho.':'The app is already installed on this device.',
-'INSTALL_HELP':'<p>In <b>Chrome</b> (Android): tap the <b>⋮</b> menu and choose <b>“Install app”</b> (or “Add to Home screen”).</p><p>If the option does not appear, the browser may not support installation (e.g. Mi Browser) — open this site in Chrome and try again.</p><p>On a computer: use the install icon in the Chrome or Edge address bar.</p>',
+'INSTALL_HELP':'<p><b>On a computer (Windows) — Edge or Chrome:</b></p><ol><li>Open this site in <b>Microsoft Edge</b> or <b>Google Chrome</b>.</li><li>Check that the address starts with <b>https://</b> and is the app\'s official site.</li><li>Click the <b>install icon</b> (a monitor with an arrow ⤓) at the end of the address bar — or the <b>⋮</b> menu → <b>“Install Organizador de Aulas”</b>.</li><li>Confirm <b>“Install”</b>. The app gets an icon in the <b>Start menu</b> and opens in its own window.</li></ol><p><b>On Android (phone/tablet):</b> open it in <b>Chrome</b> → <b>⋮</b> menu → <b>“Install app”</b> (or “Add to Home screen”). If the option does not appear, the browser may not support it (e.g. Mi Browser) — use Chrome.</p><p class="fhint">Safety: always install from the official site and keep your browser updated. The app works offline and keeps everything on this device only.</p>',
+'INSTALL_HELP_IOS':'<p><b>On iPhone or iPad — using Safari:</b></p><ol><li>Open this site in <b>Safari</b> (it must be Safari — other browsers on iPhone can\'t install apps).</li><li>Check that the address starts with <b>https://</b> and is the app\'s official site.</li><li>Tap the <b>Share</b> button (the square with an up arrow, in the bottom bar).</li><li>Scroll and tap <b>“Add to Home Screen”</b> → <b>“Add”</b>.</li></ol><p>The app gets its own icon and opens full screen, like a regular app.</p><p class="fhint">Safety: always install through Safari from the official site. The app works offline and keeps everything on this device only.</p>',
 'Projeto em uso':'Current project','Gerenciar projetos':'Manage projects','Criar novo projeto':'Create new project',
 'Exportar backup (.json)':'Export backup (.json)','Importar backup (.json)':'Import backup (.json)',
 'Nova matéria':'New subject','Nova série/ano':'New grade/year','Nova aula':'New lesson','Novo capítulo':'New chapter','Novo vídeo':'New video',
@@ -195,7 +196,9 @@ const I18N={
 'Você tinha um vídeo não salvo ("{n}"). Restaurar o rascunho?':'You had an unsaved video ("{n}"). Restore the draft?',
 'Pagar agora (Pix ou cartão)':'Pay now (Pix or card)',
 'Pagamento seguro pelo Mercado Pago. O código de ativação chega em poucos minutos no e-mail usado no pagamento — cole-o no campo abaixo.':'Secure payment via Mercado Pago. The activation code arrives within minutes at the e-mail used for payment — paste it in the field below.',
-'Prefere Pix manual? Siga os passos abaixo (o código é enviado por uma pessoa, pode demorar mais).':'Prefer manual Pix? Follow the steps below (the code is sent by a person and may take longer).',
+'Problemas ou não recebeu o código? Escreva para {mail}.':'Problems or didn\'t get the code? Write to {mail}.',
+'Aviso':'Notice','Saiba mais':'Learn more',
+'Horas totais':'Total hours','Ministradas':'Taught','Não ministradas':'Not taught',
 'sem nome':'unnamed','Tamanho do texto':'Text size',
 'Diminuir letras e botões':'Smaller text and buttons','Aumentar letras e botões':'Bigger text and buttons',
 'Ex: A Primeira Revolução Industrial':'E.g.: The First Industrial Revolution',
@@ -281,10 +284,6 @@ const I18N={
 'Período gratuito encerrado':'Free period ended',
 'Ative para criar novos conteúdos. Seus dados e as exportações continuam acessíveis.':'Activate to create new content. Your data and exports remain accessible.',
 'Como ativar':'How to activate',
-'Pague por Pix usando a chave ou o código abaixo.':'Pay by Pix using the key or the code below.',
-'Envie o comprovante e o seu e-mail para {mail}.':'Send the receipt and your e-mail to {mail}.',
-'Você receberá um código de ativação por e-mail — cole-o abaixo.':'You will receive an activation code by e-mail — paste it below.',
-'Chave Pix':'Pix key','Pix copia e cola':'Pix copy-and-paste','Copiar':'Copy','Copiado!':'Copied!',
 'Código de ativação (recebido por e-mail)':'Activation code (received by e-mail)',
 'Cole aqui o código de ativação':'Paste the activation code here',
 'Código inválido. Confira se copiou o código completo do e-mail.':'Invalid code. Check that you copied the complete code from the e-mail.',
@@ -362,7 +361,8 @@ const I18N={
 'Críticas e sugestões — Organizador de Aulas':'Críticas y sugerencias — Organizador de Clases',
 'Instalar aplicativo':'Instalar aplicación',
 'O app já está instalado neste aparelho.':'La app ya está instalada en este dispositivo.',
-'INSTALL_HELP':'<p>En <b>Chrome</b> (Android): toca el menú <b>⋮</b> y elige <b>«Instalar aplicación»</b> (o «Añadir a pantalla de inicio»).</p><p>Si la opción no aparece, puede que el navegador no admita la instalación (p. ej. Mi Browser) — abre este sitio en Chrome e inténtalo de nuevo.</p><p>En el ordenador: usa el icono de instalación en la barra de direcciones de Chrome o Edge.</p>',
+'INSTALL_HELP':'<p><b>En el ordenador (Windows) — Edge o Chrome:</b></p><ol><li>Abre este sitio en <b>Microsoft Edge</b> o <b>Google Chrome</b>.</li><li>Comprueba que la dirección empieza por <b>https://</b> y es el sitio oficial de la app.</li><li>Haz clic en el <b>icono de instalar</b> (un monitor con una flecha ⤓) al final de la barra de direcciones — o menú <b>⋮</b> → <b>«Instalar Organizador de Aulas»</b>.</li><li>Confirma <b>«Instalar»</b>. La app obtiene un icono en el <b>menú Inicio</b> y se abre en su propia ventana.</li></ol><p><b>En Android (móvil/tablet):</b> ábrelo en <b>Chrome</b> → menú <b>⋮</b> → <b>«Instalar aplicación»</b> (o «Añadir a pantalla de inicio»). Si la opción no aparece, el navegador puede no admitirlo (p. ej. Mi Browser) — usa Chrome.</p><p class="fhint">Seguridad: instala siempre desde el sitio oficial y mantén el navegador actualizado. La app funciona sin conexión y guarda todo solo en este dispositivo.</p>',
+'INSTALL_HELP_IOS':'<p><b>En iPhone o iPad — con Safari:</b></p><ol><li>Abre este sitio en <b>Safari</b> (debe ser Safari — otros navegadores en el iPhone no instalan apps).</li><li>Comprueba que la dirección empieza por <b>https://</b> y es el sitio oficial de la app.</li><li>Toca el botón <b>Compartir</b> (el cuadrado con una flecha hacia arriba, en la barra inferior).</li><li>Desplázate y toca <b>«Añadir a pantalla de inicio»</b> → <b>«Añadir»</b>.</li></ol><p>La app gana su propio icono y se abre a pantalla completa, como una aplicación normal.</p><p class="fhint">Seguridad: instala siempre a través de Safari desde el sitio oficial. La app funciona sin conexión y guarda todo solo en este dispositivo.</p>',
 'Projeto em uso':'Proyecto en uso','Gerenciar projetos':'Gestionar proyectos','Criar novo projeto':'Crear nuevo proyecto',
 'Exportar backup (.json)':'Exportar copia de seguridad (.json)','Importar backup (.json)':'Importar copia de seguridad (.json)',
 'Nova matéria':'Nueva asignatura','Nova série/ano':'Nuevo curso/año','Nova aula':'Nueva clase','Novo capítulo':'Nuevo capítulo','Novo vídeo':'Nuevo vídeo',
@@ -416,7 +416,9 @@ const I18N={
 'Você tinha um vídeo não salvo ("{n}"). Restaurar o rascunho?':'Tenías un vídeo sin guardar ("{n}"). ¿Restaurar el borrador?',
 'Pagar agora (Pix ou cartão)':'Pagar ahora (Pix o tarjeta)',
 'Pagamento seguro pelo Mercado Pago. O código de ativação chega em poucos minutos no e-mail usado no pagamento — cole-o no campo abaixo.':'Pago seguro por Mercado Pago. El código de activación llega en pocos minutos al correo usado en el pago: pégalo en el campo de abajo.',
-'Prefere Pix manual? Siga os passos abaixo (o código é enviado por uma pessoa, pode demorar mais).':'¿Prefieres Pix manual? Sigue los pasos de abajo (el código lo envía una persona y puede tardar más).',
+'Problemas ou não recebeu o código? Escreva para {mail}.':'¿Problemas o no recibiste el código? Escribe a {mail}.',
+'Aviso':'Aviso','Saiba mais':'Más información',
+'Horas totais':'Horas totales','Ministradas':'Impartidas','Não ministradas':'No impartidas',
 'sem nome':'sin nombre','Tamanho do texto':'Tamaño del texto',
 'Diminuir letras e botões':'Reducir letras y botones','Aumentar letras e botões':'Agrandar letras y botones',
 'Ex: A Primeira Revolução Industrial':'Ej.: La Primera Revolución Industrial',
@@ -501,10 +503,6 @@ const I18N={
 'Período gratuito encerrado':'Período gratuito finalizado',
 'Ative para criar novos conteúdos. Seus dados e as exportações continuam acessíveis.':'Actívalo para crear contenido nuevo. Tus datos y las exportaciones siguen accesibles.',
 'Como ativar':'Cómo activar',
-'Pague por Pix usando a chave ou o código abaixo.':'Paga por Pix usando la clave o el código de abajo.',
-'Envie o comprovante e o seu e-mail para {mail}.':'Envía el comprobante y tu correo a {mail}.',
-'Você receberá um código de ativação por e-mail — cole-o abaixo.':'Recibirás un código de activación por correo — pégalo abajo.',
-'Chave Pix':'Clave Pix','Pix copia e cola':'Pix copiar y pegar','Copiar':'Copiar','Copiado!':'¡Copiado!',
 'Código de ativação (recebido por e-mail)':'Código de activación (recibido por correo)',
 'Cole aqui o código de ativação':'Pega aquí el código de activación',
 'Código inválido. Confira se copiou o código completo do e-mail.':'Código no válido. Comprueba que copiaste el código completo del correo.',
@@ -542,7 +540,8 @@ const I18N={
 'Críticas e sugestões — Organizador de Aulas':'意见与建议 — 课程管理器',
 'Instalar aplicativo':'安装应用',
 'O app já está instalado neste aparelho.':'应用已安装在此设备上。',
-'INSTALL_HELP':'<p>在 <b>Chrome</b>（Android）中：点按 <b>⋮</b> 菜单，选择<b>“安装应用”</b>（或“添加到主屏幕”）。</p><p>如果没有该选项，可能是浏览器不支持安装（如 Mi Browser）— 请在 Chrome 中打开本站后重试。</p><p>在电脑上：使用 Chrome 或 Edge 地址栏中的安装图标。</p>',
+'INSTALL_HELP':'<p><b>在电脑（Windows）上 — Edge 或 Chrome：</b></p><ol><li>用 <b>Microsoft Edge</b> 或 <b>Google Chrome</b> 打开本站。</li><li>确认网址以 <b>https://</b> 开头，且是应用的官方网站。</li><li>点击地址栏末尾的<b>安装图标</b>（带箭头的显示器 ⤓）——或 <b>⋮</b> 菜单 → <b>“安装 Organizador de Aulas”</b>。</li><li>确认<b>“安装”</b>。应用会在<b>开始菜单</b>中获得图标，并在独立窗口中打开。</li></ol><p><b>在 Android（手机/平板）上：</b>用 <b>Chrome</b> 打开 → <b>⋮</b> 菜单 → <b>“安装应用”</b>（或“添加到主屏幕”）。如果没有该选项，浏览器可能不支持（如 Mi Browser）——请用 Chrome。</p><p class="fhint">安全提示：请始终从官方网站安装，并保持浏览器为最新版本。应用可离线使用，所有数据仅保存在本设备。</p>',
+'INSTALL_HELP_IOS':'<p><b>在 iPhone 或 iPad 上 — 使用 Safari：</b></p><ol><li>用 <b>Safari</b> 打开本站（必须是 Safari——iPhone 上其他浏览器无法安装应用）。</li><li>确认网址以 <b>https://</b> 开头，且是应用的官方网站。</li><li>点按<b>分享</b>按钮（底部栏中带向上箭头的方块）。</li><li>向下滚动并点按<b>“添加到主屏幕”</b> → <b>“添加”</b>。</li></ol><p>应用会获得自己的图标，并像普通应用一样全屏打开。</p><p class="fhint">安全提示：请始终通过 Safari 从官方网站安装。应用可离线使用，所有数据仅保存在本设备。</p>',
 'Projeto em uso':'当前项目','Gerenciar projetos':'管理项目','Criar novo projeto':'新建项目',
 'Exportar backup (.json)':'导出备份 (.json)','Importar backup (.json)':'导入备份 (.json)',
 'Nova matéria':'新科目','Nova série/ano':'新年级','Nova aula':'新课','Novo capítulo':'新章节','Novo vídeo':'新视频',
@@ -596,7 +595,9 @@ const I18N={
 'Você tinha um vídeo não salvo ("{n}"). Restaurar o rascunho?':'您有一个未保存的视频（"{n}"）。要恢复草稿吗？',
 'Pagar agora (Pix ou cartão)':'立即支付（Pix 或银行卡）',
 'Pagamento seguro pelo Mercado Pago. O código de ativação chega em poucos minutos no e-mail usado no pagamento — cole-o no campo abaixo.':'通过 Mercado Pago 安全支付。激活码将在几分钟内发送到付款所用的电子邮箱——请粘贴到下方输入框。',
-'Prefere Pix manual? Siga os passos abaixo (o código é enviado por uma pessoa, pode demorar mais).':'想使用人工 Pix？请按下面的步骤操作（激活码由人工发送，可能较慢）。',
+'Problemas ou não recebeu o código? Escreva para {mail}.':'遇到问题或没收到激活码？请写信至 {mail}。',
+'Aviso':'提示','Saiba mais':'了解更多',
+'Horas totais':'总时长','Ministradas':'已授课','Não ministradas':'未授课',
 'sem nome':'未命名','Tamanho do texto':'文字大小',
 'Diminuir letras e botões':'缩小文字和按钮','Aumentar letras e botões':'放大文字和按钮',
 'Ex: A Primeira Revolução Industrial':'例：第一次工业革命',
@@ -680,10 +681,6 @@ const I18N={
 'Período gratuito encerrado':'免费期已结束',
 'Ative para criar novos conteúdos. Seus dados e as exportações continuam acessíveis.':'激活后即可创建新内容。你的数据和导出功能仍可访问。',
 'Como ativar':'如何激活',
-'Pague por Pix usando a chave ou o código abaixo.':'使用下方的 Pix 密钥或代码付款。',
-'Envie o comprovante e o seu e-mail para {mail}.':'将付款凭证和你的电子邮箱发送至 {mail}。',
-'Você receberá um código de ativação por e-mail — cole-o abaixo.':'你将通过电子邮件收到激活码 —— 粘贴到下方。',
-'Chave Pix':'Pix 密钥','Pix copia e cola':'Pix 复制粘贴码','Copiar':'复制','Copiado!':'已复制！',
 'Código de ativação (recebido por e-mail)':'激活码（通过电子邮件收到）',
 'Cole aqui o código de ativação':'在此粘贴激活码',
 'Código inválido. Confira se copiou o código completo do e-mail.':'激活码无效。请确认已从邮件中复制完整的激活码。',
@@ -746,6 +743,7 @@ const TUT_ML={
 <li><b>New subject:</b> big button at the bottom of the home screen.</li>
 <li><b>New grade:</b> open the subject and tap <b>New grade/year</b>.</li>
 <li>In the grade card, the <b>arrow button (lesson count)</b> opens a compact tree of the lessons.</li>
+<li><b>Hours per grade:</b> the card shows three indicators — <b>Total hours</b> (sum of all video durations), <b>Taught</b> (chapters already marked as done) and <b>Not taught</b> (what's still left). They update automatically as you check off chapters.</li>
 <li>The <b>report</b> icon on the grade generates a Word/PDF document with the whole structure.</li>
 <li>The <b>pencil</b> and <b>trash</b> icons edit and delete each item.</li>
 </ul>`},
@@ -771,9 +769,9 @@ const TUT_ML={
 <p>In the video form, the <b>“Teaching materials & documents”</b> section starts collapsed — tap it to expand.</p>
 %FIG3%
 <ul>
-<li><b>Cited materials:</b> a simple list of title + author/publisher/link (books mentioned in the video). The <b>magnifier</b> next to each material searches the internet for a <b>free PDF</b> version of the book.</li>
+<li><b>Cited materials:</b> a simple list with the <b>title</b> of the book mentioned in the video. The <b>magnifier</b> next to each material searches the internet for a <b>free PDF</b> version of the book.</li>
 <li><b>Attached documents:</b> tap <b>Import PDF, image, Word or audio</b> to store up to <b>10 files per video</b> (up to <b>100 MB</b> each — enough for a whole book) inside the app itself.</li>
-<li>Each document has an editable <b>Title</b> and <b>Author</b>, plus a <b>thumbnail</b> (photos) or a <b>colored badge</b> (PDF, DOC, audio) so you can spot the type at a glance.</li>
+<li>Each document has an editable <b>Title</b>, plus a <b>thumbnail</b> (photos) or a <b>colored badge</b> (PDF, DOC, audio) so you can spot the type at a glance.</li>
 <li>The <b>eye</b> opens PDFs and images right away; Word files are downloaded to open in the device's editor. If a PDF won't open, try another document — some files are corrupted at the source.</li>
 <li>The <b>share</b> button sends the document via <b>WhatsApp</b>, e-mail or any other app on the device.</li>
 <li>Attachments are included in project backups and in reports.</li>
@@ -799,17 +797,21 @@ const TUT_ML={
 <li>For PDF, the browser opens the print dialog: choose <b>“Save as PDF”</b>.</li>
 </ul>`},
 {ic:'ti-shield',t:'Backup and data safety',c:`
-<p>Your data lives <b>in this device's browser</b>. If the app is uninstalled or the browser data is cleared, it is gone — so export backups:</p>
+<p><b>Saving is automatic.</b> Everything you type is stored on its own, on every change, <b>in this device's browser</b> — there is no “save” button, and nothing is sent to the internet. But if the app is uninstalled or the browser data is cleared, it is gone. So, to <b>switch devices</b> or keep a safety copy, export a backup:</p>
 <ul>
-<li><b>Export:</b> ☰ → File → <b>Export backup (.json)</b> — creates a file with the whole project, attachments included. Keep it on Drive, e-mail or a USB stick.</li>
-<li><b>Import:</b> ☰ → File → <b>Import backup (.json)</b> — recreates the project on any device.</li>
+<li><b>Export:</b> ☰ → File → <b>Export backup (.json)</b> — creates a file with the whole project, attachments included.</li>
+<li><b>File name:</b> <code>prometeu-&lt;year&gt;.json</code> (for example, <b>prometeu-2026.json</b>; if the project has an institution, it's added to the name). This is the file you take to another device.</li>
+<li><b>Where it goes:</b> to the device's <b>Downloads folder</b> — on <b>Windows</b>, “Downloads”; on <b>Android</b>, “Download”; on <b>iPhone/iPad</b>, the <b>Files</b> app → “Downloads”. Copy it to Google Drive, e-mail or a USB stick so you don't lose it.</li>
+<li><b>Import:</b> ☰ → File → <b>Import backup (.json)</b> — on the new device, pick that file and the whole project is recreated.</li>
 <li>Suggestion: export at the end of each term and before updating the app.</li>
 </ul>`},
 {ic:'ti-device-tablet',t:'On a Samsung tablet (Galaxy Tab S)',c:`
 <p>The app is tuned for tablets — full screen, One UI <b>split screen</b> and <b>pop-up view</b>:</p>
 %FIG4%
 <ul>
-<li><b>Install:</b> open the site in Chrome → ⋮ menu → <b>“Install app”</b> (or “Add to home screen”). The app then opens in its own window, without the browser bar.</li>
+<li><b>Install on an Android phone/tablet:</b> open the site in Chrome → ⋮ menu → <b>“Install app”</b> (or “Add to home screen”). The app then opens in its own window, without the browser bar.</li>
+<li><b>Install on iPhone/iPad:</b> open the site in <b>Safari</b> → <b>Share</b> button (square with arrow) → <b>“Add to Home Screen”</b>.</li>
+<li><b>Install on a computer (Windows):</b> open the site in <b>Edge or Chrome</b> and click the <b>install icon</b> in the address bar — the app becomes a program with an icon in the Start menu.</li>
 <li><b>Split screen:</b> tap <b>Recents</b>, tap the <b>app icon</b> at the top of the card → <b>“Open in split screen view”</b> → choose the second app (e.g. YouTube). The middle divider adjusts the size.</li>
 <li><b>Pop-up view:</b> in Recents, tap the app icon → <b>“Open in pop-up view”</b> — the app becomes a floating window over another app.</li>
 <li>The layout reorganizes itself at any window size. In the Notes field, stylus handwriting-to-text is disabled (use the keyboard) to avoid conversion errors.</li>
@@ -850,6 +852,7 @@ const TUT_ML={
 <li><b>Nueva asignatura:</b> botón grande al pie de la pantalla inicial.</li>
 <li><b>Nuevo curso:</b> abre la asignatura y toca <b>Nuevo curso/año</b>.</li>
 <li>En el curso, el botón con la <b>flecha (n.º de clases)</b> abre el árbol resumido de las clases.</li>
+<li><b>Horas de cada curso:</b> la tarjeta muestra tres indicadores — <b>Horas totales</b> (suma de la duración de todos los vídeos), <b>Impartidas</b> (capítulos ya marcados como dados) y <b>No impartidas</b> (lo que aún falta). Se actualizan solos a medida que marcas los capítulos.</li>
 <li>El icono de <b>informe</b> del curso genera un documento Word/PDF con toda la estructura.</li>
 <li>Los iconos de <b>lápiz</b> y <b>papelera</b> editan y eliminan cada elemento.</li>
 </ul>`},
@@ -875,9 +878,9 @@ const TUT_ML={
 <p>En el formulario del vídeo, la sección <b>«Material didáctico y documentos»</b> está plegada — tócala para expandirla.</p>
 %FIG3%
 <ul>
-<li><b>Materiales citados:</b> lista simple de título + autor/editorial/enlace (libros citados en el vídeo). La <b>lupa</b> junto a cada material busca en internet una versión <b>gratuita en PDF</b> del libro.</li>
+<li><b>Materiales citados:</b> lista simple con el <b>título</b> del libro citado en el vídeo. La <b>lupa</b> junto a cada material busca en internet una versión <b>gratuita en PDF</b> del libro.</li>
 <li><b>Documentos adjuntos:</b> toca <b>Importar PDF, imagen, Word o audio</b> para guardar hasta <b>10 archivos por vídeo</b> (hasta <b>100 MB</b> cada uno — cabe un libro entero) dentro de la propia app.</li>
-<li>Cada documento tiene <b>Título</b> y <b>Autor</b> editables, además de una <b>miniatura</b> (fotos) o un <b>sello de color</b> (PDF, DOC, audio) para reconocer el tipo de un vistazo.</li>
+<li>Cada documento tiene un <b>Título</b> editable, además de una <b>miniatura</b> (fotos) o un <b>sello de color</b> (PDF, DOC, audio) para reconocer el tipo de un vistazo.</li>
 <li>El <b>ojo</b> abre PDF e imágenes al momento; los archivos Word se descargan para abrirlos en el editor del dispositivo. Si un PDF no se abre, prueba con otro documento — algunos archivos vienen dañados de origen.</li>
 <li>El botón de <b>compartir</b> envía el documento por <b>WhatsApp</b>, correo o cualquier otra app del dispositivo.</li>
 <li>Los adjuntos entran en la copia de seguridad del proyecto y salen en los informes.</li>
@@ -903,17 +906,21 @@ const TUT_ML={
 <li>Para PDF, el navegador abre el diálogo de impresión: elige <b>«Guardar como PDF»</b>.</li>
 </ul>`},
 {ic:'ti-shield',t:'Copia de seguridad y protección de datos',c:`
-<p>Los datos viven <b>en el navegador de este dispositivo</b>. Si desinstalas la app o borras los datos del navegador, desaparecen — por eso exporta copias:</p>
+<p><b>El guardado es automático.</b> Todo lo que escribes se guarda solo, en cada cambio, <b>en el navegador de este dispositivo</b> — no hay botón de “guardar” y nada se envía a internet. Pero si desinstalas la app o borras los datos del navegador, desaparecen. Por eso, para <b>cambiar de dispositivo</b> o tener una copia de seguridad, exporta una copia:</p>
 <ul>
-<li><b>Exportar:</b> ☰ → Archivo → <b>Exportar copia (.json)</b> — genera un archivo con el proyecto entero, adjuntos incluidos. Guárdalo en Drive, correo o USB.</li>
-<li><b>Importar:</b> ☰ → Archivo → <b>Importar copia (.json)</b> — recrea el proyecto en cualquier dispositivo.</li>
+<li><b>Exportar:</b> ☰ → Archivo → <b>Exportar copia (.json)</b> — genera un archivo con el proyecto entero, adjuntos incluidos.</li>
+<li><b>Nombre del archivo:</b> <code>prometeu-&lt;año&gt;.json</code> (por ejemplo, <b>prometeu-2026.json</b>; si el proyecto tiene institución, se añade al nombre). Es el archivo que llevas a otro dispositivo.</li>
+<li><b>Dónde queda:</b> en la <b>carpeta de Descargas</b> del dispositivo — en <b>Windows</b>, “Descargas”; en <b>Android</b>, “Download”; en <b>iPhone/iPad</b>, la app <b>Archivos</b> → “Descargas”. Cópialo a Google Drive, correo o USB para no perderlo.</li>
+<li><b>Importar:</b> ☰ → Archivo → <b>Importar copia (.json)</b> — en el dispositivo nuevo, elige ese archivo y se recrea el proyecto entero.</li>
 <li>Sugerencia: exporta al final de cada trimestre y antes de actualizar la app.</li>
 </ul>`},
 {ic:'ti-device-tablet',t:'En una tableta Samsung (Galaxy Tab S)',c:`
 <p>La app está ajustada para tabletas — pantalla completa, <b>pantalla dividida</b> y <b>vista emergente</b> de One UI:</p>
 %FIG4%
 <ul>
-<li><b>Instalar:</b> abre el sitio en Chrome → menú ⋮ → <b>«Instalar aplicación»</b> (o «Añadir a pantalla de inicio»). La app pasa a abrirse en su propia ventana, sin barra del navegador.</li>
+<li><b>Instalar en un móvil/tablet Android:</b> abre el sitio en Chrome → menú ⋮ → <b>«Instalar aplicación»</b> (o «Añadir a pantalla de inicio»). La app pasa a abrirse en su propia ventana, sin barra del navegador.</li>
+<li><b>Instalar en iPhone/iPad:</b> abre el sitio en <b>Safari</b> → botón <b>Compartir</b> (cuadrado con flecha) → <b>«Añadir a pantalla de inicio»</b>.</li>
+<li><b>Instalar en el ordenador (Windows):</b> abre el sitio en <b>Edge o Chrome</b> y haz clic en el <b>icono de instalación</b> de la barra de direcciones — la app se convierte en un programa con icono en el menú Inicio.</li>
 <li><b>Pantalla dividida:</b> toca <b>Recientes</b>, toca el <b>icono de la app</b> en la parte superior de la tarjeta → <b>«Abrir en vista de pantalla dividida»</b> → elige la segunda app (p. ej. YouTube).</li>
 <li><b>Vista emergente:</b> en Recientes, toca el icono de la app → <b>«Abrir en vista emergente»</b> — la app se convierte en una ventana flotante sobre otra app.</li>
 <li>El diseño se reorganiza solo en cualquier tamaño de ventana. En las Notas, la escritura a mano del lápiz queda desactivada (usa el teclado) para evitar errores de conversión.</li>
@@ -954,6 +961,7 @@ const TUT_ML={
 <li><b>新科目：</b>主屏幕底部的大按钮。</li>
 <li><b>新年级：</b>打开科目后点按<b>新年级</b>。</li>
 <li>年级卡片上的<b>箭头按钮（课程数）</b>可展开课程树。</li>
+<li><b>每个年级的时长：</b>卡片显示三个指标——<b>总时长</b>（所有视频时长之和）、<b>已授课</b>（已标记为完成的章节）和<b>未授课</b>（尚未完成的部分）。勾选章节时它们会自动更新。</li>
 <li>年级上的<b>报告</b>图标可生成包含整个结构的 Word/PDF 文档。</li>
 <li><b>铅笔</b>和<b>垃圾桶</b>图标用于编辑和删除。</li>
 </ul>`},
@@ -979,9 +987,9 @@ const TUT_ML={
 <p>在视频表单中，<b>“教学材料与文档”</b>部分默认收起 — 点按即可展开。</p>
 %FIG3%
 <ul>
-<li><b>引用材料：</b>标题 + 作者/出版社/链接的简单列表（视频中提到的书籍）。每条材料旁的<b>放大镜</b>可在网上搜索该书的<b>免费 PDF</b> 版本。</li>
+<li><b>引用材料：</b>仅含视频中提到书籍<b>标题</b>的简单列表。每条材料旁的<b>放大镜</b>可在网上搜索该书的<b>免费 PDF</b> 版本。</li>
 <li><b>附件文档：</b>点按<b>导入 PDF、图片、Word 或音频</b>，每个视频最多可在应用内保存 <b>10 个文件</b>（每个最大 <b>100 MB</b> — 足以放下一整本书）。</li>
-<li>每个文档都有可编辑的<b>标题</b>和<b>作者</b>，并带有<b>缩略图</b>（照片）或<b>彩色标识</b>（PDF、DOC、音频），一眼即可识别类型。</li>
+<li>每个文档都有可编辑的<b>标题</b>，并带有<b>缩略图</b>（照片）或<b>彩色标识</b>（PDF、DOC、音频），一眼即可识别类型。</li>
 <li><b>眼睛</b>图标可直接打开 PDF 和图片；Word 文件会下载后用设备上的编辑器打开。如果某个 PDF 打不开，请换一个文档试试 — 有些文件本身已损坏。</li>
 <li><b>分享</b>按钮可通过 <b>WhatsApp</b>、电子邮件或设备上的其他应用发送文档。</li>
 <li>附件会包含在项目备份和报告中。</li>
@@ -1007,17 +1015,21 @@ const TUT_ML={
 <li>导出 PDF 时浏览器会打开打印对话框：选择<b>“另存为 PDF”</b>。</li>
 </ul>`},
 {ic:'ti-shield',t:'备份与数据安全',c:`
-<p>数据保存在<b>此设备的浏览器</b>中。如果卸载应用或清除浏览器数据，数据将丢失 — 因此请导出备份：</p>
+<p><b>保存是自动的。</b>你输入的一切都会在每次更改时自动保存到<b>此设备的浏览器</b>中——没有“保存”按钮，也不会上传到网络。但如果卸载应用或清除浏览器数据，数据将丢失。因此，若要<b>更换设备</b>或保留安全副本，请导出备份：</p>
 <ul>
-<li><b>导出：</b>☰ → 文件 → <b>导出备份 (.json)</b> — 生成包含整个项目（含附件）的文件。保存到云盘、邮箱或 U 盘。</li>
-<li><b>导入：</b>☰ → 文件 → <b>导入备份 (.json)</b> — 在任何设备上重建项目。</li>
+<li><b>导出：</b>☰ → 文件 → <b>导出备份 (.json)</b> — 生成包含整个项目（含附件）的文件。</li>
+<li><b>文件名：</b><code>prometeu-&lt;年份&gt;.json</code>（例如 <b>prometeu-2026.json</b>；若项目含机构名，会加入文件名）。这就是你带到其他设备的文件。</li>
+<li><b>保存位置：</b>设备的<b>下载文件夹</b>——<b>Windows</b> 为“下载/Downloads”；<b>Android</b> 为“Download”；<b>iPhone/iPad</b> 为<b>文件</b>应用 →“下载”。请复制到 Google 云端硬盘、邮箱或 U 盘以防丢失。</li>
+<li><b>导入：</b>☰ → 文件 → <b>导入备份 (.json)</b> — 在新设备上选择该文件即可重建整个项目。</li>
 <li>建议：每学期末以及更新应用前都导出一次。</li>
 </ul>`},
 {ic:'ti-device-tablet',t:'在三星平板上（Galaxy Tab S）',c:`
 <p>应用已针对平板优化 — 全屏、One UI 的<b>分屏</b>和<b>弹窗视图</b>：</p>
 %FIG4%
 <ul>
-<li><b>安装：</b>在 Chrome 中打开网站 → ⋮ 菜单 → <b>“安装应用”</b>（或“添加到主屏幕”）。应用将在独立窗口中打开，没有浏览器栏。</li>
+<li><b>在 Android 手机/平板上安装：</b>在 Chrome 中打开网站 → ⋮ 菜单 → <b>“安装应用”</b>（或“添加到主屏幕”）。应用将在独立窗口中打开，没有浏览器栏。</li>
+<li><b>在 iPhone/iPad 上安装：</b>用 <b>Safari</b> 打开网站 → <b>分享</b>按钮（带箭头的方块）→ <b>“添加到主屏幕”</b>。</li>
+<li><b>在电脑（Windows）上安装：</b>用 <b>Edge 或 Chrome</b> 打开网站，点击地址栏中的<b>安装图标</b>——应用会成为带开始菜单图标的程序。</li>
 <li><b>分屏：</b>点按<b>最近任务</b>，点按卡片顶部的<b>应用图标</b> → <b>“在分屏视图中打开”</b> → 选择第二个应用（如 YouTube）。</li>
 <li><b>弹窗视图：</b>在最近任务中点按应用图标 → <b>“在弹窗视图中打开”</b> — 应用变为悬浮在其他应用上的小窗口。</li>
 <li>布局会在任何窗口尺寸下自动调整。在“备注”栏中已停用手写笔的手写转文字功能（请使用键盘），以避免转换错误。</li>
