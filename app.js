@@ -195,9 +195,9 @@ function renderDiscs(){ // TELA 1: apenas as matérias
     <div class="card"><div class="disc-row">
       <div class="disc-accent"></div>
       <div class="disc-body" onclick="openMat(${i})">
-        <div class="disc-av">${m.slice(0,3)}</div>
+        <div class="disc-av">${escH(m.slice(0,3))}</div>
         <div class="disc-info">
-          <div class="dn">${m}</div>
+          <div class="dn">${escH(m)}</div>
           <div class="dc">${ds.length} série${ds.length!==1?'s':''}/ano${ds.length!==1?'s':''}</div>
           <div class="ds">${nAulas} aulas · ${fmtS(matDur(m))}${(()=>{const pp=ds.reduce((s,d)=>s+discPend(d),0);return pp>0?` · <span class="ta-pend">● ${pp} a ministrar</span>`:'';})()}</div>
           ${scanBar(matDur(m),maxDur)}
@@ -245,8 +245,8 @@ function renderSeries(){ // TELA 2: séries/anos da matéria; aulas recolhidas n
   el.innerHTML=ds.map(d=>{
     const aulasHtml=d.aulas.length?d.aulas.map(a=>`
       <div class="tree-aula" onclick="curDiscId=${d.id};openAula(${a.id})">
-        <div class="ta-line"><b>Aula ${String(a.numero).padStart(2,'0')}</b><span>${a.titulo}</span>${aulaPend(a)>0?`<span class="ta-pend">● ${aulaPend(a)}</span>`:''}<span class="ta-dur">${fmtS(aulaDurSeg(a))}</span></div>
-        ${a.caps.map(c=>`<div class="tree-cap">${c.num||'Cap.'} — ${c.nome}</div>`).join('')}
+        <div class="ta-line"><b>Aula ${String(a.numero).padStart(2,'0')}</b><span>${escH(a.titulo)}</span>${aulaPend(a)>0?`<span class="ta-pend">● ${aulaPend(a)}</span>`:''}<span class="ta-dur">${fmtS(aulaDurSeg(a))}</span></div>
+        ${a.caps.map(c=>`<div class="tree-cap">${escH(c.num||'Cap.')} — ${escH(c.nome)}</div>`).join('')}
       </div>`).join(''):'<div class="tree-empty">Sem aulas ainda</div>';
     const isOpen=openSeries.has(d.id);
     return `
@@ -256,8 +256,8 @@ function renderSeries(){ // TELA 2: séries/anos da matéria; aulas recolhidas n
         <div class="disc-body" onclick="openDisc(${d.id})">
           <div class="disc-av">${(d.turma||'?').replace(/[^0-9A-Za-zÀ-ú]/g,'').slice(0,3)||'S/A'}</div>
           <div class="disc-info">
-            <div class="dn">${d.turma||'Série/Ano não definido'}</div>
-            <div class="dc">${d.capitulo||'Sem capítulo'}</div>
+            <div class="dn">${escH(d.turma||'Série/Ano não definido')}</div>
+            <div class="dc">${escH(d.capitulo||'Sem capítulo')}</div>
             <div class="ds">${d.aulas.length} aulas${discPend(d)>0?` · <span class="ta-pend">● ${discPend(d)} a ministrar</span>`:''}</div>
             ${(()=>{const tot=discDurSeg(d),min=discMinSeg(d),nao=tot-min;return `<div class="hrs-row">
               <span class="hrs-item"><i class="ti ti-clock" aria-hidden="true"></i><b>${fmtS(tot)}</b> <span class="hrs-l">${tr('Horas totais')}</span></span>
@@ -314,7 +314,7 @@ function renderAulas(){
     <div class="card"><div class="aula-row">
       <div class="aula-nc" onclick="openAula(${a.id})" aria-label="Abrir aula ${String(a.numero).padStart(2,'0')}"><div class="num-c">A${String(a.numero).padStart(2,'0')}</div></div>
       <div class="aula-body" onclick="openAula(${a.id})">
-        <div class="at">${a.titulo}</div>
+        <div class="at">${escH(a.titulo)}</div>
         <div class="as">${a.caps.length} cap. · ${a.caps.reduce((s,c)=>s+c.videos.length,0)} vídeos · ${fmtS(aulaDurSeg(a))}${aulaPend(a)>0?` · <span class="ta-pend">● ${aulaPend(a)} a ministrar</span>`:''}</div>
         ${scanBar(aulaDurSeg(a),maxDur,16)}
         <div class="ac">${(()=>{const cps=a.caps.map((c,i)=>c.videos.length?`CP${i+1}`:null).filter(Boolean);return cps.length?cps.join(' · '):'Sem conteúdo nos capítulos';})()}</div>
@@ -394,12 +394,12 @@ function renderCaps(){
       <div class="vid-row">
         <div class="vid-badge"><div class="vid-num">V${vi2+1}</div></div>
         <div class="vid-info">
-          <div class="vid-nome">${vid.nome||'Vídeo '+(vi2+1)}</div>
-          <div class="vid-dur"><i class="ti ti-clock" style="font-size:10px" aria-hidden="true"></i> ${vid.dur||'--:--'}<span class="vid-badges">${vid.resumo?'<i class="ti ti-file-text" aria-hidden="true" title="Tem resumo"></i>':''}${vid.materiais&&vid.materiais.length?`<i class="ti ti-book" aria-hidden="true"></i>${vid.materiais.length}`:''}${vid.arquivos&&vid.arquivos.length?`<i class="ti ti-paperclip" aria-hidden="true" title="Documentos anexados"></i>${vid.arquivos.length}`:''}</span></div>
+          <div class="vid-nome">${escH(vid.nome||'Vídeo '+(vi2+1))}</div>
+          <div class="vid-dur"><i class="ti ti-clock" style="font-size:10px" aria-hidden="true"></i> ${escH(vid.dur||'--:--')}<span class="vid-badges">${vid.resumo?'<i class="ti ti-file-text" aria-hidden="true" title="Tem resumo"></i>':''}${vid.materiais&&vid.materiais.length?`<i class="ti ti-book" aria-hidden="true"></i>${vid.materiais.length}`:''}${vid.arquivos&&vid.arquivos.length?`<i class="ti ti-paperclip" aria-hidden="true" title="Documentos anexados"></i>${vid.arquivos.length}`:''}</span></div>
         </div>
         <div class="vid-btns">
-          ${vid.link
-            ?`<button class="iBtn-sm play" onclick="window.open('${vid.link.replace(/'/g,"\\'")}','_blank')" aria-label="Abrir vídeo"><i class="ti ti-player-play" aria-hidden="true"></i></button>`
+          ${urlSegura(vid.link)
+            ?`<button class="iBtn-sm play" onclick="abrirVidLink(${cap.id},${vid.id})" aria-label="Abrir vídeo"><i class="ti ti-player-play" aria-hidden="true"></i></button>`
             :`<button class="iBtn-sm play" onclick="ytSearch(${cap.id},${vid.id})" aria-label="Buscar este vídeo no YouTube" title="Sem link — buscar no YouTube"><i class="ti ti-search" aria-hidden="true"></i></button>`}
           <button class="iBtn-sm edt" onclick="goToFormVid(${cap.id},${vid.id})" aria-label="Editar vídeo"><i class="ti ti-edit" aria-hidden="true"></i></button>
           <button class="iBtn-sm del" onclick="removeVid(${cap.id},${vid.id})" aria-label="Remover vídeo"><i class="ti ti-trash" aria-hidden="true"></i></button>
@@ -411,8 +411,8 @@ function renderCaps(){
       <div class="cap-header">
         <div class="cap-accent"></div>
         <div class="cap-hinfo">
-          <div class="cap-num">${cap.num||'Cap.'}</div>
-          <div class="cap-nome">${cap.nome}</div>
+          <div class="cap-num">${escH(cap.num||'Cap.')}</div>
+          <div class="cap-nome">${escH(cap.nome)}</div>
           <div class="cap-total">
             <i class="ti ti-files" style="font-size:11px" aria-hidden="true"></i>
             ${cap.videos.length} vídeo${cap.videos.length!==1?'s':''}
@@ -484,6 +484,12 @@ function toggleApresentado(capId){
   cap.apresentado=!cap.apresentado; // marcado(checked)=a ministrar; vazio=ministrado
   renderCaps();
 }
+function abrirVidLink(capId,vidId){ // abre o link SEM passar a URL por atributo HTML (evita injeção — E2)
+  const disc=getDisc(curDiscId);const aula=getAula(disc,curAulaId);const cap=getCap(aula,capId);
+  const v=cap&&cap.videos.find(x=>x.id===vidId);
+  const u=v?urlSegura(v.link):'';
+  if(u)window.open(u,'_blank','noopener');
+}
 function ytSearch(capId,vidId){
   const disc=getDisc(curDiscId);const aula=getAula(disc,curAulaId);const cap=getCap(aula,capId);
   const v=cap&&cap.videos.find(x=>x.id===vidId);if(!v)return;
@@ -519,7 +525,7 @@ function goToFormVid(capId,vidId){
   if(ttr){ttr.classList.toggle('open',resumoOpen);ttr.setAttribute('aria-expanded',resumoOpen);}
   renderMats();renderArqs();updPg();
   document.getElementById('vf-hint').textContent=vid?.link?tr('Link cadastrado'):'';
-  document.getElementById('vf-dur-info').innerHTML=vid?.durSeg>0?`<i class="ti ti-clock" aria-hidden="true"></i> ${vid.dur}`:'';
+  document.getElementById('vf-dur-info').innerHTML=vid?.durSeg>0?`<i class="ti ti-clock" aria-hidden="true"></i> ${escH(vid.dur)}`:'';
   document.getElementById('vf-spin').style.display='none';
   showScreen('s-vid');
   setTimeout(()=>document.getElementById('vf-nome').focus(),80);
@@ -562,7 +568,7 @@ function renderMats(){
   const box=document.getElementById('vf-mats');
   box.innerHTML=formMats.map((m,i)=>`
     <div class="mat-row">
-      <input class="finput mat-t" placeholder="Título (ex: Casa-Grande & Senzala)" value="${(m.titulo||'').replace(/"/g,'&quot;')}" oninput="formMats[${i}].titulo=this.value"/>
+      <input class="finput mat-t" placeholder="Título (ex: Casa-Grande & Senzala)" value="${escH(m.titulo||'')}" oninput="formMats[${i}].titulo=this.value"/>
       <button class="mat-x mat-s" onclick="buscarMat(${i})" aria-label="Buscar este material em PDF na internet" title="Buscar PDF grátis na internet"><i class="ti ti-search" aria-hidden="true"></i></button>
       <button class="mat-x" onclick="formMats.splice(${i},1);renderMats()" aria-label="Remover material"><i class="ti ti-x" aria-hidden="true"></i></button>
     </div>`).join('');
@@ -652,7 +658,7 @@ function renderArqs(){
     <div class="arq-row">
       ${arqBadge(a)}
       <div class="arq-campos">
-        <input class="finput" placeholder="Título" value="${(a.titulo||'').replace(/"/g,'&quot;')}" oninput="formArqs[${i}].titulo=this.value"/>
+        <input class="finput" placeholder="Título" value="${escH(a.titulo||'')}" oninput="formArqs[${i}].titulo=this.value"/>
         <div class="arq-meta">${escH(a.nomeArq)} · ${fmtKB(a.tamanho)}</div>
       </div>
       <div class="arq-btns">
@@ -718,9 +724,9 @@ function buildResumoHTML(){
   const nome=vi('vf-nome')||tr('Vídeo sem nome');
   const resumo=document.getElementById('vf-resumo').value.trim();
   const mats=formMats.filter(m=>(m.titulo||'').trim()||(m.link||'').trim());
-  const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   const link=vi('vf-link');
-  const linkHtml=link?`<div class="vlink">Vídeo: <a href="${esc(link)}">${esc(link)}</a></div>`:'';
+  const linkHtml=link?`<div class="vlink">Vídeo: ${urlSegura(link)?`<a href="${esc(link)}">${esc(link)}</a>`:esc(link)}</div>`:'';
   const paras=resumo?resumo.split(/\n{2,}/).map(p=>`<p>${esc(p).replace(/\n/g,'<br>')}</p>`).join(''):`<p><i>${tr('(Sem resumo preenchido)')}</i></p>`;
   const matsHtml=mats.length?`<h2>${tr('Material didático')}</h2><ul>${mats.map(m=>`<li><b>${esc(m.titulo||'—')}</b>${m.link?' — '+(/^https?:\/\//i.test(m.link)?`<a href="${esc(m.link)}">${esc(m.link)}</a>`:esc(m.link)):''}</li>`).join('')}</ul>`:'';
   const arqsHtml=formArqs.length?`<h2>${tr('Documentos anexados')}</h2><ul>${formArqs.map(a=>`<li><b>${esc(a.titulo||a.nomeArq)}</b>${a.autor?' — '+esc(a.autor):''} <span style="color:#777">(${esc(a.nomeArq)})</span></li>`).join('')}</ul>`:'';
@@ -775,7 +781,19 @@ function showToast(html,ms){
 }
 
 /* ===== Relatório da série/ano (estrutura completa) ===== */
-const escH=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const escH=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+/* Só aceita http(s) — bloqueia javascript:, data: etc. Usar sempre que uma URL
+   guardada for parar em href/window.open (E2 do roteiro de segurança). */
+function urlSegura(u){u=String(u||'').trim();return /^https?:\/\//i.test(u)?u:'';}
+/* Ao salvar um link digitado: completa o https:// de "youtube.com/..." e
+   descarta o que não é link navegável (javascript:, data:, texto solto). */
+function normalizarLink(u){
+  u=String(u||'').trim();
+  if(!u)return '';
+  if(/^https?:\/\//i.test(u))return u;
+  if(/^[\w.-]+\.[a-z]{2,}([\/?#:]|$)/i.test(u))return 'https://'+u;
+  return '';
+}
 let relDiscId=null;
 function openRelatorio(discId){
   relDiscId=discId;
@@ -803,8 +821,8 @@ function buildRelatorioHTML(discId){
       if(!c.videos.length){corpo+=`<p class="vazio">${tr('Sem vídeos.')}</p>`;return;}
       corpo+='<ul>';
       c.videos.forEach((v,i)=>{
-        corpo+=`<li><b>V${i+1}</b> · ${escH(v.nome)} — <span class="dur">${v.dur||'--:--'}</span>`;
-        if(v.link)corpo+=`<br>Link: <a href="${escH(v.link)}">${escH(v.link)}</a>`;
+        corpo+=`<li><b>V${i+1}</b> · ${escH(v.nome)} — <span class="dur">${escH(v.dur||'--:--')}</span>`;
+        if(v.link)corpo+=`<br>Link: ${urlSegura(v.link)?`<a href="${escH(v.link)}">${escH(v.link)}</a>`:escH(v.link)}`;
         if((v.resumo||'').trim())corpo+=`<br><i>${trf('Resumo disponível ({n} caracteres)',{n:v.resumo.trim().length})}</i>`;
         if((v.materiais||[]).length){
           corpo+='<br>'+tr('Material didático')+':<ul>'+v.materiais.map(m=>`<li>${escH(m.titulo||'—')}${m.link?' — '+(/^https?:\/\//i.test(m.link)?`<a href="${escH(m.link)}">${escH(m.link)}</a>`:escH(m.link)):''}</li>`).join('')+'</ul>';
@@ -926,7 +944,7 @@ async function fetchYT(id){
 }
 function salvarVid(){
   const nome=document.getElementById('vf-nome').value.trim();
-  const link=document.getElementById('vf-link').value.trim();
+  const link=normalizarLink(document.getElementById('vf-link').value); // completa https:// e descarta o que não é link (E2)
   const durStr=document.getElementById('vf-dur').value.trim();
   const resumo=document.getElementById('vf-resumo').value.trim();
   const materiais=formMats.filter(m=>(m.titulo||'').trim()||(m.link||'').trim())
@@ -991,7 +1009,7 @@ function checarDraft(){ // no boot: oferece restaurar um formulário que ficou a
 
 function openModal(title,fields,cb){
   document.getElementById('modal-title').textContent=title;
-  document.getElementById('modal-fields').innerHTML=fields.map(f=>`<div style="margin-bottom:12px"><label class="flbl">${f.lbl}</label><input class="finput" id="${f.id}" placeholder="${f.ph||''}" value="${f.val||''}"/></div>`).join('');
+  document.getElementById('modal-fields').innerHTML=fields.map(f=>`<div style="margin-bottom:12px"><label class="flbl">${escH(f.lbl)}</label><input class="finput" id="${f.id}" placeholder="${escH(f.ph||'')}" value="${escH(f.val||'')}"/></div>`).join('');
   _mcb=cb;document.getElementById('modal-ok').onclick=()=>_mcb&&_mcb();
   document.getElementById('modal').classList.add('open');
   setTimeout(()=>{const el=document.getElementById(fields[0].id);if(el){el.focus();if(fields[0].val)el.select();}},60);
@@ -1574,8 +1592,12 @@ let licState={ativo:false,email:''};
 const CHANNEL_KEY='prometeu.channel.v1';
 let CHANNEL='web';
 try{
-  if(/[?&]src=play\b/.test(location.search))localStorage.setItem(CHANNEL_KEY,'play');
-  CHANNEL=localStorage.getItem(CHANNEL_KEY)||'web';
+  // O canal vem SEMPRE da URL atual: o TWA da Play abre com ?src=play em todo
+  // boot (start_url), então não precisa persistir. Persistir travava o canal em
+  // 'play' p/ sempre no navegador comum que visitasse a URL do TWA uma vez
+  // (escondia a tela Ativar/Comprar na web — bug E6 do roteiro).
+  CHANNEL=/[?&]src=play\b/.test(location.search)?'play':'web';
+  localStorage.setItem(CHANNEL_KEY,CHANNEL); // só registro p/ diagnóstico
 }catch(e){}
 function installTs(){
   try{const r=localStorage.getItem(INSTALL_KEY);if(r)return +JSON.parse(r).t||Date.now();
@@ -1677,7 +1699,7 @@ function checarAviso(){
         let visto=null;try{visto=localStorage.getItem(AVISO_KEY);}catch(e){}
         if(String(visto)===String(a.id))return;
         try{localStorage.setItem(AVISO_KEY,String(a.id));}catch(e){}
-        showToast('<b>'+tr('Aviso')+':</b> '+escH(a.msg)+(a.url?' <a href="'+escH(a.url)+'" target="_blank" rel="noopener">'+tr('Saiba mais')+'</a>':''),12000);
+        showToast('<b>'+tr('Aviso')+':</b> '+escH(a.msg)+(urlSegura(a.url)?' <a href="'+escH(urlSegura(a.url))+'" target="_blank" rel="noopener">'+tr('Saiba mais')+'</a>':''),12000);
       }).catch(()=>{});
   }catch(e){}
 }
