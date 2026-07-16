@@ -68,7 +68,7 @@ const THEME_META={
 const SEED={"disciplinas":[]}; // app entregue vazio — o usuario cria as proprias materias
 
 /* ===== Projetos (anos letivos) — cada projeto guarda um banco completo ===== */
-const APP_VERSION='2.5', APP_DATE='julho de 2026';
+const APP_VERSION='2.6', APP_DATE='julho de 2026';
 const PROJ_KEY='prometeu.projects.v1';
 let projReg=null;
 function loadProjects(){
@@ -1581,7 +1581,10 @@ function demoStop(){
 const PIX_CFG={ // pagamento automático (Mercado Pago → worker → e-mail com o código)
   preco:'US$ 5 (~R$ 25)',
   email:'organizadordeaulas.prometeu@gmail.com',    // suporte: se o código não chegar
-  link:'https://mpago.la/2KJhprv'  // link de pagamento do Mercado Pago (etapa P3)
+  // Checkout criado pelo NOSSO worker (dispara o webhook que envia o código).
+  // NUNCA voltar ao link mpago.la do painel: "Link de pagamento" não notifica
+  // a aplicação e o comprador fica sem o código (bug real do teste de 13/07).
+  link:'https://prometeu-ativacao.organizadordeaulas-prometeu.workers.dev/comprar'
 };
 const LIC_PUBKEY={kty:'EC',crv:'P-256',x:'or3swlJ1Zsy8FIxg3oMI8GTeuhjsce1MREgOJCuu1Js',y:'TNSijRdV4gopbyxI0le4IYbGL7GguL5cOQgjM9GDEDU'};
 const LIC_KEY='prometeu.license.v1',INSTALL_KEY='prometeu.install.v1',TRIAL_DIAS=14;
@@ -1645,6 +1648,18 @@ async function ativarComCodigo(){
     showToast(trf('<b>Ativado!</b> Obrigado. Licença registrada para {e}.',{e:escH(r.email)}),6000);
   }else if(msg){msg.textContent=tr('Código inválido. Confira se copiou o código completo do e-mail.');msg.className='at-msg erro';}
 }
+function pagarAgora(){
+  // Abre o checkout do worker já com o e-mail do comprador (external_reference):
+  // é assim que o webhook sabe para onde mandar o código, mesmo no Pix.
+  const be=document.getElementById('at-email'),msg=document.getElementById('at-msg');
+  const em=(be&&be.value||'').trim();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){
+    if(msg){msg.textContent=tr('Digite um e-mail válido para receber o código.');msg.className='at-msg erro';}
+    if(be)be.focus();return;
+  }
+  if(msg){msg.textContent='';msg.className='at-msg';}
+  window.open(PIX_CFG.link+'?email='+encodeURIComponent(em),'_blank','noopener');
+}
 function openAtivar(){closeMenu();renderAtivar();showScreen('s-ativar');}
 function refreshLicUI(){const s=document.getElementById('s-ativar');if(s&&s.classList.contains('active'))renderAtivar();}
 function renderAtivar(){
@@ -1658,8 +1673,10 @@ function renderAtivar(){
     <div class="at-sec">
       <h3>${tr('Como ativar')} · ${escH(PIX_CFG.preco)}</h3>
       ${PIX_CFG.link?`
-      <a class="btn-pri at-pay" href="${escH(PIX_CFG.link)}" target="_blank" rel="noopener"><i class="ti ti-key" aria-hidden="true"></i> ${tr('Pagar agora (Pix ou cartão)')}</a>
-      <div class="fhint" style="margin:8px 0 4px">${tr('Pagamento seguro pelo Mercado Pago. O código de ativação chega em poucos minutos no e-mail usado no pagamento — cole-o no campo abaixo.')}</div>`:''}
+      <label class="flbl">${tr('Seu e-mail (para receber o código de ativação)')}</label>
+      <input class="finput" id="at-email" type="email" autocomplete="email" placeholder="exemplo@gmail.com">
+      <button class="btn-pri at-pay" style="margin-top:10px" onclick="pagarAgora()"><i class="ti ti-key" aria-hidden="true"></i> ${tr('Pagar agora (Pix ou cartão)')}</button>
+      <div class="fhint" style="margin:8px 0 4px">${tr('Pagamento seguro pelo Mercado Pago. O código de ativação chega em poucos minutos no e-mail informado acima — cole-o no campo abaixo.')}</div>`:''}
       <label class="flbl" style="margin-top:16px">${tr('Código de ativação (recebido por e-mail)')}</label>
       <textarea class="finput" id="at-code" rows="3" placeholder="${tr('Cole aqui o código de ativação')}"></textarea>
       <div class="at-msg" id="at-msg"></div>
@@ -1703,6 +1720,34 @@ function checarAviso(){
       }).catch(()=>{});
   }catch(e){}
 }
+
+/* ===== Botão/gesto "voltar" do sistema (Android/tablet) =====
+   O app é uma página só; sem estados no histórico, o voltar do aparelho
+   fechava o app em qualquer tela. Mantemos um estado-sentinela no history:
+   cada voltar do sistema fecha o que estiver aberto (menu/modais) ou sobe
+   um nível na navegação; só na tela inicial ele sai do app de verdade. */
+const BACK_PARENT={'s-series':'s-main','s-disc':'s-series','s-aula':'s-disc','s-vid':'s-aula','s-proj':'s-main','s-tut':'s-main','s-ativar':'s-main'};
+function backSistema(){
+  if(typeof demoOn!=='undefined'&&demoOn){demoStop();return true;}
+  const aberto=id=>{const e=document.getElementById(id);return e&&e.classList.contains('open');};
+  if(aberto('drawer')){closeMenu();return true;}
+  if(aberto('modal')){closeModal();return true;}
+  if(aberto('imodal')){closeInfo();return true;}
+  if(aberto('rmodal')){closeRModal();return true;}
+  if(aberto('tmodal')){recusarTutorial();return true;}
+  // cmodal (consentimento) fica de fora de propósito: precisa de resposta.
+  const cur=document.querySelector('.screen.active');
+  if(!cur||cur.id==='s-main')return false; // na home: deixa sair
+  goBack(BACK_PARENT[cur.id]||'s-main');
+  return true;
+}
+try{
+  history.pushState({prometeu:1},'');
+  window.addEventListener('popstate',()=>{
+    if(backSistema())history.pushState({prometeu:1},''); // consumiu o voltar: repõe o sentinela
+    else history.back(); // home: segue saindo do app
+  });
+}catch(e){}
 
 /* ===== Inicialização ===== */
 loadProjects();
