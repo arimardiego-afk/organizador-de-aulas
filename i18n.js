@@ -801,6 +801,7 @@ const TUT_ML={
 <li><b>Grade report:</b> report icon on the grade card → Word or PDF with lessons, chapters, videos, links, notes, pending items and documents.</li>
 <li><b>Video summary:</b> inside the video form → Word or PDF with the summary text, teaching materials and attachments.</li>
 <li>For PDF, the browser opens the print dialog: choose <b>“Save as PDF”</b>.</li>
+<li><b>On a tablet/phone:</b> save the PDF to <b>internal storage</b> (Downloads folder). Saving straight to the <b>memory card</b> may produce a “corrupted file” — an Android limitation, not the app’s; move the file to the card later with the Files app.</li>
 </ul>`},
 {ic:'ti-shield',t:'Backup and data safety',c:`
 <p><b>Saving is automatic.</b> Everything you type is stored on its own, on every change, <b>in this device's browser</b> — there is no “save” button, and nothing is sent to the internet. But if the app is uninstalled or the browser data is cleared, it is gone. So, to <b>switch devices</b> or keep a safety copy, export a backup:</p>
@@ -910,6 +911,7 @@ const TUT_ML={
 <li><b>Informe del curso:</b> icono de informe en la tarjeta del curso → Word o PDF con clases, capítulos, vídeos, enlaces, notas, pendientes y documentos.</li>
 <li><b>Resumen del vídeo:</b> dentro del formulario del vídeo → Word o PDF con el texto del resumen, material didáctico y adjuntos.</li>
 <li>Para PDF, el navegador abre el diálogo de impresión: elige <b>«Guardar como PDF»</b>.</li>
+<li><b>En tablet/móvil:</b> guarda el PDF en la <b>memoria interna</b> (carpeta Descargas). Guardar directo en la <b>tarjeta de memoria</b> puede generar un «archivo dañado» — es una limitación de Android, no de la app; luego mueve el archivo a la tarjeta con la app Archivos.</li>
 </ul>`},
 {ic:'ti-shield',t:'Copia de seguridad y protección de datos',c:`
 <p><b>El guardado es automático.</b> Todo lo que escribes se guarda solo, en cada cambio, <b>en el navegador de este dispositivo</b> — no hay botón de “guardar” y nada se envía a internet. Pero si desinstalas la app o borras los datos del navegador, desaparecen. Por eso, para <b>cambiar de dispositivo</b> o tener una copia de seguridad, exporta una copia:</p>
@@ -1019,6 +1021,7 @@ const TUT_ML={
 <li><b>年级报告：</b>年级卡片上的报告图标 → Word 或 PDF，包含课程、章节、视频、链接、备注、待办和文档。</li>
 <li><b>视频摘要：</b>在视频表单内 → Word 或 PDF，包含摘要文字、教学材料和附件。</li>
 <li>导出 PDF 时浏览器会打开打印对话框：选择<b>“另存为 PDF”</b>。</li>
+<li><b>在平板/手机上：</b>请将 PDF 保存到<b>内部存储</b>（下载文件夹）。直接保存到<b>存储卡</b>可能出现“文件已损坏”——这是安卓系统的限制，并非应用问题；之后可用文件管理器把文件移动到存储卡。</li>
 </ul>`},
 {ic:'ti-shield',t:'备份与数据安全',c:`
 <p><b>保存是自动的。</b>你输入的一切都会在每次更改时自动保存到<b>此设备的浏览器</b>中——没有“保存”按钮，也不会上传到网络。但如果卸载应用或清除浏览器数据，数据将丢失。因此，若要<b>更换设备</b>或保留安全副本，请导出备份：</p>

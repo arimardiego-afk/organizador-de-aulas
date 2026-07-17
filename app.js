@@ -68,7 +68,7 @@ const THEME_META={
 const SEED={"disciplinas":[]}; // app entregue vazio — o usuario cria as proprias materias
 
 /* ===== Projetos (anos letivos) — cada projeto guarda um banco completo ===== */
-const APP_VERSION='2.6', APP_DATE='julho de 2026';
+const APP_VERSION='2.7', APP_DATE='julho de 2026';
 const PROJ_KEY='prometeu.projects.v1';
 let projReg=null;
 function loadProjects(){
@@ -210,7 +210,7 @@ function renderDiscs(){ // TELA 1: apenas as matérias
     </div></div>`;
   }).join('');
 }
-function openMat(i){curMat=MATS[i];renderSeries();showScreen('s-series');}
+function openMat(i){pushNav();curMat=MATS[i];renderSeries();showScreen('s-series');}
 function renameMat(i){
   const m=MATS[i];
   openModal(tr('Renomear matéria'),[{id:'mm-n',lbl:'Nome da matéria',val:m}],()=>{
@@ -289,7 +289,7 @@ function openAddSerie(){
     db.disciplinas.push({id:nid(),nome:curMat,turma,capitulo:vi('md-c'),aulas:[]});closeModal();renderSeries();
   });
 }
-function openDisc(id){curDiscId=id;renderAulas();showScreen('s-disc');}
+function openDisc(id){pushNav();curDiscId=id;renderAulas();showScreen('s-disc');}
 function openAddDisc(){if(!exigirAtivacao())return;openModal(tr('Nova matéria'),[{id:'md-n',lbl:'Nome da matéria',ph:'Ex: HISTÓRIA'},{id:'md-t',lbl:'Série/Ano',ph:'Ex: 6° ANO'},{id:'md-c',lbl:'Capítulo / unidade',ph:'Ex: Cap. 01 — Brasil Colônia'}],()=>{
   const nome=vi('md-n');if(!nome){alert(tr('Informe o nome.'));return;}
   db.disciplinas.push({id:nid(),nome:nome.toUpperCase(),turma:vi('md-t'),capitulo:vi('md-c'),aulas:[]});closeModal();renderDiscs();
@@ -325,7 +325,7 @@ function renderAulas(){
       </div>
     </div></div>`).join('');
 }
-function openAula(id){curAulaId=id;selCP=null;renderCaps();showScreen('s-aula');}
+function openAula(id){pushNav();curAulaId=id;selCP=null;renderCaps();showScreen('s-aula');}
 function openAddAula(){
   if(!exigirAtivacao())return;
   const disc=getDisc(curDiscId);
@@ -527,7 +527,7 @@ function goToFormVid(capId,vidId){
   document.getElementById('vf-hint').textContent=vid?.link?tr('Link cadastrado'):'';
   document.getElementById('vf-dur-info').innerHTML=vid?.durSeg>0?`<i class="ti ti-clock" aria-hidden="true"></i> ${escH(vid.dur)}`:'';
   document.getElementById('vf-spin').style.display='none';
-  showScreen('s-vid');
+  pushNav();showScreen('s-vid');
   setTimeout(()=>document.getElementById('vf-nome').focus(),80);
 }
 
@@ -802,7 +802,7 @@ function openRelatorio(discId){
   const nVids=d.aulas.reduce((s,a)=>s+a.caps.reduce((x,c)=>x+c.videos.length,0),0);
   document.getElementById('rmodal-title').textContent=trf('Relatório — {d}',{d:`${d.nome} · ${d.turma||tr('Série única')}`});
   document.getElementById('rmodal-sub').textContent=[trf('{n} aulas',{n:d.aulas.length}),trf('{n} capítulos',{n:nCaps}),trf('{n} vídeos',{n:nVids}),fmtS(discDurSeg(d))].join(' · ');
-  document.getElementById('rmodal').classList.add('open');paintIcons();
+  pushNav();document.getElementById('rmodal').classList.add('open');paintIcons();
 }
 function closeRModal(){document.getElementById('rmodal').classList.remove('open');relDiscId=null;}
 function buildRelatorioHTML(discId){
@@ -1008,6 +1008,7 @@ function checarDraft(){ // no boot: oferece restaurar um formulário que ficou a
 }
 
 function openModal(title,fields,cb){
+  pushNav();
   document.getElementById('modal-title').textContent=title;
   document.getElementById('modal-fields').innerHTML=fields.map(f=>`<div style="margin-bottom:12px"><label class="flbl">${escH(f.lbl)}</label><input class="finput" id="${f.id}" placeholder="${escH(f.ph||'')}" value="${escH(f.val||'')}"/></div>`).join('');
   _mcb=cb;document.getElementById('modal-ok').onclick=()=>_mcb&&_mcb();
@@ -1018,7 +1019,7 @@ function closeModal(){document.getElementById('modal').classList.remove('open');
 function modalOverlayClick(e){if(e.target===document.getElementById('modal'))closeModal();}
 
 /* ===== Tela de projetos (anos letivos) ===== */
-function openProjetos(){closeMenu();renderProjetos();showScreen('s-proj');}
+function openProjetos(){pushNav();closeMenu();renderProjetos();showScreen('s-proj');}
 function renderProjetos(){
   saveDB();
   const el=document.getElementById('list-proj');
@@ -1157,11 +1158,11 @@ async function importBackup(input){
 }
 
 /* ===== Menu lateral (drawer) ===== */
-function openMenu(){clearMenuHint();refreshProjUI();document.getElementById('drawer').classList.add('open');document.getElementById('drawer-ov').classList.add('open');}
+function openMenu(){pushNav();clearMenuHint();refreshProjUI();document.getElementById('drawer').classList.add('open');document.getElementById('drawer-ov').classList.add('open');}
 function closeMenu(){document.getElementById('drawer').classList.remove('open');document.getElementById('drawer-ov').classList.remove('open');}
 
 /* ===== Modal de informações (Ajuda) ===== */
-function openInfo(title,html){closeMenu();document.getElementById('im-title').textContent=title;document.getElementById('im-body').innerHTML=html;document.getElementById('imodal').classList.add('open');paintIcons();}
+function openInfo(title,html){pushNav();closeMenu();document.getElementById('im-title').textContent=title;document.getElementById('im-body').innerHTML=html;document.getElementById('imodal').classList.add('open');paintIcons();}
 function closeInfo(){document.getElementById('imodal').classList.remove('open');}
 function showVersao(){
   openInfo(tr('Versão'),`
@@ -1281,6 +1282,7 @@ const TUT=[
 <li><b>Relatório da série:</b> ícone de relatório no cartão da série → Word ou PDF com aulas, capítulos, vídeos, links, observações, pendências e documentos.</li>
 <li><b>Resumo do vídeo:</b> dentro do formulário do vídeo → Word ou PDF com o texto do resumo, material didático e anexos.</li>
 <li>Para PDF, o navegador abre a tela de impressão: escolha <b>“Salvar como PDF”</b>.</li>
+<li><b>No tablet/celular:</b> salve o PDF na <b>memória interna</b> (pasta Downloads). Salvar direto no <b>cartão de memória</b> pode gerar “arquivo corrompido” — é uma limitação do Android, não do app; depois mova o arquivo para o cartão pelo app Arquivos.</li>
 </ul>`},
 {ic:'ti-shield',t:'Backup e segurança dos dados',c:`
 <p><b>O salvamento é automático.</b> Tudo o que você digita é guardado sozinho, a cada alteração, <b>no navegador deste aparelho</b> — não existe botão “salvar”, e nada é enviado para a internet. Se o app for desinstalado ou os dados do navegador forem limpos, porém, eles se vão. Por isso, para <b>trocar de aparelho</b> ou ter uma cópia de segurança, exporte um backup:</p>
@@ -1660,7 +1662,7 @@ function pagarAgora(){
   if(msg){msg.textContent='';msg.className='at-msg';}
   window.open(PIX_CFG.link+'?email='+encodeURIComponent(em),'_blank','noopener');
 }
-function openAtivar(){closeMenu();renderAtivar();showScreen('s-ativar');}
+function openAtivar(){pushNav();closeMenu();renderAtivar();showScreen('s-ativar');}
 function refreshLicUI(){const s=document.getElementById('s-ativar');if(s&&s.classList.contains('active'))renderAtivar();}
 function renderAtivar(){
   const el=document.getElementById('at-body');if(!el)return;
@@ -1722,11 +1724,15 @@ function checarAviso(){
 }
 
 /* ===== Botão/gesto "voltar" do sistema (Android/tablet) =====
-   O app é uma página só; sem estados no histórico, o voltar do aparelho
-   fechava o app em qualquer tela. Mantemos um estado-sentinela no history:
-   cada voltar do sistema fecha o que estiver aberto (menu/modais) ou sobe
-   um nível na navegação; só na tela inicial ele sai do app de verdade. */
+   Cada ação de navegação do usuário (abrir tela, menu ou janela) registra uma
+   entrada no histórico NO MOMENTO DO TOQUE (pushNav dentro dos openX). Isso é
+   obrigatório: o Chrome/Android IGNORA entradas criadas sem gesto do usuário
+   ("history manipulation intervention") — o sentinela criado no carregamento
+   era pulado pelo gesto de voltar no TWA/APK e o app minimizava (bug real do
+   tablet, 16/07). O popstate consome uma entrada por vez: fecha o que estiver
+   aberto ou sobe um nível; na tela inicial, deixa o app sair/minimizar. */
 const BACK_PARENT={'s-series':'s-main','s-disc':'s-series','s-aula':'s-disc','s-vid':'s-aula','s-proj':'s-main','s-tut':'s-main','s-ativar':'s-main'};
+function pushNav(){try{history.pushState({prometeu:1},'');}catch(e){}}
 function backSistema(){
   if(typeof demoOn!=='undefined'&&demoOn){demoStop();return true;}
   const aberto=id=>{const e=document.getElementById(id);return e&&e.classList.contains('open');};
@@ -1742,10 +1748,8 @@ function backSistema(){
   return true;
 }
 try{
-  history.pushState({prometeu:1},'');
   window.addEventListener('popstate',()=>{
-    if(backSistema())history.pushState({prometeu:1},''); // consumiu o voltar: repõe o sentinela
-    else history.back(); // home: segue saindo do app
+    if(!backSistema())history.back(); // home: esvazia o resto e sai/minimiza
   });
 }catch(e){}
 
