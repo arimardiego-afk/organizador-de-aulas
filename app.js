@@ -1321,7 +1321,7 @@ function buildTutorial(){
   </div>`).join('');
 }
 function openTutorial(){
-  closeMenu();
+  pushNav();closeMenu();
   const b=document.getElementById('tut-body');
   if(b.dataset.ok!==LANG){b.innerHTML=buildTutorial();b.dataset.ok=LANG;paintIcons();}
   showScreen('s-tut');
