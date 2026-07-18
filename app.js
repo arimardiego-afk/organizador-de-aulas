@@ -68,7 +68,7 @@ const THEME_META={
 const SEED={"disciplinas":[]}; // app entregue vazio — o usuario cria as proprias materias
 
 /* ===== Projetos (anos letivos) — cada projeto guarda um banco completo ===== */
-const APP_VERSION='2.7', APP_DATE='julho de 2026';
+const APP_VERSION='2.8', APP_DATE='julho de 2026';
 const PROJ_KEY='prometeu.projects.v1';
 let projReg=null;
 function loadProjects(){
@@ -118,6 +118,11 @@ function normalizeDB(){
       if(typeof v.resumo!=='string')v.resumo='';
       if(!Array.isArray(v.materiais))v.materiais=[];
       if(!Array.isArray(v.arquivos))v.arquivos=[];
+      // backups/JSON montados fora do app podem trazer só "dur" (texto) sem
+      // "durSeg" (número) — sem isso os totais e o relógio ficam vazios
+      if(typeof v.durSeg!=='number'||!isFinite(v.durSeg)||v.durSeg<0)v.durSeg=parseInt(v.durSeg,10)||0;
+      if(!v.durSeg&&typeof v.dur==='string')v.durSeg=parseDur(v.dur);
+      v.dur=v.durSeg>0?fmtS(v.durSeg):((typeof v.dur==='string'&&v.dur.trim())?v.dur:'--:--');
     });
   })));
 }
@@ -1303,6 +1308,18 @@ const TUT=[
 <li><b>Tela dividida:</b> toque em <b>Recentes</b> (botão ▯|▯ ou gesto), toque no <b>ícone do app</b> no topo do cartão → <b>“Abrir em visualização em tela dividida”</b> → escolha o segundo app (ex.: YouTube). A divisória central ajusta o tamanho.</li>
 <li><b>Exibição pop-up:</b> em Recentes, toque no ícone do app → <b>“Abrir em exibição pop-up”</b> — o app vira uma janelinha flutuante sobre outro app.</li>
 <li>O layout se reorganiza sozinho em qualquer tamanho de janela. Nas Observações, a conversão de escrita à mão da caneta fica desativada (use o teclado) para evitar erros.</li>
+</ul>`},
+{ic:'ti-alert-triangle',t:'Problemas comuns e soluções',c:`
+<p>Antes de pensar que algo quebrou, confira esta lista — a maioria dos casos tem solução simples:</p>
+<ul>
+<li><b>“Arquivo corrompido” ao salvar PDF ou backup no cartão de memória:</b> é uma limitação do Android — os aplicativos só gravam com segurança na <b>memória interna</b> do aparelho. Salve sempre na pasta <b>Downloads</b> (memória interna) e depois, se quiser, mova o arquivo para o cartão pelo app Arquivos.</li>
+<li><b>Os dados sumiram:</b> os dados vivem no navegador deste aparelho. <b>Limpar os dados do navegador/site</b> ou desinstalar o app apaga tudo. Prevenção: exporte o <b>backup (.json)</b> com frequência (☰ → Arquivo).</li>
+<li><b>A duração do vídeo não apareceu:</b> a detecção automática precisa de internet na hora em que o link é colado. Sem internet, digite a duração à mão no campo pequeno ao lado do link (MM:SS).</li>
+<li><b>O app abre com a barra do navegador em cima:</b> a instalação não terminou como aplicativo. Reinstale pelo site (Chrome → ⋮ → <b>“Instalar aplicativo”</b>) ou baixe o APK atualizado na página Comprar do site.</li>
+<li><b>Paguei e o código não chegou:</b> confira a caixa de <b>spam/lixo eletrônico</b>. Se não estiver lá, escreva para o e-mail de suporte (☰ → Ativar) informando o e-mail usado na compra.</li>
+<li><b>A tela de pagamento mostra valor maior que o anunciado:</b> o Mercado Pago às vezes sugere a “Linha de Crédito” (com juros). Volte e escolha <b>Pix</b> ou cartão comum — o valor certo aparece antes de confirmar.</li>
+<li><b>Um PDF anexado não abre:</b> alguns arquivos já vêm com defeito de origem. Teste outro documento; se os demais abrem, o problema é do arquivo, não do app.</li>
+<li><b>As letras ficaram diferentes sem internet:</b> normal — sem rede o app usa a fonte do sistema. Nada se perde.</li>
 </ul>`},
 {ic:'ti-help',t:'Atualização e versão',c:`
 <ul>

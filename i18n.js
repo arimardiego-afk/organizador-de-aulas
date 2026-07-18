@@ -823,6 +823,18 @@ const TUT_ML={
 <li><b>Pop-up view:</b> in Recents, tap the app icon → <b>“Open in pop-up view”</b> — the app becomes a floating window over another app.</li>
 <li>The layout reorganizes itself at any window size. In the Notes field, stylus handwriting-to-text is disabled (use the keyboard) to avoid conversion errors.</li>
 </ul>`},
+{ic:'ti-alert-triangle',t:'Common problems and solutions',c:`
+<p>Before assuming something broke, check this list — most cases have a simple fix:</p>
+<ul>
+<li><b>“Corrupted file” when saving a PDF or backup to the memory card:</b> an Android limitation — apps can only write reliably to the device's <b>internal storage</b>. Always save to the <b>Downloads</b> folder (internal storage) and, if you wish, move the file to the card later with the Files app.</li>
+<li><b>My data disappeared:</b> your data lives in this device's browser. <b>Clearing the browser/site data</b> or uninstalling the app erases everything. Prevention: export the <b>backup (.json)</b> often (☰ → File).</li>
+<li><b>The video duration didn't appear:</b> automatic detection needs internet at the moment the link is pasted. Offline, type the duration manually in the small field next to the link (MM:SS).</li>
+<li><b>The app opens with a browser bar on top:</b> the installation didn't finish as an app. Reinstall from the site (Chrome → ⋮ → <b>“Install app”</b>) or download the updated APK from the site's Buy page.</li>
+<li><b>I paid but the code didn't arrive:</b> check your <b>spam/junk</b> folder. If it's not there, write to the support e-mail (☰ → Activate) mentioning the e-mail used in the purchase.</li>
+<li><b>The payment screen shows a higher amount than advertised:</b> Mercado Pago sometimes suggests its “credit line” (with interest). Go back and choose <b>Pix</b> or a regular card — the right amount shows before you confirm.</li>
+<li><b>An attached PDF won't open:</b> some files are already damaged at the source. Try another document; if the others open, the problem is the file, not the app.</li>
+<li><b>The fonts look different offline:</b> normal — without internet the app falls back to the system font. Nothing is lost.</li>
+</ul>`},
 {ic:'ti-help',t:'Updates and version',c:`
 <ul>
 <li><b>☰ → Help → Updates:</b> explains how to update each version (PWA or single file) and checks whether a new version exists.</li>
@@ -933,6 +945,18 @@ const TUT_ML={
 <li><b>Vista emergente:</b> en Recientes, toca el icono de la app → <b>«Abrir en vista emergente»</b> — la app se convierte en una ventana flotante sobre otra app.</li>
 <li>El diseño se reorganiza solo en cualquier tamaño de ventana. En las Notas, la escritura a mano del lápiz queda desactivada (usa el teclado) para evitar errores de conversión.</li>
 </ul>`},
+{ic:'ti-alert-triangle',t:'Problemas comunes y soluciones',c:`
+<p>Antes de pensar que algo se rompió, revisa esta lista — la mayoría de los casos tiene solución simple:</p>
+<ul>
+<li><b>“Archivo dañado” al guardar un PDF o copia de seguridad en la tarjeta de memoria:</b> es una limitación de Android — las aplicaciones solo escriben con seguridad en el <b>almacenamiento interno</b> del dispositivo. Guarda siempre en la carpeta <b>Descargas</b> (almacenamiento interno) y, si quieres, mueve el archivo a la tarjeta después con la app Archivos.</li>
+<li><b>Mis datos desaparecieron:</b> los datos viven en el navegador de este dispositivo. <b>Borrar los datos del navegador/sitio</b> o desinstalar la app lo elimina todo. Prevención: exporta la <b>copia de seguridad (.json)</b> con frecuencia (☰ → Archivo).</li>
+<li><b>La duración del vídeo no apareció:</b> la detección automática necesita internet en el momento de pegar el enlace. Sin internet, escribe la duración a mano en el campo pequeño junto al enlace (MM:SS).</li>
+<li><b>La app se abre con una barra de navegador arriba:</b> la instalación no terminó como aplicación. Reinstala desde el sitio (Chrome → ⋮ → <b>“Instalar aplicación”</b>) o descarga el APK actualizado en la página Comprar del sitio.</li>
+<li><b>Pagué y el código no llegó:</b> revisa la carpeta de <b>spam/correo no deseado</b>. Si no está ahí, escribe al correo de soporte (☰ → Activar) indicando el correo usado en la compra.</li>
+<li><b>La pantalla de pago muestra un valor mayor que el anunciado:</b> Mercado Pago a veces sugiere su “línea de crédito” (con intereses). Vuelve atrás y elige <b>Pix</b> o tarjeta común — el valor correcto aparece antes de confirmar.</li>
+<li><b>Un PDF adjunto no se abre:</b> algunos archivos ya vienen dañados de origen. Prueba con otro documento; si los demás se abren, el problema es del archivo, no de la app.</li>
+<li><b>Las letras se ven diferentes sin internet:</b> es normal — sin red la app usa la fuente del sistema. No se pierde nada.</li>
+</ul>`},
 {ic:'ti-help',t:'Actualización y versión',c:`
 <ul>
 <li><b>☰ → Ayuda → Actualización:</b> explica cómo actualizar cada versión (PWA o archivo único) y comprueba si hay una nueva.</li>
@@ -1042,6 +1066,18 @@ const TUT_ML={
 <li><b>分屏：</b>点按<b>最近任务</b>，点按卡片顶部的<b>应用图标</b> → <b>“在分屏视图中打开”</b> → 选择第二个应用（如 YouTube）。</li>
 <li><b>弹窗视图：</b>在最近任务中点按应用图标 → <b>“在弹窗视图中打开”</b> — 应用变为悬浮在其他应用上的小窗口。</li>
 <li>布局会在任何窗口尺寸下自动调整。在“备注”栏中已停用手写笔的手写转文字功能（请使用键盘），以避免转换错误。</li>
+</ul>`},
+{ic:'ti-alert-triangle',t:'常见问题与解决办法',c:`
+<p>在认为出了故障之前，请先查看这份清单 — 大多数情况都有简单的解决办法：</p>
+<ul>
+<li><b>把 PDF 或备份保存到存储卡时提示“文件已损坏”：</b>这是 Android 的限制 — 应用只能可靠地写入设备的<b>内部存储</b>。请始终保存到<b>下载（Downloads）</b>文件夹（内部存储），之后如有需要，再用文件管理应用把文件移到存储卡。</li>
+<li><b>数据不见了：</b>数据保存在本设备的浏览器里。<b>清除浏览器/网站数据</b>或卸载应用会删除全部内容。预防办法：经常导出<b>备份（.json）</b>（☰ → 文件）。</li>
+<li><b>视频时长没有出现：</b>自动识别需要在粘贴链接的那一刻联网。离线时，请在链接旁边的小输入框里手动填写时长（MM:SS）。</li>
+<li><b>应用顶部出现浏览器地址栏：</b>说明没有以应用方式完成安装。请通过网站重新安装（Chrome → ⋮ → <b>“安装应用”</b>），或在网站的购买页下载最新的 APK。</li>
+<li><b>付款后没有收到激活码：</b>请检查<b>垃圾邮件</b>文件夹。如果也没有，请写信给支持邮箱（☰ → 激活），并注明购买时使用的邮箱。</li>
+<li><b>付款页面显示的金额比宣传的高：</b>Mercado Pago 有时会推荐它的“信用额度”（含利息）。请返回并选择 <b>Pix</b> 或普通银行卡 — 确认前会显示正确金额。</li>
+<li><b>附件里的 PDF 打不开：</b>有些文件本身就已损坏。请试试其他文档；如果其他文件能打开，问题出在文件本身，而不是应用。</li>
+<li><b>离线时字体变了样：</b>属于正常现象 — 没有网络时应用会改用系统字体，不会丢失任何内容。</li>
 </ul>`},
 {ic:'ti-help',t:'更新与版本',c:`
 <ul>
