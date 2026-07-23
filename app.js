@@ -17,6 +17,7 @@ const ICONS={
 'ti-book':'<path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0"/><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0"/><path d="M3 6l0 13"/><path d="M12 6l0 13"/><path d="M21 6l0 13"/>',
 'ti-file-text':'<path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/><path d="M9 9l1 0M9 13l6 0M9 17l6 0"/>',
 'ti-download':'<path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/><path d="M7 11l5 5l5 -5"/><path d="M12 4l0 12"/>',
+'ti-copy':'<path d="M8 8m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z"/><path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"/>',
 'ti-x':'<path d="M18 6l-12 12"/><path d="M6 6l12 12"/>',
 'ti-chevron-down':'<path d="M6 9l6 6l6 -6"/>',
 'ti-report':'<path d="M8 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h5.697"/><path d="M18 12v-5a2 2 0 0 0 -2 -2h-2"/><path d="M8 3m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v1a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z"/><path d="M8 11h4"/><path d="M8 15h3"/><path d="M16.5 17.5m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0"/><path d="M18.5 19.5l2.5 2.5"/>',
@@ -68,7 +69,7 @@ const THEME_META={
 const SEED={"disciplinas":[]}; // app entregue vazio — o usuario cria as proprias materias
 
 /* ===== Projetos (anos letivos) — cada projeto guarda um banco completo ===== */
-const APP_VERSION='2.8', APP_DATE='julho de 2026';
+const APP_VERSION='2.9', APP_DATE='julho de 2026';
 const PROJ_KEY='prometeu.projects.v1';
 let projReg=null;
 function loadProjects(){
@@ -141,7 +142,36 @@ function saveTheme(){try{localStorage.setItem(THEME_KEY,String(themeIdx));}catch
 
 function nid(){return Date.now()+(Math.random()*9999|0);}
 function fmtS(s){if(!s||s<=0)return'--:--';const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),ss=s%60;return h>0?`${h}:${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`:`${m}:${String(ss).padStart(2,'0')}`;}
-function parseDur(str){if(!str)return 0;const p=str.trim().split(':').map(Number);if(p.some(isNaN)||p.length<2)return 0;return p.length===3?p[0]*3600+p[1]*60+p[2]:p[0]*60+p[1];}
+/* Duração em texto -> segundos. Tolerante aos formatos que uma IA costuma
+   escrever num .json ("12 min", "1h05", "PT12M5S", "725"), além do relógio
+   mm:ss / hh:mm:ss digitado no formulário. Devolve 0 se não reconhecer. */
+function parseDur(str){
+  if(typeof str==='number')return isFinite(str)&&str>0?Math.round(str):0;
+  if(!str)return 0;
+  const s=String(str).trim().toLowerCase().replace(/,/g,'.');
+  if(!s)return 0;
+  let m;
+  // 1) relógio mm:ss ou hh:mm:ss (aceita texto em volta: "12:05 min")
+  m=s.match(/(\d{1,3}):([0-5]?\d)(?::([0-5]?\d))?/);
+  if(m)return m[3]!==undefined?(+m[1])*3600+(+m[2])*60+(+m[3]):(+m[1])*60+(+m[2]);
+  // 2) ISO 8601 do YouTube: PT1H2M3S
+  m=s.match(/^p?t(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$/);
+  if(m&&(m[1]||m[2]||m[3]))return (+m[1]||0)*3600+(+m[2]||0)*60+(+m[3]||0);
+  // 3) "1h05" / "1 h 05" — minutos colados na hora, sem unidade própria
+  m=s.match(/^(\d{1,2})\s*h\s*(\d{1,2})\s*(?:min|m)?$/);
+  if(m)return (+m[1])*3600+(+m[2])*60;
+  // 4) por extenso: "12 min", "1 hora 5 minutos", "12m5s"
+  let seg=0,achou=false;
+  [[/(\d+(?:\.\d+)?)\s*(?:horas|hora|hrs|hr|h)(?![a-z])/,3600],
+   [/(\d+(?:\.\d+)?)\s*(?:minutos|minuto|mins|min|m)(?![a-z])/,60],
+   [/(\d+(?:\.\d+)?)\s*(?:segundos|segundo|segs|seg|s)(?![a-z])/,1]
+  ].forEach(u=>{const x=s.match(u[0]);if(x){seg+=parseFloat(x[1])*u[1];achou=true;}});
+  if(achou)return Math.round(seg);
+  // 5) número puro: acima de 100 só pode ser segundos; até 100, minutos
+  m=s.match(/^(\d+(?:\.\d+)?)$/);
+  if(m){const n=parseFloat(m[1]);return Math.round(n>100?n:n*60);}
+  return 0;
+}
 function capDurSeg(cap){return cap.videos.reduce((s,v)=>s+(v.durSeg||0),0);}
 function aulaDurSeg(a){return a.caps.reduce((s,c)=>s+capDurSeg(c),0);}
 function discDurSeg(d){return d.aulas.reduce((s,a)=>s+aulaDurSeg(a),0);}
@@ -204,7 +234,7 @@ function renderDiscs(){ // TELA 1: apenas as matérias
         <div class="disc-info">
           <div class="dn">${escH(m)}</div>
           <div class="dc">${ds.length} série${ds.length!==1?'s':''}/ano${ds.length!==1?'s':''}</div>
-          <div class="ds">${nAulas} aulas · ${fmtS(matDur(m))}${(()=>{const pp=ds.reduce((s,d)=>s+discPend(d),0);return pp>0?` · <span class="ta-pend">● ${pp} a ministrar</span>`:'';})()}</div>
+          <div class="ds">${nAulas} aula${nAulas!==1?'s':''} · ${fmtS(matDur(m))}${(()=>{const pp=ds.reduce((s,d)=>s+discPend(d),0);return pp>0?` · <span class="ta-pend">● ${pp} a ministrar</span>`:'';})()}</div>
           ${scanBar(matDur(m),maxDur)}
         </div>
       </div>
@@ -263,7 +293,7 @@ function renderSeries(){ // TELA 2: séries/anos da matéria; aulas recolhidas n
           <div class="disc-info">
             <div class="dn">${escH(d.turma||'Série/Ano não definido')}</div>
             <div class="dc">${escH(d.capitulo||'Sem capítulo')}</div>
-            <div class="ds">${d.aulas.length} aulas${discPend(d)>0?` · <span class="ta-pend">● ${discPend(d)} a ministrar</span>`:''}</div>
+            <div class="ds">${d.aulas.length} aula${d.aulas.length!==1?'s':''}${discPend(d)>0?` · <span class="ta-pend">● ${discPend(d)} a ministrar</span>`:''}</div>
             ${(()=>{const tot=discDurSeg(d),min=discMinSeg(d),nao=tot-min;return `<div class="hrs-row">
               <span class="hrs-item"><i class="ti ti-clock" aria-hidden="true"></i><b>${fmtS(tot)}</b> <span class="hrs-l">${tr('Horas totais')}</span></span>
               <span class="hrs-item ok"><i class="ti ti-check" aria-hidden="true"></i><b>${fmtS(min)}</b> <span class="hrs-l">${tr('Ministradas')}</span></span>
@@ -433,22 +463,24 @@ function renderCaps(){
           <button class="iBtn del" onclick="removeCap(${cap.id})" aria-label="Remover capítulo"><i class="ti ti-trash" aria-hidden="true"></i></button>
         </div>
       </div>
-      <button class="tree-toggle${openCaps.has(cap.id)?' open':''}" id="ttc-${cap.id}" onclick="toggleCap(${cap.id})" aria-expanded="${openCaps.has(cap.id)}">
-        <i class="ti ti-chevron-down chev" aria-hidden="true"></i>
-        <span>${cap.videos.length} vídeo${cap.videos.length!==1?'s':''}</span>
-      </button>
+      <div class="cap-tabs">
+        <button class="tree-toggle${openCaps.has(cap.id)?' open':''}" id="ttc-${cap.id}" onclick="toggleCap(${cap.id})" aria-expanded="${openCaps.has(cap.id)}">
+          <i class="ti ti-chevron-down chev" aria-hidden="true"></i>
+          <span>${cap.videos.length} vídeo${cap.videos.length!==1?'s':''}</span>
+        </button>
+        <button class="tree-toggle obs-toggle${openObs.has(cap.id)?' open':''}" id="tto-${cap.id}" onclick="toggleObs(${cap.id})" aria-expanded="${openObs.has(cap.id)}">
+          <i class="ti ti-chevron-down chev" aria-hidden="true"></i>
+          <i class="ti ti-note" aria-hidden="true"></i>
+          <span>Observações</span>
+          <span class="obs-dot" id="obsdot-${cap.id}" style="display:${(cap.obs||'').trim()?'inline':'none'}">●</span>
+        </button>
+      </div>
       <div class="tree-wrap${openCaps.has(cap.id)?' open':''}" id="twc-${cap.id}"><div class="tree-inner">
         <div class="vid-list">${vidsHtml}</div>
         <button class="add-vid-btn" onclick="goToFormVid(${cap.id},null)">
           <i class="ti ti-plus" aria-hidden="true"></i> Adicionar vídeo neste capítulo
         </button>
       </div></div>
-      <button class="tree-toggle obs-toggle${openObs.has(cap.id)?' open':''}" id="tto-${cap.id}" onclick="toggleObs(${cap.id})" aria-expanded="${openObs.has(cap.id)}">
-        <i class="ti ti-chevron-down chev" aria-hidden="true"></i>
-        <i class="ti ti-note" aria-hidden="true"></i>
-        <span>Observações</span>
-        <span class="obs-dot" id="obsdot-${cap.id}" style="display:${(cap.obs||'').trim()?'inline':'none'}">●</span>
-      </button>
       <div class="tree-wrap${openObs.has(cap.id)?' open':''}" id="two-${cap.id}"><div class="tree-inner">
         <div class="obs-box"><textarea class="finput obs-ta" handwriting="false" placeholder="Anotações deste capítulo (lembretes, tarefas, páginas do livro…)" oninput="setObs(${cap.id},this.value)">${escH(cap.obs||'')}</textarea></div>
       </div></div>
@@ -530,8 +562,11 @@ function goToFormVid(capId,vidId){
   if(ttr){ttr.classList.toggle('open',resumoOpen);ttr.setAttribute('aria-expanded',resumoOpen);}
   renderMats();renderArqs();updPg();
   document.getElementById('vf-hint').textContent=vid?.link?tr('Link cadastrado'):'';
-  document.getElementById('vf-dur-info').innerHTML=vid?.durSeg>0?`<i class="ti ti-clock" aria-hidden="true"></i> ${escH(vid.dur)}`:'';
+  // vazio de propósito: o campo "Duração" ao lado já mostra o mesmo valor.
+  // Esta linha só reaparece quando o YouTube devolve a duração detectada.
+  document.getElementById('vf-dur-info').innerHTML='';
   document.getElementById('vf-spin').style.display='none';
+  if(vid)autoFetchDurSeVazio(vid,vidId);
   pushNav();showScreen('s-vid');
   setTimeout(()=>document.getElementById('vf-nome').focus(),80);
 }
@@ -651,7 +686,9 @@ async function onArqPick(input){
 function arqIcon(t){return /pdf/.test(t)?'ti-file-text':/^image\//.test(t)?'ti-photo':/^audio\//.test(t)?'ti-music':'ti-file';}
 function fmtKB(n){return n>=1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';}
 function arqBadge(a){ // pré-visualização: miniatura p/ imagem, selo colorido p/ os demais tipos
-  if(/^image\//.test(a.tipo))return `<img class="arq-thumb" id="arqth-${a.fid}" alt="">`;
+  // src transparente: o blob real vem do IndexedDB depois, e sem isso o
+  // navegador desenha o ícone de "imagem quebrada" durante a espera
+  if(/^image\//.test(a.tipo))return `<img class="arq-thumb" id="arqth-${a.fid}" alt="" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">`;
   if(/pdf/.test(a.tipo)||/\.pdf$/i.test(a.nomeArq))return '<span class="arq-badge b-pdf" aria-hidden="true">PDF</span>';
   if(/(msword|wordprocessingml)/.test(a.tipo)||/\.docx?$/i.test(a.nomeArq))return '<span class="arq-badge b-doc" aria-hidden="true">DOC</span>';
   if(/^audio\//.test(a.tipo)||/\.(mp3|m4a|aac|ogg|opus|wav|3gp|amr)$/i.test(a.nomeArq))return '<span class="arq-badge b-aud" aria-hidden="true">♪</span>';
@@ -731,7 +768,10 @@ function buildResumoHTML(){
   const mats=formMats.filter(m=>(m.titulo||'').trim()||(m.link||'').trim());
   const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   const link=vi('vf-link');
-  const linkHtml=link?`<div class="vlink">Vídeo: ${urlSegura(link)?`<a href="${esc(link)}">${esc(link)}</a>`:esc(link)}</div>`:'';
+  const prof=(curProj()||{}).professor||'';
+  const aulaVal=`${String(aula.numero).padStart(2,'0')} — ${aula.titulo||''}`;
+  const capVal=`${cap.num||''} ${cap.nome||''}`.trim();
+  const linkRow=link?`<div class="hrow"><b>${tr('Link')}:</b> ${urlSegura(link)?`<a href="${esc(link)}">${esc(link)}</a>`:esc(link)}</div>`:'';
   const paras=resumo?resumo.split(/\n{2,}/).map(p=>`<p>${esc(p).replace(/\n/g,'<br>')}</p>`).join(''):`<p><i>${tr('(Sem resumo preenchido)')}</i></p>`;
   const matsHtml=mats.length?`<h2>${tr('Material didático')}</h2><ul>${mats.map(m=>`<li><b>${esc(m.titulo||'—')}</b>${m.link?' — '+(/^https?:\/\//i.test(m.link)?`<a href="${esc(m.link)}">${esc(m.link)}</a>`:esc(m.link)):''}</li>`).join('')}</ul>`:'';
   const arqsHtml=formArqs.length?`<h2>${tr('Documentos anexados')}</h2><ul>${formArqs.map(a=>`<li><b>${esc(a.titulo||a.nomeArq)}</b>${a.autor?' — '+esc(a.autor):''} <span style="color:#777">(${esc(a.nomeArq)})</span></li>`).join('')}</ul>`:'';
@@ -739,27 +779,39 @@ function buildResumoHTML(){
 <style>
 @page{size:A4;margin:2.5cm}
 body{font-family:Georgia,'Times New Roman',serif;font-size:12pt;line-height:1.5;color:#111;max-width:17cm;margin:auto}
-h1{font-size:16pt;margin:0 0 2pt}
-.meta{font-size:10pt;color:#555;border-bottom:1px solid #999;padding-bottom:8pt;margin-bottom:14pt}
-.vlink{font-size:10pt;margin-bottom:12pt;word-break:break-all}
+.hdr{font-size:10.5pt;color:#333;border-bottom:1px solid #999;padding-bottom:8pt;margin-bottom:14pt}
+.hrow{margin:1pt 0}
+.hrow b{color:#111}
 a{color:#1155cc}
 h2{font-size:13pt;margin-top:18pt}
 ul{padding-left:18pt}
 </style></head><body>
-<h1>${esc(nome)}</h1>
-<div class="meta">${esc(disc.nome||'')} · ${esc(disc.turma||'')} · ${trf('Aula {n}',{n:String(aula.numero).padStart(2,'0')})} — ${esc(aula.titulo)} · ${esc(cap.num||'')} ${esc(cap.nome||'')}</div>
-${linkHtml}
+<div class="hdr">
+<div class="hrow"><b>${tr('Matéria')}:</b> ${esc(disc.nome||'')}</div>
+<div class="hrow"><b>${tr('Serie')}:</b> ${esc(disc.turma||'')}</div>
+<div class="hrow"><b>${tr('Professor')}:</b> ${esc(prof)}</div>
+<div class="hrow"><b>${tr('Aula')}:</b> ${esc(aulaVal)}</div>
+<div class="hrow"><b>${tr('Cap.')}:</b> ${esc(capVal)}</div>
+<div class="hrow"><b>${tr('Título Do Vídeo')}:</b> ${esc(nome)}</div>
+${linkRow}
+</div>
 ${paras}
 ${matsHtml}
 ${arqsHtml}
 </body></html>`;
+}
+function nomeArquivoResumo(){
+  const disc=getDisc(curDiscId);const aula=getAula(disc,curAulaId);const cap=getCap(aula,curCapId);
+  const nome=vi('vf-nome')||tr('video');
+  const partes=[disc?.nome,disc?.turma,'Aula '+String(aula.numero).padStart(2,'0'),aula?.titulo,cap?.num,cap?.nome,nome].filter(Boolean).join(' ');
+  return (partes.toLowerCase().replace(/[^a-z0-9à-ú]+/gi,'-').replace(/^-+|-+$/g,'').slice(0,150))||'video';
 }
 function expWord(){
   const html=buildResumoHTML();
   const blob=new Blob(['\ufeff'+html],{type:'application/msword'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
-  a.download=`resumo-${(vi('vf-nome')||'video').toLowerCase().replace(/[^a-z0-9à-ú]+/gi,'-').slice(0,60)}.doc`;
+  a.download=`resumo-${nomeArquivoResumo()}.doc`;
   document.body.appendChild(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(a.href),4000);
 }
@@ -936,6 +988,24 @@ function fetchYTDur(id){
     setTimeout(()=>fim(0),8000);
   }));
 }
+/* Duração ausente (ex.: vídeo veio de um .json editado por IA) — busca sozinho ao abrir o vídeo */
+function autoFetchDurSeVazio(vid,vidId){
+  if(!vid||vid.durSeg>0)return;
+  const id=ytId(vid.link||'');
+  if(!id)return;
+  document.getElementById('vf-spin').style.display='flex';
+  fetchYTDur(id).then(seg=>{
+    if(editVidId!==vidId)return; // saiu da tela ou trocou de vídeo enquanto buscava
+    const el=document.getElementById('vf-dur');
+    if(seg>0&&el&&!el.value.trim()){
+      el.value=fmtS(seg);
+      document.getElementById('vf-dur-info').innerHTML=`<i class="ti ti-clock" aria-hidden="true"></i> ${escH(fmtS(seg))}`;
+      document.getElementById('vf-hint').textContent=tr('Duração obtida automaticamente.');
+    }
+  }).catch(()=>{}).finally(()=>{
+    if(editVidId===vidId)document.getElementById('vf-spin').style.display='none';
+  });
+}
 async function fetchYT(id){
   try{const r=await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${id}&format=json`);if(r.ok){const j=await r.json();if(j.title&&!document.getElementById('vf-nome').value.trim())document.getElementById('vf-nome').value=j.title;}}catch(e){}
   let durOk=false;
@@ -1015,15 +1085,31 @@ function checarDraft(){ // no boot: oferece restaurar um formulário que ficou a
 function openModal(title,fields,cb){
   pushNav();
   document.getElementById('modal-title').textContent=title;
-  document.getElementById('modal-fields').innerHTML=fields.map(f=>`<div style="margin-bottom:12px"><label class="flbl">${escH(f.lbl)}</label><input class="finput" id="${f.id}" placeholder="${escH(f.ph||'')}" value="${escH(f.val||'')}"/></div>`).join('');
+  document.getElementById('modal-fields').innerHTML=fields.map(f=>{
+    const campo=f.type==='select'
+      ?`<select class="finput" id="${f.id}">${(f.opts||[]).map(o=>`<option value="${escH(o.v)}"${o.v===(f.val||'')?' selected':''}>${escH(o.t)}</option>`).join('')}</select>`
+      :`<input class="finput" id="${f.id}" placeholder="${escH(f.ph||'')}" value="${escH(f.val||'')}"/>`;
+    return `<div style="margin-bottom:12px"><label class="flbl">${escH(f.lbl)}</label>${campo}</div>`;
+  }).join('');
   _mcb=cb;document.getElementById('modal-ok').onclick=()=>_mcb&&_mcb();
   document.getElementById('modal').classList.add('open');
-  setTimeout(()=>{const el=document.getElementById(fields[0].id);if(el){el.focus();if(fields[0].val)el.select();}},60);
+  setTimeout(()=>{const el=document.getElementById(fields[0].id);if(el){el.focus();if(fields[0].val&&typeof el.select==='function')el.select();}},60);
 }
 function closeModal(){document.getElementById('modal').classList.remove('open');_mcb=null;}
 function modalOverlayClick(e){if(e.target===document.getElementById('modal'))closeModal();}
 
 /* ===== Tela de projetos (anos letivos) ===== */
+function formacaoOpts(){
+  return [
+    {v:'',t:tr('Não informado')},
+    {v:'tecnico',t:tr('Técnico')},
+    {v:'graduado',t:tr('Graduado')},
+    {v:'pos',t:tr('Pós-graduando')},
+    {v:'mestrado',t:tr('Mestrado')},
+    {v:'doutorado',t:tr('Doutorado')}
+  ];
+}
+function formacaoLbl(v){const o=formacaoOpts().find(x=>x.v===v);return o?o.t:'';}
 function openProjetos(){pushNav();closeMenu();renderProjetos();showScreen('s-proj');}
 function renderProjetos(){
   saveDB();
@@ -1045,6 +1131,7 @@ function renderProjetos(){
       <div class="side-btns">
         <button class="iBtn" onclick="exportBackup(${p.id})" aria-label="Exportar arquivo deste projeto"><i class="ti ti-download" aria-hidden="true"></i></button>
         <button class="iBtn edt" onclick="editProjeto(${p.id})" aria-label="Editar projeto"><i class="ti ti-edit" aria-hidden="true"></i></button>
+        <button class="iBtn" onclick="duplicarProjeto(${p.id})" aria-label="Duplicar projeto"><i class="ti ti-copy" aria-hidden="true"></i></button>
         <button class="iBtn del" onclick="delProjeto(${p.id})" aria-label="Excluir projeto"><i class="ti ti-trash" aria-hidden="true"></i></button>
       </div>
     </div></div>`;
@@ -1056,13 +1143,15 @@ function novoProjeto(){
   if(!exigirAtivacao())return;
   openModal(tr('Criar novo projeto (ano letivo)'),[
     {id:'pj-ano',lbl:'Ano',ph:'Ex: '+new Date().getFullYear(),val:String(new Date().getFullYear())},
-    {id:'pj-inst',lbl:'Instituição',ph:'Ex: Escola Estadual …'}
+    {id:'pj-inst',lbl:'Instituição',ph:'Ex: Escola Estadual …'},
+    {id:'pj-prof',lbl:tr('Professor'),ph:tr('Ex: Nome do professor')},
+    {id:'pj-form',lbl:tr('Formação'),type:'select',opts:formacaoOpts()}
   ],()=>{
     const ano=vi('pj-ano');if(!ano){alert(tr('Informe o ano.'));return;}
     saveDB(); // garante o projeto atual salvo antes de trocar
     const id=nid();
     try{localStorage.setItem(projKey(id),'{"disciplinas":[]}');}catch(e){alert(tr('Sem espaço no navegador para criar o projeto.'));return;}
-    projReg.projetos.push({id,ano,instituicao:vi('pj-inst'),criadoEm:Date.now()});
+    projReg.projetos.push({id,ano,instituicao:vi('pj-inst'),professor:vi('pj-prof'),formacao:vi('pj-form'),criadoEm:Date.now()});
     projReg.ativo=id;saveProjects();
     loadDB();closeModal();refreshProjUI();renderDiscs();showScreen('s-main');
     showToast(trf('<b>Projeto {a} criado e em uso.</b> O anterior ficou arquivado — troque quando quiser em ☰ → Gerenciar projetos.',{a:escH(ano)}),8000);
@@ -1080,11 +1169,25 @@ function editProjeto(id){
   const p=projReg.projetos.find(x=>x.id===id);if(!p)return;
   openModal(tr('Editar projeto'),[
     {id:'pj-ano',lbl:'Ano',val:p.ano},
-    {id:'pj-inst',lbl:'Instituição',val:p.instituicao}
+    {id:'pj-inst',lbl:'Instituição',val:p.instituicao},
+    {id:'pj-prof',lbl:tr('Professor'),ph:tr('Ex: Nome do professor'),val:p.professor||''},
+    {id:'pj-form',lbl:tr('Formação'),type:'select',opts:formacaoOpts(),val:p.formacao||''}
   ],()=>{
-    p.ano=vi('pj-ano')||p.ano;p.instituicao=vi('pj-inst');
+    p.ano=vi('pj-ano')||p.ano;p.instituicao=vi('pj-inst');p.professor=vi('pj-prof');p.formacao=vi('pj-form');
     saveProjects();closeModal();renderProjetos();refreshProjUI();
   });
+}
+function duplicarProjeto(id){
+  const p=projReg.projetos.find(x=>x.id===id);if(!p)return;
+  if(!exigirAtivacao())return;
+  let dados='{"disciplinas":[]}';
+  try{dados=(id===projReg.ativo)?JSON.stringify(db):(localStorage.getItem(projKey(id))||dados);}catch(e){}
+  saveDB();
+  const novoId=nid();
+  try{localStorage.setItem(projKey(novoId),dados);}catch(e){alert(tr('Sem espaço no navegador para duplicar o projeto.'));return;}
+  projReg.projetos.push({id:novoId,ano:p.ano,instituicao:p.instituicao,professor:p.professor,formacao:p.formacao,criadoEm:Date.now()});
+  saveProjects();renderProjetos();refreshProjUI();
+  showToast(trf('<b>Projeto duplicado.</b> Cópia de "{p}" criada.',{p:escH(projNome(p))}),5000);
 }
 function delProjeto(id){
   if(projReg.projetos.length<=1){alert(tr('Este é o único projeto. Crie outro antes de excluir este.'));return;}

@@ -1,6 +1,6 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-.L{--bg:#F0EDE8;--card:#fff;--card2:#f5f2ee;--bar:#C0392B;--bard:#922B21;--txt:#1a1a1a;--txt2:#4a4a4a;--txt3:#888;--brd:rgba(0,0,0,0.1);--brd2:rgba(0,0,0,0.06);--chip:#e4e0db;--chipt:#555;--inp:#fff;--inpb:rgba(0,0,0,0.18);--iBtn:rgba(0,0,0,0.06);--fab-s:0 4px 16px rgba(192,57,43,0.38);--vbg:#fdf9f8;--vbrd:rgba(192,57,43,0.12);--acc:#C0392B}
-.D{--bg:#000;--card:#000;--card2:#0d0d0d;--bar:#000;--bard:#000;--txt:#fff;--txt2:#c9c9c9;--txt3:#8a8a8a;--brd:rgba(255,255,255,0.45);--brd2:rgba(255,255,255,0.14);--chip:#000;--chipt:#ddd;--inp:#000;--inpb:rgba(255,255,255,0.4);--iBtn:rgba(255,255,255,0.08);--fab-s:0 0 0 1px rgba(255,255,255,0.7),0 0 18px rgba(255,255,255,0.35);--vbg:#000;--vbrd:rgba(255,255,255,0.25);--acc:#fff;--wn:0 0 7px rgba(255,255,255,.75)}
+.L{--bg:#F0EDE8;--card:#fff;--card2:#f5f2ee;--bar:#C0392B;--bard:#922B21;--txt:#1a1a1a;--txt2:#4a4a4a;--txt3:#888;--brd:rgba(0,0,0,0.1);--brd2:rgba(0,0,0,0.06);--chip:#e4e0db;--chipt:#555;--inp:#fff;--inpb:rgba(0,0,0,0.18);--iBtn:rgba(0,0,0,0.06);--fab-s:0 4px 16px rgba(192,57,43,0.38);--vbg:#fdf9f8;--vbrd:rgba(192,57,43,0.12);--acc:#C0392B;--grgb:192,57,43;--gl:255,255,255}
+.D{--bg:#000;--card:#000;--card2:#0d0d0d;--bar:#000;--bard:#000;--txt:#fff;--txt2:#c9c9c9;--txt3:#8a8a8a;--brd:rgba(255,255,255,0.45);--brd2:rgba(255,255,255,0.14);--chip:#000;--chipt:#ddd;--inp:#000;--inpb:rgba(255,255,255,0.4);--iBtn:rgba(255,255,255,0.08);--fab-s:0 0 0 1px rgba(255,255,255,0.7),0 0 18px rgba(255,255,255,0.35);--vbg:#000;--vbrd:rgba(255,255,255,0.25);--acc:#fff;--wn:0 0 7px rgba(255,255,255,.75);--grgb:255,255,255;--gl:255,255,255}
 body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--txt);font-size:14px;min-height:100vh;transition:background .2s,color .2s}
 i.ti{display:inline-flex;align-items:center;justify-content:center;width:1em;height:1em;vertical-align:-0.125em;flex-shrink:0}
 i.ti svg{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -182,7 +182,7 @@ i.ti svg{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:2;strok
 .tree-wrap>.tree-inner{overflow:hidden;min-height:0}
 @media (prefers-reduced-motion:reduce){.tree-wrap,.tree-toggle .chev{transition:none}}
 .tree-aulas{border-top:0.5px solid var(--brd2);padding:6px 10px 8px 16px}
-.tree-aula{padding:6px 6px 6px 8px;cursor:pointer;border-radius:6px;border-left:2px solid var(--brd)}
+.tree-aula{padding:6px 6px 6px 8px;cursor:pointer;border-radius:6px}
 .tree-aula:hover{background:var(--card2)}
 .tree-aula+.tree-aula{margin-top:4px}
 .ta-line{display:flex;align-items:baseline;gap:6px;font-size:12px;color:var(--txt)}
@@ -247,14 +247,7 @@ textarea.finput{resize:vertical;min-height:120px;line-height:1.45}
 .P .theme-btn:hover{background:rgba(var(--grgb),.18)}
 .P .tbk:hover,.P .tbtn:hover{background:rgba(var(--grgb),.18)}
 
-/* painéis chanfrados */
-.P .card,.P .cap-card,.P .modal-box{
-  position:relative;background:var(--card);border:1px solid var(--brd);border-radius:4px;
-  clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px);
-  box-shadow:0 0 0 1px rgba(var(--grgb),.06) inset,0 4px 18px rgba(0,0,0,.45);
-}
-.P .card::before,.P .cap-card::before{content:'';position:absolute;top:0;right:0;width:14px;height:14px;background:linear-gradient(135deg,transparent 50%,var(--cy) 51%,transparent 52%);opacity:.55;pointer-events:none}
-.P .card::after,.P .cap-card::after{content:'';position:absolute;bottom:0;left:0;width:14px;height:14px;background:linear-gradient(-45deg,transparent 50%,var(--cy) 51%,transparent 52%);opacity:.35;pointer-events:none}
+/* painéis: vidro 3D (geometria no bloco "VIDRO 3D" no fim do arquivo) */
 .P .side-btns,.P .cap-hbtns,.P .vid-btns{border-left-color:var(--brd2)}
 
 /* cor de destaque (antes usava --bar como texto) */
@@ -436,7 +429,12 @@ textarea.finput{resize:vertical;min-height:120px;line-height:1.45}
 
 /* ===== Material didático recolhível + documentos anexados ===== */
 .mat-sec{border:0.5px solid var(--brd);border-radius:12px;overflow:hidden;background:var(--card)}
-.mat-sec>.tree-toggle{border-top:none}
+/* no formulário do vídeo o título da seção é um cabeçalho, não uma aba:
+   centralizado brigava com todo o resto do app, que é alinhado à esquerda */
+.mat-sec>.tree-toggle{border-top:none;justify-content:flex-start;padding:11px 14px;font-size:12.5px}
+.pg-lbl{text-align:right;color:var(--txt2)}
+/* linha de dica/duração vazia deixava um buraco de ~45px no meio do formulário */
+.fdur:empty,.fhint:empty{display:none}
 .mat-inner{padding:12px}
 .arq-row{display:flex;gap:8px;align-items:flex-start;border:0.5px solid var(--brd2);border-radius:10px;padding:8px;margin-bottom:8px;background:var(--card2)}
 .arq-ic{font-size:20px;color:var(--acc);margin-top:8px;flex-shrink:0}
@@ -531,6 +529,165 @@ body{min-height:100dvh}
 .at-copy .btn-sec{flex:0 0 auto;width:auto;padding:9px 14px}
 .at-msg{font-size:12.5px;margin:8px 0;min-height:16px}
 .at-msg.erro{color:#d9534f}
+
+/* =====================================================================
+   VIDRO 3D — a superfície comum a TODOS os módulos
+   ---------------------------------------------------------------------
+   Linguagem da "escada de vidro": painel translúcido, borda luminosa,
+   espessura visível na lateral e halo na cor do tema. Nenhuma cor é
+   escrita à mão aqui — tudo sai de --grgb / --gl / --card do tema ativo,
+   então os 5 temas continuam com as cores originais.
+   Para regular o efeito inteiro do app, mexa só nas variáveis abaixo.
+   ===================================================================== */
+:root{
+  --g3-radius:20px;   /* arredondamento do painel */
+  --g3-bw:1.5px;      /* espessura da borda de vidro */
+  --g3-depth:13px;    /* espessura aparente (a lateral do vidro) */
+  --g3-glow:30px;     /* halo na cor do tema */
+  --g3-ry:2.4deg;     /* inclinação 3D (0 = painel reto) */
+  --g3-persp:1600px;  /* distância do olho: quanto menor, mais 3D */
+  --g3-tint:.10;      /* quanto da cor do tema entra no vidro */
+  --g3-shine:.16;     /* força do reflexo especular */
+  --g3-ease:cubic-bezier(.22,1,.36,1);
+}
+/* cor da lateral: nos temas néon é a própria cor do tema; no claro, um
+   cinza de vidro — vermelho ali virava mancha de tinta ao redor do cartão */
+:root{--g3-edge:var(--grgb)}
+.L{--g3-tint:.05;--g3-shine:.55;--g3-glow:18px;--g3-edge:96,102,110}
+.D{--g3-tint:.04;--g3-shine:.10;--g3-glow:16px}
+
+/* --- o painel de vidro --- */
+.card,.cap-card,.mat-sec,.tut-sec,.at-card,.arq-row,.dw-proj{
+  position:relative;
+  border-radius:var(--g3-radius);
+  border:var(--g3-bw) solid rgba(var(--gl),.26);
+  background:
+    linear-gradient(168deg,rgba(var(--gl),var(--g3-shine)) 0%,rgba(var(--gl),0) 32%),
+    linear-gradient(200deg,rgba(var(--grgb),var(--g3-tint)),rgba(var(--grgb),0) 62%),
+    var(--card);
+  box-shadow:
+    /* lateral do vidro: duas lâminas deslocadas dão a espessura */
+    calc(var(--g3-depth) * .5) 1px 0 calc(var(--g3-depth) * -.32) rgba(var(--g3-edge),.32),
+    var(--g3-depth) 2px 0 calc(var(--g3-depth) * -.6) rgba(var(--g3-edge),.16),
+    0 0 var(--g3-glow) rgba(var(--grgb),.16),
+    0 8px 22px rgba(0,0,0,.26),
+    inset 0 1px 0 rgba(var(--gl),.18);
+  clip-path:none;
+}
+.card,.cap-card{
+  transform:perspective(var(--g3-persp)) rotateY(var(--g3-ry));
+  transform-origin:left center;
+}
+/* reflexo especular que atravessa o vidro */
+.card::before,.cap-card::before{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:2;
+  border-radius:inherit;
+  background:linear-gradient(104deg,
+    rgba(var(--gl),0) 30%,
+    rgba(var(--gl),calc(var(--g3-shine) * .38)) 48%,
+    rgba(var(--gl),0) 66%);
+}
+/* luz de contorno por dentro (o "fio" do vidro) */
+.card::after,.cap-card::after{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:2;
+  border-radius:inherit;
+  box-shadow:inset 0 0 0 1px rgba(var(--gl),.10),
+             inset 0 -14px 22px -18px rgba(0,0,0,.7);
+  background:none;width:auto;height:auto;opacity:1;
+}
+.P .card,.P .cap-card,.P .modal-box,.P .mat-sec,.P .tut-sec,.P .arq-row,
+.P .disc-av,.P .chip,.P .add-cap-btn{clip-path:none;border-radius:var(--g3-radius)}
+.P .chip,.P .disc-av{border-radius:10px}
+.P .finput,.P .dz-btn,.P .arq-thumb,.P .arq-badge{border-radius:10px}
+.D .card,.D .cap-card{border-color:rgba(255,255,255,.34)}
+.D .card::before,.D .cap-card::before{opacity:.5}
+@media (prefers-reduced-motion:no-preference){
+  .card,.cap-card{transition:box-shadow .3s var(--g3-ease),transform .3s var(--g3-ease)}
+  .card:hover,.cap-card:hover{
+    transform:perspective(var(--g3-persp)) rotateY(calc(var(--g3-ry) * .4)) translateZ(6px);
+    box-shadow:
+      calc(var(--g3-depth) * .5) 1px 0 calc(var(--g3-depth) * -.32) rgba(var(--g3-edge),.4),
+      var(--g3-depth) 2px 0 calc(var(--g3-depth) * -.6) rgba(var(--g3-edge),.22),
+      0 0 calc(var(--g3-glow) * 1.5) rgba(var(--grgb),.26),
+      0 12px 28px rgba(0,0,0,.3),
+      inset 0 1px 0 rgba(var(--gl),.24);
+  }
+}
+
+/* --- menos moldura: o que estava poluindo os campos --- */
+/* botões de ação viram só ícone; a moldura some, o alvo de toque fica */
+.iBtn,.iBtn-sm{background:none;border:none}
+.iBtn{width:32px;height:32px;font-size:17px}
+.iBtn:hover,.iBtn-sm:hover{background:rgba(var(--grgb),.14)}
+.side-btns,.cap-hbtns,.vid-btns,.P .side-btns,.P .cap-hbtns,.P .vid-btns{border-left:none}
+/* os botões em COLUNA esticavam o cartão a ~120px de altura e deixavam um
+   vazio enorme em volta do texto; em linha o cartão volta a caber no conteúdo */
+.side-btns,.cap-hbtns{flex-direction:row;align-items:center;gap:0;padding:4px 6px}
+.cap-check{width:32px;height:32px}
+.disc-row{min-height:60px}
+.cap-header{min-height:48px}
+.aula-row{min-height:56px}
+/* faixa lateral: a do cartão de série era só enfeite; a do capítulo é
+   estado ("a ministrar"), então vira pílula solta que respeita o canto */
+.disc-accent{display:none}
+.disc-body{padding-left:12px}
+.cap-accent{width:3px;border-radius:99px;margin:9px 0 9px 8px}
+.cap-hinfo{padding-left:9px}
+/* horas da série: três dados numa linha, sem três cápsulas */
+.hrs-row{gap:11px;margin-top:6px;flex-wrap:wrap}
+.hrs-item{background:none;border:none;border-radius:0;padding:0;font-size:10.5px}
+.hrs-l{display:none}
+/* legendas secundárias estavam apagadas demais para ler */
+.cap-total,.ac,.arq-meta,.chips-lbl,.done-badge{color:var(--txt2)}
+.P .scan-bar{height:6px;gap:2px;margin-top:6px}
+/* faixa CP1…CP11: uma linha que rola, não duas linhas de cápsulas */
+.chips-grid{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.chips-grid::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0}
+.chip:not(.on):not(.sel){background:none;border-color:transparent;opacity:.3}
+/* abas do capítulo lado a lado (vídeos | observações) */
+.cap-tabs{display:flex;border-top:0.5px solid var(--brd2)}
+.cap-tabs .tree-toggle{flex:1;border-top:none}
+.cap-tabs .tree-toggle+.tree-toggle{border-left:0.5px solid var(--brd2)}
+.tree-toggle{background:none;font-weight:600}
+.tree-toggle:hover{background:rgba(var(--grgb),.08)}
+.add-vid-btn{background:none;border-top:0.5px solid var(--brd2)}
+.add-vid-btn:hover{background:rgba(var(--grgb),.08)}
+.vid-list{background:rgba(var(--grgb),.04)}
+.vid-row{border-bottom:none}
+.vid-row+.vid-row{border-top:0.5px solid var(--brd2)}
+.cap-total{margin-top:3px}
+.ac{margin-top:2px}
+/* "novo capítulo" não é um cartão de conteúdo: fica discreto, sem vidro */
+.add-cap-btn{background:none;border:1px dashed rgba(var(--grgb),.35);box-shadow:none;
+  border-radius:var(--g3-radius);color:var(--txt2);font-weight:500;padding:9px 14px}
+.add-cap-btn:hover{background:rgba(var(--grgb),.07);color:var(--acc)}
+/* --- o resto do app na mesma linguagem --- */
+/* o chanfro do tema Prometeu saía dos painéis mas ficava nos botões:
+   ou tudo chanfrado, ou tudo arredondado. Escolhido: arredondado. */
+.P .fab,.P .btn-pri,.P .btn-sec,.P .toast,.P .cap-check.checked .box{clip-path:none}
+.P .fab,.P .btn-pri,.P .btn-sec{border-radius:14px}
+.P .toast{border-radius:12px}
+.P .cap-check .box,.P .cap-check.checked .box{border-radius:5px}
+/* folha de baixo (modais) e gaveta ganham o mesmo vidro, sem a inclinação */
+.modal-box,.drawer{
+  background:
+    linear-gradient(168deg,rgba(var(--gl),var(--g3-shine)) 0%,rgba(var(--gl),0) 26%),
+    linear-gradient(200deg,rgba(var(--grgb),var(--g3-tint)),rgba(var(--grgb),0) 55%),
+    var(--card);
+}
+.modal-box{border-radius:calc(var(--g3-radius) + 6px) calc(var(--g3-radius) + 6px) 0 0;
+  border-top:1px solid rgba(var(--gl),.22);box-shadow:0 -10px 40px rgba(0,0,0,.4)}
+.drawer{border-right:1px solid rgba(var(--gl),.18);box-shadow:6px 0 32px rgba(0,0,0,.4)}
+/* seções e caixas do formulário de vídeo */
+.at-card{border-radius:var(--g3-radius)}
+.fhint{color:var(--txt2)}
+/* árvore de aulas: recuo em vez de barra colorida na lateral */
+.tree-aula{border-left:none;padding-left:14px}
+.tree-aula::before{content:'';position:absolute;left:4px;top:12px;width:5px;height:5px;
+  border-radius:50%;background:rgba(var(--grgb),.5)}
+.tree-aula{position:relative}
+.tree-aulas{padding-left:12px}
 
 /* ===== Destaque do botão ☰ na primeira abertura ===== */
 #menuHintBubble{position:fixed;top:56px;left:10px;z-index:120;background:#0d1a24;color:#fff;font-size:13px;font-weight:600;padding:9px 12px;border-radius:10px;border:1px solid var(--acc);box-shadow:0 6px 22px rgba(0,0,0,.45);max-width:250px;display:flex;align-items:center;gap:10px}
