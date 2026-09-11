@@ -2544,6 +2544,27 @@ function aceitarConsent(){
   _menuHintPending=true; // 1º uso: destaca o botão ☰ quando a home aparecer
   offerTutorial(); // logo após aceitar, oferece o tutorial rápido (só no 1º uso)
 }
+/* Recusar é obrigatório nas lojas (AppGallery 7.5 / Play): o aviso de
+   privacidade não pode ter só o botão de aceitar. Ao recusar nada é gravado —
+   o consentimento continua ausente e o aviso volta na próxima abertura. */
+function recusarConsent(){
+  document.getElementById('cmodal').classList.remove('open');
+  document.getElementById('nmodal').classList.add('open');
+}
+function voltarConsent(){
+  document.getElementById('nmodal').classList.remove('open');
+  document.getElementById('cmodal').classList.add('open');
+}
+function sairConsent(){
+  try{window.close();}catch(e){}
+  /* No app instalado (TWA/PWA) o window.close() encerra mesmo. Em aba comum do
+     navegador ele é ignorado, porque a aba não foi aberta por script: se ainda
+     estamos aqui depois de um instante, explicamos como fechar na mão. */
+  setTimeout(()=>{
+    const d=document.getElementById('nmodal-dica');
+    if(d)d.textContent=tr('Se a janela não fechar sozinha, feche o app pelo botão do aparelho ou feche esta aba do navegador.');
+  },500);
+}
 /* ===== Oferta de tutorial rápido (apenas no primeiríssimo uso) ===== */
 const TUTOFFER_KEY='prometeu.tutoffer.v1';
 function offerTutorial(){
@@ -3022,7 +3043,7 @@ function backSistema(){
   if(aberto('imodal')){closeInfo();return true;}
   if(aberto('rmodal')){closeRModal();return true;}
   if(aberto('tmodal')){recusarTutorial();return true;}
-  // cmodal (consentimento) fica de fora de propósito: precisa de resposta.
+  // cmodal e nmodal (consentimento) ficam de fora de propósito: pedem resposta.
   const cur=document.querySelector('.screen.active');
   if(!cur||cur.id==='s-main')return false; // na home: deixa sair
   goBack(BACK_PARENT[cur.id]||'s-main');
